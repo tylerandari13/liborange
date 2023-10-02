@@ -4,4 +4,5 @@ foreach(file in [
 	"location"
 	"table"
 	//"sexp"
+	"misc"
 ]) import("orange-api/" + file + ".nut")
