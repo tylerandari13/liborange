@@ -1,0 +1,23 @@
+name: Package Add-on
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    name: "Package addon"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Create archive
+        run: zip orange-api_${{ github.sha }}.zip ./*
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: "Add-on archive"
+          path: "orange-api_${{ github.sha }}.zip"
