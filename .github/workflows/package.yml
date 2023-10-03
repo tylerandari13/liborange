@@ -13,6 +13,10 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Remove unnecessary files
+        run: |
+          rm -rf .*
+
       - name: Upload archive
         uses: actions/upload-artifact@v3
         with:
