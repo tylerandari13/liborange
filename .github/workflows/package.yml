@@ -13,11 +13,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Create archive
-        run: zip addon.zip ./*
-
       - name: Upload archive
         uses: actions/upload-artifact@v3
         with:
           name: "orange-api_${{ github.sha }}"
-          path: "addon.zip"
+          path: ./
