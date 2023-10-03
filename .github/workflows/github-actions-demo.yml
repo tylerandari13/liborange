@@ -2,16 +2,21 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions
 on: [push]
 jobs:
-  Package-as-Addon:
+  package:
     runs-on: ubuntu-latest
+    
+    name: "Package addon"
+
     steps:
-      - name: Check out repository code.
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Install 7zip.
-        run: |
-          sudo apt-get install p7zip-full
-      - name: Add the files to a zip.
-        run: |
-          7z a orange_api.zip ${{ github.workspace }}/orange-api.nfo
-          7z a orange_api.zip ${{ github.workspace }}/orange-api.nut
-          7z a orange_api.zip ${{ github.workspace }}/orange_api
+
+      - name: Package as addon
+        run: zip out.zip ./*
+
+      - name: Upload addon zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: "Addon zip"
+          path: "out.zip"
+
