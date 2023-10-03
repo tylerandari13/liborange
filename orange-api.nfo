@@ -1,0 +1,9 @@
+(supertux-addoninfo
+  (id "orange_api")
+  (version 1)
+  (type "levelset")
+  (title "SuperTux Orange API")
+  (description "An addon dependency that gives addons more scripting functions.")
+  (author "tylerandari12")
+  (license "CC-BY-SA 4.0 International")
+)
