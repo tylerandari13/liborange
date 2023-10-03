@@ -15,7 +15,7 @@ jobs:
 
       - name: Remove unnecessary files
         run: |
-          rm -rf .*
+          rm -rf .git*
 
       - name: Upload archive
         uses: actions/upload-artifact@v3
