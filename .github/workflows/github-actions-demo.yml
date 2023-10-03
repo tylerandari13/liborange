@@ -12,8 +12,6 @@ jobs:
           sudo apt-get install p7zip-full
       - name: Add the files to a zip.
         run: |
-          ls ${{ github.workspace }}
-          @echo Stuff below fails lol.
           7z a orange_api.zip ${{ github.workspace }}/orange-api.nfo
           7z a orange_api.zip ${{ github.workspace }}/orange-api.nut
           7z a orange_api.zip ${{ github.workspace }}/orange_api
