@@ -5,8 +5,13 @@ jobs:
   Package-as-Addon:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Check out repository code.
         uses: actions/checkout@v4
-      - name: List files in the repository (temp)
+      - name: Install 7zip.
         run: |
-          ls ${{ github.workspace }}
+          sudo apt-get install p7zip-full
+      - name: Add the files to a zip.
+        run: |
+          7z a orange_api.zip ${{ github.workspace }}/orange-api.nfo
+          7z a orange_api.zip ${{ github.workspace }}/orange-api.nut
+          7z a orange_api.zip ${{ github.workspace }}/orange_api
