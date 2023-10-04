@@ -1,0 +1,42 @@
+(supertux-text
+	(version 2)
+	(background "../engine/menu/frame.png")
+	(music "")
+	(speed 60)
+	(content
+		(text
+			(type "heading")
+			(string "Supertux Orange Api")
+		)
+		(text
+			(type "normal")
+			(string "This is an addon depency for SuperTux.")
+		)
+		(blank)
+		(text
+			(type "normal")
+			(string "If it survives long enough the api will be added to the addons repo when 0.7 comes out")
+		)
+		(text
+			(type "normal")
+			(string "and can be used as a dependancy for other addons.")
+		)
+		(blank)
+		(blank)
+		(blank)
+		(text
+			(type "normal")
+			(string "(Remind me to add instructions on how to set up the addon for before 0.7)")
+		)
+		(blank)
+		(blank)
+		(text
+			(type "normal")
+			(string "Github repo:")
+		)
+		(text
+    		(type "reference")
+    		(string "https://github.com/tylerandari13/supertux-orange-api")
+    	)
+	)
+)

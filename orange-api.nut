@@ -1,8 +1,10 @@
 foreach(file in [
-	"tilemap"
-	"rand"
+	"button"
 	"location"
-	"table"
-	//"sexp"
 	"misc"
+	"rand"
+	//"sexp"
+	"table"
+	"test"
+	"tilemap"
 ]) import("orange-api/" + file + ".nut")
