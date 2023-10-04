@@ -1,6 +1,6 @@
 import("orange-api/orange_api_util.nut")
 
-class NewButton extends ObjectOverride {
+class OButton extends ObjectOverride {
 	direction = null
 	press_function = null
 
@@ -12,7 +12,9 @@ class NewButton extends ObjectOverride {
 	constructor(obj, dir = "up", func = function(){}) {
 		base.constructor(obj)
 		direction = dir.tolower()
-		press_function = func
+		if(type(func) == "string") {
+			press_function = compilestring(func)
+		} else press_function = func
 		button_x = object.get_pos_x()
 		button_y = object.get_pos_y()
 
@@ -20,6 +22,18 @@ class NewButton extends ObjectOverride {
 	}
 
 	function press() {
+		if(direction == "up" && sector.Tux.get_y() + (sector.Tux.get_bonus() == "none" ? 32 : 64) <= object.get_pos_y() + 1) {
+			force_press()
+		} else if(direction == "down" && sector.Tux.get_y() >= object.get_pos_y() + 1) {
+			force_press()
+		} else if(direction == "left" && true) {
+			force_press()
+		} else if(direction == "right" && true) {
+			force_press()
+		}
+	}
+
+	function force_press() {
 		if(!is_pressed) {
 			is_pressed = true
 			press_function()
@@ -42,8 +56,9 @@ class NewButton extends ObjectOverride {
 		}
 	}
 
-	function push() press()
-	function unpush() unpress()
+	//push = press
+	//unpush = unpress
+	//force_push = force_press
 }
 
-get_api_table().Button <- NewButton
+get_api_table().Button <- OButton
