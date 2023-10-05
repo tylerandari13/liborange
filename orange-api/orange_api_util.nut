@@ -36,25 +36,16 @@ class OObject {
 	}
 
 	function _get(key) {
-		try {
-			return this[key]
-		} catch(e) try {
+		if(key in object) {
 			return object[key]
-		} catch(e) try {
+		} else if(key in odata) {
 			return odata[key]
-		} catch(e) {
-			throw null
 		}
+		throw null
 	}
 
 	function _set(key, value) {
-		try {
-			return this[key] = value
-		} catch(e) try {
-			return odata[key] = value
-		} catch(e) {
-			throw e
-		}
+		return odata[key] = value
 	}
 
 	function _newslot(key, value) {
