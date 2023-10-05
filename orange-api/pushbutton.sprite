@@ -1,5 +1,11 @@
 (supertux-sprite
   (action
+    (name "default")
+    (hitbox 0 0 16 16)
+    (images "res/sideways_pushbutton/pushbutton-editor.png")
+  )
+
+  (action
     (name "off-up")
     (hitbox 0 0 30 16)
     (images "../images/objects/pushbutton/pushbutton-0.png")
@@ -28,16 +34,16 @@
   (action
     (name "off-left")
     (hitbox 0 0 16 30)
-    (images "res/pushbutton-0.png")
+    (images "res/sideways_pushbutton/pushbutton-0.png")
   )
   (action
     (name "on-left")
     (hitbox 0 0 10 30)
     (loops 1)
     (fps 20)
-    (images "res/pushbutton-1.png"
-            "res/pushbutton-2.png"
-            "res/pushbutton-3.png"
+    (images "res/sideways_pushbutton/pushbutton-1.png"
+            "res/sideways_pushbutton/pushbutton-2.png"
+            "res/sideways_pushbutton/pushbutton-3.png"
     )
   )
   (action
