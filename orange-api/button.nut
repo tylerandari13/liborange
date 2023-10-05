@@ -26,9 +26,9 @@ class OButton extends ObjectOverride {
 			force_press()
 		} else if(direction == "down" && sector.Tux.get_y() >= object.get_pos_y() + 1) {
 			force_press()
-		} else if(direction == "left" && true) {
+		} else if(direction == "left" && sector.Tux.get_x() >= object.get_pos_x() + 5) {
 			force_press()
-		} else if(direction == "right" && true) {
+		} else if(direction == "right" && sector.Tux.get_x() + 32 <= object.get_pos_x() + 1) {
 			force_press()
 		}
 	}
@@ -41,7 +41,7 @@ class OButton extends ObjectOverride {
 			play_sound("sounds/switch.ogg")
 			wait(0.01)
 			if(direction == "up") object.set_pos(button_x, button_y + 6)
-			if(direction == "left") object.set_pos(button_x + 6, button_y)
+			if(direction == "right") object.set_pos(button_x + 6, button_y)
 		}
 	}
 
@@ -52,7 +52,7 @@ class OButton extends ObjectOverride {
 			play_sound("sounds/switch.ogg")
 			wait(0.01)
 			if(direction == "up") object.set_pos(button_x, button_y)
-			if(direction == "left") object.set_pos(button_x, button_y)
+			if(direction == "right") object.set_pos(button_x, button_y)
 		}
 	}
 
