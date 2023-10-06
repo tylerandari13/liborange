@@ -32,8 +32,9 @@ class OObject {
 
 	constructor(obj) {
 		odata = {} // we dont want all odatas to point to the same table
-		if("is_OObject" in obj) obj = obj.object
-		object = get_sector()[obj]
+		if("is_OObject" in get_sector()[obj]) {
+			object = get_sector()[obj].object
+		} else object = get_sector()[obj]
 		delete get_sector()[obj]
 		get_sector()[obj] <- this
 	}
@@ -96,3 +97,6 @@ class OObject {
 		return delete odata[key]
     }
 }
+
+// convert all instances to OObjects
+//foreach(i, v in get_sector()) if(type(v) == "instance") OObject(i)
