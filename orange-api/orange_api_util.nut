@@ -18,12 +18,6 @@ function help() {
 	display_text_file("orange-api/help.stxt")
 }
 
-function print(...) {
-	local stronk = ""
-	foreach(v in vargv) stronk += v.tostring()
-	::print("[ORANGE API]" + stronk)
-}
-
 class OObject {
 	static is_OObject = true
 
