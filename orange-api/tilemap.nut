@@ -1,6 +1,6 @@
 import("orange-api/orange_api_util.nut")
 
-get_api_table().tilemap_get_width <- function(tilemap) {
+api_table().tilemap_get_width <- function(tilemap) {
 	local inc = 0
 	while(true) {
 		local oldid = tilemap.get_tile_id(inc, 0)
@@ -14,7 +14,7 @@ get_api_table().tilemap_get_width <- function(tilemap) {
 	return inc
 }
 
-get_api_table().tilemap_get_height <- function(tilemap) {
+api_table().tilemap_get_height <- function(tilemap) {
 	local inc = 0
 	while(true) {
 		local oldid = tilemap.get_tile_id(0, inc)

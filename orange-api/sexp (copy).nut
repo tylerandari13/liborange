@@ -114,6 +114,6 @@ class sexp {
 	}
 }
 
-get_api_table().sexp_from_string <- function(sexp_string) {
+api_table().sexp_from_string <- function(sexp_string) {
 	
 }

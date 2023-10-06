@@ -12,7 +12,7 @@ function get_sector() {
 
 if(!("orange_api" in get_sector())) get_sector().orange_api <- {}
 
-function get_api_table() return get_sector().orange_api
+function api_table() return get_sector().orange_api
 
 function help() {
 	display_text_file("orange-api/help.stxt")

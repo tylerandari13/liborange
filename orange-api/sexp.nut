@@ -2,13 +2,13 @@ import("orange-api/orange_api_util.nut")
 import("orange-api/misc.nut")
 import("orange-api/table.nut")
 
-function min(x, limit) return get_api_table().mod_min(x, limit)
+function min(x, limit) return api_table().mod_min(x, limit)
 
-function max(x, limit) return get_api_table().mod_max(x, limit)
+function max(x, limit) return api_table().mod_max(x, limit)
 
-function schar(str, idx) return get_api_table().char_at_index(str, idx)
+function schar(str, idx) return api_table().char_at_index(str, idx)
 
-function ttostring(tab) return get_api_table().table_to_string(tab)
+function ttostring(tab) return api_table().table_to_string(tab)
 
 enum Token {
 	INIT,
@@ -111,6 +111,6 @@ class Lexer {
 	}
 }
 
-get_api_table().sexp_from_string <- function(sexp_string) return Lexer(sexp_string).read()
+api_table().sexp_from_string <- function(sexp_string) return Lexer(sexp_string).read()
 
-//get_api_table().sexp_from_file <- function(file) {} // doesnt work lol
+//api_table().sexp_from_file <- function(file) {} // doesnt work lol

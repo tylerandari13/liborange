@@ -61,4 +61,4 @@ class OButton extends OObject {
 	//force_push = force_press
 }
 
-get_api_table().Button <- OButton
+api_table().Button <- OButton
