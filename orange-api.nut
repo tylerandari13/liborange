@@ -2,7 +2,7 @@ foreach(file in [
 	"button"
 	"location"
 	"misc"
-	"object_data"
+	"oobject"
 	"rand"
 	//"sexp"
 	"table"

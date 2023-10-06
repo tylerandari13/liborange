@@ -45,7 +45,8 @@ class OObject {
 	}
 
 	function _set(key, value) {
-		return odata[key] = value
+		if(key in odata) return odata[key] = value
+		throw null
 	}
 
 	function _newslot(key, value) {
