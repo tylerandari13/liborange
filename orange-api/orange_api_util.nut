@@ -33,7 +33,7 @@ class OObject {
 		get_sector()[obj] <- this
 	}
 
-	function _get(key) {
+	function _get(key) { // returning just the function doesnt work for some reason 
 		if(key == "get_x" && "get_pos_x" in object) {
 			return function() {
 				return object.get_pos_x()
