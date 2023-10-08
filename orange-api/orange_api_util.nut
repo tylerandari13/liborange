@@ -34,7 +34,15 @@ class OObject {
 	}
 
 	function _get(key) {
-		if(key in object) {
+		if(key == "get_x" && "get_pos_x" in object) {
+			return function() {
+				return object.get_pos_x()
+			}
+		} else if(key == "get_y" && "get_pos_y" in object) {
+			return function() {
+				return object.get_pos_y()
+			}
+		} else if(key in object) {
 			return function(...) {
 				switch(vargv.len()) { // worst workaround yet
 					case 0:
