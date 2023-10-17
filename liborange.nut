@@ -1,5 +1,6 @@
 foreach(file in [
 	"button"
+	"grumbel"
 	"location"
 	"misc"
 	"oobject"
