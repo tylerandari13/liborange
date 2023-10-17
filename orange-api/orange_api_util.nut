@@ -10,9 +10,10 @@ function get_sector() {
 	}
 }
 
-if(!("orange_api" in get_sector())) get_sector().orange_api <- {}
+if(!("liborange" in get_sector())) get_sector().liborange <- {}
+if(!("orange_api" in get_sector())) get_sector().orange_api <- get_sector().liborange.weakref()
 
-function api_table() return get_sector().orange_api
+function api_table() return get_sector().liborange
 
 function help() {
 	display_text_file("orange-api/help.stxt")
