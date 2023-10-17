@@ -6,11 +6,11 @@ function get_version() {
 	return 0
 }
 
-function get_data(key) {
+function get_data(key) try {
 	if(key == "version") return get_version()
 	switch(get_version()) {
 		case 1:
-			newkey = "grumbel_" + key.slice(0, -2)
+			local newkey = "grumbel_" + key.slice(0, -2)
 			if(newkey in get_sector() && type(get_sector()[newkey]) == "array") {
 				if(endswith(key, "_x")) return get_sector()[newkey][0]
 				if(endswith(key, "_y")) return get_sector()[newkey][1]
@@ -22,9 +22,9 @@ function get_data(key) {
 		break
 	}
 	return null
-}
+} catch(e) {}
 
-function set_data(key, value) {
+function set_data(key, value) try {
 	switch(get_version()) {
 		case 1:
 			newkey = "grumbel_" + key.slice(0, -2)
@@ -38,7 +38,7 @@ function set_data(key, value) {
 			return get_sector().grumbel[key] = value
 		break
 	}
-}
+} catch(e) {}
 
 api_table().grumbel_exists <- function() return get_version() != 0
 
