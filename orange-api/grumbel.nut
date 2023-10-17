@@ -27,7 +27,7 @@ function get_data(key) try {
 function set_data(key, value) try {
 	switch(get_version()) {
 		case 1:
-			newkey = "grumbel_" + key.slice(0, -2)
+			local newkey = "grumbel_" + key.slice(0, -2)
 			if(newkey in get_sector() && type(get_sector()[newkey]) == "array") {
 				if(endswith(key, "_x")) return get_sector()[newkey][0] = value
 				if(endswith(key, "_y")) return get_sector()[newkey][1] = value
