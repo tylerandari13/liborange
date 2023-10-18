@@ -21,7 +21,6 @@ function get_data(key) try {
 			return get_sector().grumbel[key]
 		break
 	}
-	return null
 } catch(e) {}
 
 function set_data(key, value) try {
