@@ -19,7 +19,7 @@ jobs:
 
       - name: Remove unnecessary files
         run: |
-          rm -v !("liborange-pocket.nut")
+          find . ! -name 'liborange-pocket.nut' -type f -exec rm -f {} +
 
       - name: Upload archive
         uses: actions/upload-artifact@v3
