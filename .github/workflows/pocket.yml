@@ -1,0 +1,28 @@
+name: Package Add-on
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    name: "Package Add-on"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run pocketlib.sh
+        run: |
+          pocketlib.sh
+
+      - name: Remove unnecessary files
+        run: |
+          rm -v !("liborange-pocket.nut")
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: "liborange_${{ github.sha }}"
+          path: ./
