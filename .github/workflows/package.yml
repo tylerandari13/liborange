@@ -20,5 +20,5 @@ jobs:
       - name: Upload archive
         uses: actions/upload-artifact@v3
         with:
-          name: "orange-library_${{ github.sha }}"
+          name: "liborange_${{ github.sha }}"
           path: ./
