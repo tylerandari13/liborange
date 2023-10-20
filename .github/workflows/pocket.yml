@@ -6,7 +6,7 @@ jobs:
   package:
     runs-on: ubuntu-latest
 
-    name: "Package Add-on"
+    name: "Package Single File"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -15,7 +15,7 @@ jobs:
 
       - name: Run pocketlib.sh
         run: |
-          pocketlib.sh
+          ./pocketlib.sh
 
       - name: Remove unnecessary files
         run: |
