@@ -25,9 +25,7 @@ if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 }(api_table().weakref())
 
 
-function help() {
-	display_text_file("orange-api/help.stxt")
-}
+function help() display_text_file("orange-api/help.stxt")
 
 function get_players(include_OObjects = true) {
     local arroy = []
