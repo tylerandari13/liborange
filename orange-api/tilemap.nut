@@ -66,12 +66,11 @@ function alternate_tile(tilemap, x, y, framerate, ids, ...) {
 }
 
 api_table().alternate_tiles <- function(tilemap, id, framerate, ids, ...) {
-	local tile_ids = []
+	local tile_ids
 	if(type(ids) == "array") {
 		tile_ids = ids
 	} else {
-		tile_ids.push(ids)
-		foreach(v in vargv) tile_ids.push(v)
+		tile_ids = [ids].extend(vargv)
 	}
 	for(local x = 0; x < tilemap_get_width(tilemap); x++)
 		for(local y = 0; y < tilemap_get_height(tilemap); y++)
