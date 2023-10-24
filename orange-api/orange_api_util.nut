@@ -10,6 +10,8 @@ function get_sector() {
 	}
 }
 
+function api_table() return get_sector().liborange
+
 if(!("liborange" in get_sector())) get_sector().liborange <- {}
 if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 	theref = null
@@ -20,12 +22,17 @@ if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 		::display(@"The function `""orange-api." + key + @"()""` is deprecated, please use `liborange." + key + "()` instead.")
 		return theref[key]
 	}
-}(get_sector().liborange.weakref())
+}(api_table().weakref())
 
-function api_table() return get_sector().liborange
 
 function help() {
 	display_text_file("orange-api/help.stxt")
+}
+
+function get_players() {
+    local arroy = []
+    foreach(i, v in get_sector()) if("use_scripting_controller" in v) arroy.push(v)
+    return arroy
 }
 
 class OObject {
