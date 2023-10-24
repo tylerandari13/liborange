@@ -11,7 +11,16 @@ function get_sector() {
 }
 
 if(!("liborange" in get_sector())) get_sector().liborange <- {}
-if(!("orange_api" in get_sector())) get_sector().orange_api <- get_sector().liborange.weakref()
+if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
+	theref = null
+	constructor(weak) {
+		theref = weak
+	}
+	function _get(key) {
+		::display(@"The function `""orange-api." + key + @"()""` is deprecated, please use `liborange." + key + "()` instead.")
+		return theref[key]
+	}
+}(get_sector().liborange.weakref())
 
 function api_table() return get_sector().liborange
 
