@@ -29,9 +29,9 @@ function help() {
 	display_text_file("orange-api/help.stxt")
 }
 
-function get_players() {
+function get_players(include_OObjects = true) {
     local arroy = []
-    foreach(i, v in get_sector()) if("use_scripting_controller" in v) arroy.push(v)
+    foreach(i, v in get_sector()) if("use_scripting_controller" in v || (include_OObjects && v.is_OObject && "use_scripting_controller" in v.object)) arroy.push(v)
     return arroy
 }
 
@@ -39,6 +39,7 @@ class OObject {
 	static is_OObject = true
 
 	object = null
+	object_name = null
 	odata = null
 
 	constructor(obj) {
@@ -48,6 +49,9 @@ class OObject {
 		} else object = get_sector()[obj]
 		delete get_sector()[obj]
 		get_sector()[obj] <- this
+		if("get_name" in object) {
+			object_name = object.get_name()
+		} else object_name = obj
 	}
 
 	function _get(key) { // returning just the function doesnt work for some reason 
