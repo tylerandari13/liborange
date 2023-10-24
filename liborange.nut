@@ -4,6 +4,7 @@ foreach(file in [
 	"grumbel"
 	"location"
 	"misc"
+	"multiplayer"
 	"oobject"
 	"rand"
 	//"sexp"
