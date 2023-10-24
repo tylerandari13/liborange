@@ -31,7 +31,7 @@ function help() {
 
 function get_players(include_OObjects = true) {
     local arroy = []
-    foreach(i, v in get_sector()) if("use_scripting_controller" in v || (include_OObjects && v.is_OObject && "use_scripting_controller" in v.object)) arroy.push(v)
+    foreach(i, v in get_sector()) if("use_scripting_controller" in v || (include_OObjects && "is_OObject" in v && "use_scripting_controller" in v.object)) arroy.push(v)
     return arroy
 }
 
