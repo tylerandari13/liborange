@@ -33,6 +33,19 @@ function get_players(include_OObjects = true) {
     return arroy
 }
 
+function objects_collided(x1, y1, w1, h1, x2, y2, w2, h2, direction = "auto") {
+	if((direction == "left" || direction == "auto") && (x1 + w1 + 1 > x2)) {
+		return true
+	} else if((direction == "right" || direction == "auto") && (x1 < x2 + w2 - 1)) {
+		return true
+	} else if((direction == "up" || direction == "auto") && (y1 + h1 + 1 > y2)) {
+		return true
+	} else if((direction == "down" || direction == "auto") && (y1 < y2 + h2 - 1)) {
+		return true
+	}
+	return false
+}
+
 class OObject {
 	static is_OObject = true
 
@@ -52,7 +65,7 @@ class OObject {
 		} else object_name = obj
 	}
 
-	function _get(key) { // returning just the function doesnt work for some reason 
+	function _get(key) { // returning just the function doesnt work for some reason
 		if(key == "get_x" && "get_pos_x" in object) {
 			return function() {
 				return object.get_pos_x()
@@ -117,7 +130,7 @@ class OObject {
 	function _newslot(key, value) {
 		return odata[key] <- value
 	}
-	
+
 	function _delslot(key) {
 		return delete odata[key]
     }
