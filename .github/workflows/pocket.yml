@@ -1,4 +1,4 @@
-name: Package Add-on
+name: Package Single File
 on:
   push:
   workflow_dispatch:
