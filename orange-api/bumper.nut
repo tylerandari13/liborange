@@ -15,16 +15,27 @@ class OBumper extends OObject {
 	}
 
 	function press() {
-		local speed
 		sector.Tux.deactivate()
 		wait(0.01)
-		sector.Tux.set_velocity((direction == "right" ? speed_x : speed_x * -1), speed_y)
+		local y_speed = (
+			sector.Tux.get_action().find("slide-")
+			|| sector.Tux.get_action().find("swim-")
+			|| sector.Tux.get_action().find("boost-")
+			|| sector.Tux.get_action().find("float-")
+		) ? sector.Tux.get_velocity_x() : speed_y
+		sector.Tux.set_velocity((direction == "right" ? speed_x : speed_x * -1), y_speed)
 		play_sound("sounds/trampoline.wav")
 		object.set_action("swinging-" + direction)
-		while(sector.Tux.get_velocity_y() < 0) wait(0.01)
+		while(sector.Tux.get_velocity_y() < 0) {
+			if(sector.Tux.get_input_held("left")) sector.Tux.set_dir(false)
+			if(sector.Tux.get_input_held("right")) sector.Tux.set_dir(true)
+			wait(0.01)
+		}
 		object.set_action("normal-" + direction)
 		sector.Tux.activate()
 	}
+
+	function force_press() press() //dummy function
 
 	//push = press
 	//unpush = unpress
