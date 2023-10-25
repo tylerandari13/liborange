@@ -22,15 +22,11 @@ class OButton extends OObject {
 	}
 
 	function press(sound = true) {
-		if(direction == "up" && sector.Tux.get_y() + (sector.Tux.get_bonus() == "none" ? 32 : 64) <= object.get_pos_y() + 1) {
-			force_press(sound)
-		} else if(direction == "down" && sector.Tux.get_y() >= object.get_pos_y() + 1) {
-			force_press(sound)
-		} else if(direction == "left" && sector.Tux.get_x() >= object.get_pos_x() + 5) {
-			force_press(sound)
-		} else if(direction == "right" && sector.Tux.get_x() + 32 <= object.get_pos_x() + 1) {
-			force_press(sound)
-		}
+		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
+							object.get_pos_x(), object.get_pos_y(),
+							((direction == "up" || direction == "down") ? 30 : 16),
+							((direction == "up" || direction == "down") ? 16 : 30), direction))
+			force_press(true)
 	}
 
 	function force_press(sound = true) {
