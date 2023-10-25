@@ -15,12 +15,6 @@ class OBumper extends OObject {
 	}
 
 	function press() {
-		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
-							object.get_pos_x(), object.get_pos_y(), 18, 27, "auto"))
-			force_press()
-	}
-
-	function force_press() {
 		local speed
 		sector.Tux.deactivate()
 		wait(0.01)
