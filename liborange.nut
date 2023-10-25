@@ -1,4 +1,5 @@
 foreach(file in [
+	"bumper"
 	"button"
 	"class"
 	"control"
@@ -12,4 +13,5 @@ foreach(file in [
 	"table"
 	"test"
 	"tilemap"
+	"trampoline"
 ]) import("orange-api/" + file + ".nut")

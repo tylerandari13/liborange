@@ -1,0 +1,29 @@
+(supertux-sprite
+	(action
+		(name "normal-up")
+		(hitbox 2 32 32 32)
+		(images "../images/objects/trampoline/trampoline2-0.png")
+	)
+	(action
+		(name "swinging-up")
+		(fps 32)
+		(hitbox 2 32 32 32)
+		(images "../images/objects/trampoline/trampoline2-0.png"
+				"../images/objects/trampoline/trampoline2-1.png"
+				"../images/objects/trampoline/trampoline2-2.png"
+				"../images/objects/trampoline/trampoline2-3.png"
+				"../images/objects/trampoline/trampoline2-4.png"
+				"../images/objects/trampoline/trampoline2-5.png")
+	)
+	(action
+		(name "normal-down")
+		(hitbox 2 0 32 32)
+		(flip-action "normal-up")
+	)
+	(action
+		(name "swinging-down")
+		(fps 32)
+		(hitbox 2 0 32 32)
+		(flip-action "swinging-up")
+	)
+)
