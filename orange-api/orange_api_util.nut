@@ -58,20 +58,14 @@ class OObject {
 		} else object_name = obj
 	}
 
-	function _get(key) { // returning just the function doesnt work for some reason
+	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
 		if(key == "get_x" && "get_pos_x" in object) {
-			return function() {
-				return object.get_pos_x()
-			}
+			return object.get_pos_x.bindenv(object)
 		} else if(key == "get_y" && "get_pos_y" in object) {
-			return function() {
-				return object.get_pos_y()
-			}
+			return object.get_pos_y.bindenv(object)
 		} else if(key in object) {
 			if(type(object[key]) == "function") {
-				return function(...) {
-					return object[key].acall([object].extend(vargv))
-				}
+				return object[key].bindenv(object)
 			} else {
 				return object[key]
 			}
