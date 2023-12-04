@@ -15,15 +15,15 @@ class OButton extends OObject {
 		if(type(func) == "string") {
 			press_function = compilestring(func)
 		} else press_function = func
-		button_x = object.get_pos_x()
-		button_y = object.get_pos_y()
+		button_x = get_x()
+		button_y = get_y()
 
-		object.set_action("off-" + direction)
+		set_action("off-" + direction)
 	}
 
 	function press(sound = true) {
 		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
-							object.get_pos_x(), object.get_pos_y(),
+							get_x(), get_y(),
 							((direction == "up" || direction == "down") ? 30 : 16),
 							((direction == "up" || direction == "down") ? 16 : 30), direction))
 			force_press(true)
@@ -33,22 +33,22 @@ class OButton extends OObject {
 		if(!is_pressed) {
 			is_pressed = true
 			press_function()
-			object.set_action("on-" + direction)
+			set_action("on-" + direction)
 			if(sound) play_sound("sounds/switch.ogg")
 			wait(0.01)
-			if(direction == "up") object.set_pos(button_x, button_y + 6)
-			if(direction == "right") object.set_pos(button_x + 6, button_y)
+			if(direction == "up") set_pos(button_x, button_y + 6)
+			if(direction == "right") set_pos(button_x + 6, button_y)
 		}
 	}
 
 	function unpress(sound = false) {
 		if(is_pressed) {
 			is_pressed = false
-			object.set_action("off-" + direction)
+			set_action("off-" + direction)
 			if(sound) play_sound("sounds/switch.ogg")
 			wait(0.01)
-			if(direction == "up") object.set_pos(button_x, button_y)
-			if(direction == "right") object.set_pos(button_x, button_y)
+			if(direction == "up") set_pos(button_x, button_y)
+			if(direction == "right") set_pos(button_x, button_y)
 		}
 	}
 

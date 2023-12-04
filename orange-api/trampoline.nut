@@ -11,13 +11,13 @@ class OTrampoline extends OObject {
         speed_y = y
 		speed_multiplier = mult
 
-		object.set_action("normal")
-		object.set_action("normal-" + direction)
+		set_action("normal")
+		set_action("normal-" + direction)
 	}
 
 	function press() {
 		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
-							object.get_pos_x(), object.get_pos_y(),
+							get_x(), get_y(),
 							((direction == "up" || direction == "down") ? 30 : 16),
 							((direction == "up" || direction == "down") ? 16 : 30), direction))
 			force_press()
@@ -41,11 +41,11 @@ class OTrampoline extends OObject {
 
 		sector.Tux.set_velocity(sector.Tux.get_velocity_x(), speed)
 		play_sound("sounds/trampoline.wav")
-		object.set_action("swinging")
-		object.set_action("swinging-" + direction)
+		set_action("swinging")
+		set_action("swinging-" + direction)
 		wait(0.21875)
-		object.set_action("normal")
-		object.set_action("normal-" + direction)
+		set_action("normal")
+		set_action("normal-" + direction)
 	}
 
 	//push = press
