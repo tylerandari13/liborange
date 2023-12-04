@@ -18,7 +18,7 @@ class OBumper extends OObject {
 		sector.Tux.deactivate()
 		wait(0.01)
 		local y_speed = (
-			sector.Tux.get_action().find("slide-")
+			(sector.Tux.get_action().find("slide-") && object.get_y() - 31 <= sector.Tux.get_y())
 			|| sector.Tux.get_action().find("swim-")
 			|| sector.Tux.get_action().find("boost-")
 			|| sector.Tux.get_action().find("float-")
