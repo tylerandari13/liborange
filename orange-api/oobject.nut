@@ -8,7 +8,7 @@ api_table().convert_to_OObject <- function(sector = get_sector())
 			OObject(i)
 
 api_table().init_objects <- function(obj_name, obj_class, ...) {
-	local params = type(vargv[0]) == "array" ? vargv[0] : vargv
+	local params = (vargv.len() > 0 && type(vargv[0]) == "array") ? vargv[0] : vargv
 	foreach(i, v in sector)
 		if(startswith(i, obj_name) && !("is_OObject" in v))
 			obj_class.instance().constructor.acall([obj_class.instance(), i].extend(params))
