@@ -16,6 +16,6 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 	get_sector().settings.add_object(class_name, name, x, y, direction, data)
 	wait(0.01)
 	local retvalue = get_sector()[name].weakref()
-	if(unexposed) get_sector()[name]
+	if(unexposed) delete get_sector()[name]
 	return retvalue.ref()
 }
