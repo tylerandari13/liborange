@@ -22,11 +22,16 @@ class OButton extends OObject {
 	}
 
 	function press(sound = true) {
+		/*
 		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
 							get_x(), get_y(),
 							((direction == "up" || direction == "down") ? 30 : 16),
 							((direction == "up" || direction == "down") ? 16 : 30), direction))
-			force_press(true)
+		*/
+		if(collided_with_any_player(get_x(), get_y(),
+									((direction == "up" || direction == "down") ? 30 : 16),
+									((direction == "up" || direction == "down") ? 16 : 30), direction).len() > 0)
+			force_press(sound)
 	}
 
 	function force_press(sound = true) {

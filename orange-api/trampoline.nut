@@ -16,30 +16,29 @@ class OTrampoline extends OObject {
 	}
 
 	function press() {
-		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
-							get_x(), get_y(),
-							((direction == "up" || direction == "down") ? 30 : 16),
-							((direction == "up" || direction == "down") ? 16 : 30), direction))
-			force_press()
+		if(collided_with_any_player(get_x(), get_y(),
+									((direction == "up" || direction == "down") ? 30 : 16),
+									((direction == "up" || direction == "down") ? 16 : 30), direction).len() > 0)
+			force_press(get_nearest_player(get_x(), get_y()))
 	}
 
-	function force_press() {
+	function force_press(player = sector.Tux) {
 		local speed
 
 		if(direction == "up") {
-			if(sector.Tux.get_bonus() == "airflower") {
+			if(player.get_bonus() == "airflower") {
 			speed = speed_y
-			* (sector.Tux.get_input_held("jump") || sector.Tux.get_input_held("down") ? speed_multiplier : 1)
+			* (player.get_input_held("jump") || player.get_input_held("down") ? speed_multiplier : 1)
 			- 80
-			+ (sector.Tux.get_input_held("down") ? 10 : 0)
+			+ (player.get_input_held("down") ? 10 : 0)
 			} else {
 			speed = speed_y
-			* (sector.Tux.get_input_held("jump") || sector.Tux.get_input_held("down") ? speed_multiplier : 1)
-			+ (sector.Tux.get_input_held("down") ? 100 : 0)
+			* (player.get_input_held("jump") || player.get_input_held("down") ? speed_multiplier : 1)
+			+ (player.get_input_held("down") ? 100 : 0)
 			}
 		} else speed = speed_y * speed_multiplier * -1
 
-		sector.Tux.set_velocity(sector.Tux.get_velocity_x(), speed)
+		player.set_velocity(player.get_velocity_x(), speed)
 		play_sound("sounds/trampoline.wav")
 		set_action("swinging")
 		set_action("swinging-" + direction)

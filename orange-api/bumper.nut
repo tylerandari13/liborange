@@ -15,27 +15,29 @@ class OBumper extends OObject {
 	}
 
 	function press() {
-		sector.Tux.deactivate()
+		force_press(get_nearest_player(get_x(), get_y()))
+	}
+
+	function force_press(player = sector.Tux) {
+		player.deactivate()
 		wait(0.01)
 		local y_speed = (
-			(sector.Tux.get_action().find("slide-") && get_y() - 31 <= sector.Tux.get_y())
-			|| sector.Tux.get_action().find("swim-")
-			|| sector.Tux.get_action().find("boost-")
-			|| sector.Tux.get_action().find("float-")
-		) ? sector.Tux.get_velocity_x() : speed_y
-		sector.Tux.set_velocity((direction == "right" ? speed_x : speed_x * -1), y_speed)
+			(player.get_action().find("slide-") && get_y() - 31 <= player.get_y())
+			|| player.get_action().find("swim-")
+			|| player.get_action().find("boost-")
+			|| player.get_action().find("float-")
+		) ? player.get_velocity_x() : speed_y
+		player.set_velocity((direction == "right" ? speed_x : speed_x * -1), y_speed)
 		play_sound("sounds/trampoline.wav")
 		set_action("swinging-" + direction)
-		while(sector.Tux.get_velocity_y() < 0) {
-			if(sector.Tux.get_input_held("left")) sector.Tux.set_dir(false)
-			if(sector.Tux.get_input_held("right")) sector.Tux.set_dir(true)
+		while(player.get_velocity_y() < 0) {
+			if(player.get_input_held("left")) player.set_dir(false)
+			if(player.get_input_held("right")) player.set_dir(true)
 			wait(0.01)
 		}
 		set_action("normal-" + direction)
-		sector.Tux.activate()
+		player.activate()
 	}
-
-	function force_press() press() //dummy function
 
 	//push = press
 	//unpush = unpress
