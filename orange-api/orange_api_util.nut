@@ -12,7 +12,8 @@ function get_sector() {
 
 function api_table() return get_sector().liborange
 
-if(!("liborange" in get_sector())) get_sector().liborange <- {}
+if(!("liborange" in get_sector())) get_sector().liborange <- class {} // not a table so that ::display(sector) doesnt flood the console with orange api stuff
+
 if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 	theref = null
 	constructor(weak) {
