@@ -4,7 +4,8 @@ api_table().min <- function(num, limit) return num < limit ? limit : num
 
 api_table().max <- function(num, limit) return num > limit ? limit : num
 
-api_table().char_at_index <- function(string, index) return string.slice(index, api_table().mod_max(index + 1, string.len()))api_table().char_at_index <- function(string, index) return string.slice(index, api_table().mod_max(index + 1, string.len()))
+api_table().char_at_index <- function(string, index) return string.slice(index, api_table().mod_max(index + 1, string.len()))
+
 api_table().add_object <- function(class_name, name = "", x = 0, y = 0, direction = "auto", data = "", unexposed = false) {
 	if(name.tolower() == "unexposeme" || unexposed) {
 		unexposed = true
