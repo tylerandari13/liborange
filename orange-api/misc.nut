@@ -14,7 +14,7 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 	if(class_name == "checkpoint") class_name = "firefly" //somebody change this please
 	if(class_name == "scriptedobject" && !data.find("(name") && name != "") data += @"(name """ + name + @""")"
 	get_sector().settings.add_object(class_name, name, x, y, direction, data)
-	wait(0.05)
+	wait(0.1)
 	local retvalue = get_sector()[name].weakref()
 	if(unexposed) delete get_sector()[name]
 	return retvalue.ref()
