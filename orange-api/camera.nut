@@ -23,7 +23,8 @@ class OCamera extends OObject {
 		camera.y_bounds = camera.get_height() / 4
 		while(true) {
 			if(camera.get_mode() == "normal") {
-				camera.set_pos(sector.Tux.get_x() - (camera.get_width() * 0.5) + 16 + cur_x, cur_y)
+				camera.scroll_to(sector.Tux.get_x() - (camera.get_width() * 0.5) + 16 + cur_x, cur_y, 0.01)
+
 				if(sector.Tux.get_velocity_x() != 0) {
 					cur_x += camera.x_speed * sector.Tux.get_velocity_x() / 250
 				}
