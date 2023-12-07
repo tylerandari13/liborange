@@ -1,6 +1,7 @@
 foreach(file in [
 	"bumper"
 	"button"
+	"camera"
 	"class"
 	"control"
 	"grumbel"
