@@ -66,10 +66,6 @@ class OCamera extends OObject {
 		object.scroll_to(x, y, scrolltime)
 	}
 
-	function scale(scale, time) {
-		scale_anchor(scale, time, ANCHOR_MIDDLE)
-	}
-
 	// OCamera specific functions
 
 	function get_mode() switch (mode) {
