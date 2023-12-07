@@ -31,11 +31,7 @@ class OCamera extends OObject {
 				if(cur_x < camera.x_bounds * -1) cur_x = camera.x_bounds * -1
 
 				if(camera.get_y() + camera.y_bounds > sector.Tux.get_y()) cur_y = sector.Tux.get_y() - camera.y_bounds
-				if(camera.get_y() + camera.get_height() - camera.y_bounds < sector.Tux.get_y()) {
-					//display(ii)
-					//ii++
-					cur_y = sector.Tux.get_y() + camera.y_bounds - camera.get_height()
-				}
+				if(camera.get_y() + camera.get_height() - camera.y_bounds < sector.Tux.get_y()) cur_y = sector.Tux.get_y() + camera.y_bounds - camera.get_height()
 			}
 			wait(0.01)
 		}
