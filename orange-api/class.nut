@@ -13,8 +13,8 @@ class newclass extends liborange.combined_class(class1, class2) {
 */
 api_table().combined_class <- function(classa, classb) {
 	class newclass {
-		base1 = classa
-		base2 = classb
+		base1 = classa.instance()
+		base2 = classb.instance()
 	}
 	foreach(i, v in classa) newclass[i] <- v
 	foreach(i, v in classb) newclass[i] <- v
