@@ -8,12 +8,14 @@ enum camera_mode {
 class OCamera extends OObject {
 	mode = camera_mode.NORMAL
 
+	default_drag = 0.01
+
 	x_bounds = 150 // How far the camera goes in front of Tux. Where can i find this value in the source?
 	x_speed = 2
 
 	y_bounds = 4
 
-	drag = 0.01
+	drag = null
 
 	target = sector.Tux
 
@@ -21,6 +23,7 @@ class OCamera extends OObject {
 
 	constructor(name) {
 		base.constructor(name)
+		reset_drag()
 		object.set_mode("manual")
 		thread = newthread(thread_func)
 		thread.call(this)
@@ -97,6 +100,10 @@ class OCamera extends OObject {
 			}(_target)
 		}
 	}
+
+	function set_drag(_drag) drag = _drag * 0.01
+	function get_drag() return drag * 100
+	function reset_drag() drag = default_drag
 
 	function get_width() return get_screen_width()
 	function get_height() return get_screen_height()
