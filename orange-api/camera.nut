@@ -90,6 +90,12 @@ class OCamera extends OObject {
 		}
 	}
 
+	function scale_to_objects(object_a, object_b, time) {
+		if(!("is_OObject" in object_a)) object_a = OObject(object_a)
+		if(!("is_OObject" in object_b)) object_b = OObject(object_b)
+		// temp, come back to this
+	}
+
 	function set_drag(_drag) drag = _drag * 0.01
 	function get_drag() return drag * 100
 	function reset_drag() drag = default_drag
