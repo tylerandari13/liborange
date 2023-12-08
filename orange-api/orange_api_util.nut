@@ -89,6 +89,10 @@ class OObject {
 		} else object_name = obj
 	}
 
+	function display(ANY) { // for convenience
+		::display(ANY)
+	}
+
 	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
 		if(key == "get_x" && "get_pos_x" in object) {
 			return object.get_pos_x.bindenv(object)
