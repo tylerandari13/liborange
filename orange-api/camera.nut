@@ -90,11 +90,20 @@ class OCamera extends OObject {
 		}
 	}
 
-	function scale_to_objects(object_a, object_b, time) {
+	/*function scale_to_objects(object_a, object_b, time) {
 		if(!("is_OObject" in object_a)) object_a = OObject(object_a)
 		if(!("is_OObject" in object_b)) object_b = OObject(object_b)
-		// temp, come back to this
-	}
+		local scale_at_1 = get_width() * get_scale()
+		local distance_x = abs(object_a.get_x() - object_b.get_x())
+		local distance_y = abs(object_a.get_y() - object_b.get_y())
+		local distance = distance_x > distance_y ? distance_x : distance_y
+		local newpos_x = object_a.get_x() < object_b.get_x() ? object_a.get_x() : object_b.get_x()
+		local newpos_y = object_a.get_y() < object_b.get_y() ? object_a.get_y() : object_b.get_y()
+		local div = scale_at_1 / distance
+		scroll_to(newpos_x, newpos_y, time)
+		scale_anchor(div, time, ANCHOR_BOTTOM_RIGHT)
+		scale_anchor(div, time, ANCHOR_TOP_LEFT)
+	}*/
 
 	function set_drag(_drag) drag = _drag * 0.01
 	function get_drag() return drag * 100
@@ -102,6 +111,7 @@ class OCamera extends OObject {
 
 	function get_width() return get_screen_width()
 	function get_height() return get_screen_height()
+	function get_scale() return get_current_scale()
 }
 
 api_table().Camera <- OCamera
