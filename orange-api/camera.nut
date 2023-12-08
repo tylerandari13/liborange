@@ -11,7 +11,7 @@ class OCamera extends OObject {
 	default_drag = 0.01
 
 	x_bounds = 150 // How far the camera goes in front of Tux. Where can i find this value in the source?
-	x_speed = 2
+	x_speed = 1
 
 	y_bounds = 4
 
@@ -39,7 +39,7 @@ class OCamera extends OObject {
 					camera.object.scroll_to(camera.target.get_x() - (camera.get_width() * 0.5) + 16 + cur_x, cur_y, camera.drag)
 
 					if(camera.target.get_velocity_x() != 0) {
-						cur_x += camera.x_speed * camera.target.get_velocity_x() / 250
+						cur_x += camera.x_speed * camera.target.get_velocity_x() / 125
 						if(cur_x > camera.x_bounds) cur_x = camera.x_bounds
 						if(cur_x < camera.x_bounds * -1) cur_x = camera.x_bounds * -1
 					}
