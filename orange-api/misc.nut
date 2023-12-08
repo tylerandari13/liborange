@@ -17,9 +17,7 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 	if(class_name == "scriptedobject" && !data.find("(name") && name != "") data += @"(name """ + name + @""")"
 	get_sector().settings.add_object(class_name, name, x, y, direction, data)
 	while(!(name in get_sector())) wait(0.01)
-	if(name in get_sector()) {
-		local retvalue = get_sector()[name].weakref()
-		if(unexposed) delete get_sector()[name]
-		return retvalue.ref()
-	}
+	local retvalue = get_sector()[name].weakref()
+	if(unexposed) delete get_sector()[name]
+	return retvalue.ref()
 }
