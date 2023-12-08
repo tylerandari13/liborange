@@ -21,13 +21,14 @@ class OButton extends OObject {
 		set_action("off-" + direction)
 	}
 
-	function press(sound = true) {
-		/*
-		if(objects_collided(sector.Tux.get_x(), sector.Tux.get_y(), 32, (sector.Tux.get_bonus() == "none" ? 32 : 64),
-							get_x(), get_y(),
-							((direction == "up" || direction == "down") ? 30 : 16),
-							((direction == "up" || direction == "down") ? 16 : 30), direction))
-		*/
+	function press(...) {
+		local sound = true
+		foreach(v in vargv)
+			if(type(v) == "string") {
+				press_function = compilestring(v)
+			} else if(type(v) == "function") {
+				press_function = v
+			} else if(type(v) == "bool") sound = v
 		if(collided_with_any_player(get_x(), get_y(),
 									((direction == "up" || direction == "down") ? 30 : 16),
 									((direction == "up" || direction == "down") ? 16 : 30), direction).len() > 0)
