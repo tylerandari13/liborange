@@ -83,7 +83,7 @@ class OCamera extends OObject {
 	}
 
 	function set_target(_target) {
-		if(("get_x" in _target && "get_y" in _target) || ("is_OObject" in _target)) {
+		if(("is_OObject" in _target)) {
 			target = _target
 		} else {
 			target = OObject(_target)
