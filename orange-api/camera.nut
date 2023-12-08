@@ -86,18 +86,7 @@ class OCamera extends OObject {
 		if(("get_x" in _target && "get_y" in _target) || ("is_OObject" in _target)) {
 			target = _target
 		} else {
-			target = class {
-				object = null
-				constructor(_object) {
-					object = _object
-				}
-				function get_x() return object.get_pos_x()
-				function get_y() return object.get_pos_y()
-				function _get(key) {
-					if(key in object) return object[key]
-					throw null
-				}
-			}(_target)
+			target = OObject(_target)
 		}
 	}
 

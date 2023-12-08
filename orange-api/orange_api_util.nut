@@ -73,11 +73,17 @@ class OObject {
 
 	constructor(obj) {
 		odata = {} // we dont want all odatas to point to the same table
-		if("is_OObject" in get_sector()[obj]) {
-			object = get_sector()[obj].object
-		} else object = get_sector()[obj]
-		delete get_sector()[obj]
-		get_sector()[obj] <- this
+		if(type(obj) == "string") {
+			if("is_OObject" in get_sector()[obj]) {
+				object = get_sector()[obj].object
+			} else object = get_sector()[obj]
+			delete get_sector()[obj]
+			get_sector()[obj] <- this
+		} else if(type(obj) == "instance") {
+			if("is_OObject" in obj) {
+				object = obj.object
+			} else object = obj
+		}
 		if("get_name" in object) {
 			object_name = object.get_name()
 		} else object_name = obj
