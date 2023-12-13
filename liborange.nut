@@ -11,6 +11,7 @@ foreach(file in [
 	"oobject"
 	"rand"
 	//"sexp"
+	"signal"
 	"table"
 	"test"
 	"tilemap"
