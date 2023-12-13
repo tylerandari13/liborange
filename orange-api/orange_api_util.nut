@@ -106,6 +106,11 @@ class OObject {
 			}
 		} else if(key in odata) {
 			return odata[key]
+// Godot-like get_*() and set_*() functions. if theres a variable in an OObject called `value` then typing `OObject.get_value()` will return `value`
+		} else if(key.slice(0, 4) == "get_") {
+			return function[this]() return this[key.slice(4)]
+		}else if(key.slice(0, 4) == "set_") {
+			return function[this](value) return this[key.slice(4)] = value
 		}
 		throw null
 	}
