@@ -17,7 +17,7 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 	if(return_object) {
 		while(!(name in get_sector())) wait(0.01)
 		local retvalue = get_sector()[name]
-		if(unexposed) get_sector()[name] = null
+		if(unexposed) get_sector()[name] = null // the key cant be deleted because it will throw errors
 		return retvalue
 	}
 }
