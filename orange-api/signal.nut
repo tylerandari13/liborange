@@ -4,6 +4,7 @@ class OSignal extends OObject {
 	connections = null
 
 	constructor() {
+		base.constructor(class{}())
 		connections = []
 	}
 
