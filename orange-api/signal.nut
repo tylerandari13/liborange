@@ -18,8 +18,6 @@ class OSignal extends OObject {
 		connections.remove(connections.find(func))
 	}
 
-	//function call(envobj, ...) foreach(connection in connections) connection.acall([envobj].extend(vargv))
-	//function fire(envobj, ...) foreach(connection in connections) connection.acall([envobj].extend(vargv))
 	function call(...) foreach(connection in connections) {
 		if(!("OSignalthreads" in api_table())) api_table().OSignalthreads <- []
 		local thrd = newthread(connection)
