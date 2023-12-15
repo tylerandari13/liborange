@@ -19,9 +19,7 @@ class OSignal extends OObject {
 	}
 
 	function call(...) foreach(connection in connections) {
-		if(!("OSignalthreads" in api_table())) api_table().OSignalthreads <- []
-		local thrd = newthread(connection)
-		api_table().OSignalthreads.push(thrd)
+		local thrd = api_table().thread(connection)
 		thrd.call.acall([thrd].extend(vargv))
 	}
 	function fire(...) call.acall([this].extend(vargv))
