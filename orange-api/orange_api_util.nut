@@ -11,8 +11,11 @@ function get_sector() {
 }
 
 function api_table() return get_sector().liborange
+function api_storage() return get_sector().liborange.other_data
 
-if(!("liborange" in get_sector())) get_sector().liborange <- class {} // not a table so that ::display(sector) doesnt flood the console with orange api stuff
+if(!("liborange" in get_sector())) get_sector().liborange <- class { // not a table so that ::display(sector) doesnt flood the console with orange api stuff
+	other_data = {}
+}
 
 if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 	theref = null
@@ -134,8 +137,8 @@ class OThread extends OObject {
 		if(::type(func) == "string") {
 			base.constructor(::newthread(compilestring(func)))
 		} else base.constructor(::newthread(func))
-		if(!("OThreads" in ::api_table())) ::api_table().OThreads <- []
-		::api_table().OThreads.push(object)
+		if(!("OThreads" in ::api_storage())) ::api_storage().OThreads <- []
+		::api_storage().OThreads.push(object)
 	}
 	function _get(key) {
 		try {
