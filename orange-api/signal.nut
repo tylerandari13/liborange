@@ -37,11 +37,11 @@ api_table().init_signals <- function() {
 			foreach(i, v in get_players())
 				if(!(i in added_players)) {
 					added_players[i] <- v
-					api_table().get_signal("player_added").call(this, v)
+					api_table().get_signal("player_added").call(this, v, i)
 				} else if(added_players.len() > get_players().len()) {
 					foreach(i, v in added_players)
 						if(!(i in get_players())) {
-							api_table().get_signal("player_removed").call(this, v)
+							api_table().get_signal("player_removed").call(this, v, i)
 							delete added_players[i]
 						}
 				}
