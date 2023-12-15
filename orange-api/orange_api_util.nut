@@ -73,13 +73,13 @@ class OObject {
 
 	constructor(obj) {
 		odata = {} // we dont want all odatas to point to the same table
-		if(type(obj) == "string") {
+		if(::type(obj) == "string") {
 			if("is_OObject" in get_sector()[obj]) {
 				object = get_sector()[obj].object
 			} else object = get_sector()[obj]
 			delete get_sector()[obj]
 			get_sector()[obj] <- this
-		} else if(type(obj) == "instance") {
+		} else {
 			if("is_OObject" in obj) {
 				object = obj.object
 			} else object = obj
@@ -99,7 +99,7 @@ class OObject {
 		} else if(key == "get_y" && "get_pos_y" in object) {
 			return object.get_pos_y.bindenv(object)
 		} else if(key in object) {
-			if(type(object[key]) == "function") {
+			if(::type(object[key]) == "function") {
 				return object[key].bindenv(object)
 			} else {
 				return object[key]
@@ -129,5 +129,25 @@ class OObject {
     }
 }
 
+class OThread extends OObject {
+	constructor(func) {
+		if(::type(func) == "string") {
+			base.constructor(::newthread(compilestring(func)))
+		} else base.constructor(::newthread(func))
+		if(!("OThreads" in ::api_table())) ::api_table().OThreads <- []
+		::api_table().OThreads.push(object)
+	}
+	function _get(key) {
+		try {
+			return function(...) {
+				return object[key].acall([object].extend(vargv))
+			}
+		} catch(e) {
+			return base._get(key)
+		}
+		throw null
+	}
+}
+
 // convert all instances to OObjects
-//foreach(i, v in get_sector()) if(type(v) == "instance") OObject(i)
+//foreach(i, v in get_sector()) if(::type(v) == "instance") OObject(i)

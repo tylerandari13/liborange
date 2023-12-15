@@ -14,6 +14,7 @@ foreach(file in [
 	"signal"
 	"table"
 	"test"
+	"thread"
 	"tilemap"
 	"trampoline"
 ]) import("orange-api/" + file + ".nut")
