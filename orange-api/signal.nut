@@ -28,7 +28,7 @@ class OSignal extends OObject {
 api_table().signal <- OSignal
 
 api_table().init_signals <- function() {
-	api_table().OSignal_thread <- newthread(function() {
+	local OSignal_thread = OThread(function() {
 		local added_players = {}
 		while(true) {
 			foreach(i, v in get_players())
@@ -45,7 +45,7 @@ api_table().init_signals <- function() {
 			wait(0.01)
 		}
 	})
-	api_table().OSignal_thread.call()
+	OSignal_thread.call()
 }
 
 api_table().add_signal <- function(name) {

@@ -48,7 +48,7 @@ function alternate_tile(tilemap, x, y, framerate, ids, ...) {
 	})
 
 	if(!("alternating_tiles_thread" in api_table())) {
-		api_table().alternating_tiles_thread <- newthread(function(table) {
+		api_table().alternating_tiles_thread <- OThread(function(table) {
 			local i = 0
 			while(true) {
 				foreach(v in table.ref()) {

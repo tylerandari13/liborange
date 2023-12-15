@@ -25,7 +25,7 @@ class OCamera extends OObject {
 		base.constructor(name)
 		reset_drag()
 		object.set_mode("manual")
-		thread = newthread(thread_func)
+		thread = OThread(thread_func)
 		thread.call(this)
 	}
 

@@ -8,12 +8,12 @@ api_table().help <- help
 api_table().ping <- function() {
 	is_milling = true
 	milli = 0
-	newthread(function() {
+	OThread(function() {
 		while(is_milling) {
 			wait(0.01)
 			milli++
 		}
 	}).call()
 	is_milling = false
-	display("pong! (" + milli.tostring() + " milliseconds)")
+	::display("pong! (" + milli.tostring() + " milliseconds)")
 }
