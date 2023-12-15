@@ -20,12 +20,13 @@ class OSignal extends OObject {
 
 	//function call(envobj, ...) foreach(connection in connections) connection.acall([envobj].extend(vargv))
 	//function fire(envobj, ...) foreach(connection in connections) connection.acall([envobj].extend(vargv))
-	function call(envobj, ...) foreach(connection in connections) {
+	function call(...) foreach(connection in connections) {
 		if(!("OSignalthreads" in api_table())) api_table().OSignalthreads <- []
-		local thrd = newthread(connection.bindenv(envobj))
+		local thrd = newthread(connection)
 		api_table().OSignalthreads.push(thrd)
 		thrd.call.acall([thrd].extend(vargv))
 	}
+	function fire(...) call.acall([this].extend(vargv))
 }
 
 api_table().signal <- OSignal
@@ -37,11 +38,11 @@ api_table().init_signals <- function() {
 			foreach(i, v in get_players())
 				if(!(i in added_players)) {
 					added_players[i] <- v
-					api_table().get_signal("player_added").call(this, v, i)
+					api_table().get_signal("player_added").call(v, i)
 				} else if(added_players.len() > get_players().len()) {
 					foreach(i, v in added_players)
 						if(!(i in get_players())) {
-							api_table().get_signal("player_removed").call(this, v, i)
+							api_table().get_signal("player_removed").call(v, i)
 							delete added_players[i]
 						}
 				}
