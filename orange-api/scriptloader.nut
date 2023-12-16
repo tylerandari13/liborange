@@ -177,7 +177,14 @@ class OMenuText extends OObject {
 		start_cutscene()
 		thread = OThread(thread_func.bindenv(this))
 		thread.call()
+		sector.liborange.get_signal("console_response").connect(temp_string.bindenv(this))
 		swap_menu("main")
+	}
+
+	function temp_string(text) {
+		if(current_menu[current_item].orange_API_key == keys.CUSTOM && current_menu[current_item].orange_API_value == values.STRING) {
+			current_menu[current_item].string = text
+		}
 	}
 
 	function thread_func() {
@@ -279,7 +286,7 @@ class OMenuText extends OObject {
 								}
 								break
 							case values.STRING:
-								// to be implemented
+									// handled at temp_string()
 								break
 							case values.BOOL:
 								v.bool = !v.bool

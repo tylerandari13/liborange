@@ -33,4 +33,10 @@ function console::liborange_respond(message) Level.liborange_console_response = 
 
 function console::liborange_init_script_loader() load_level("levels/test2/script_loader.stl")
 
+Level.liborange_console_response <- ""
+function console::liborange_respond(message) {
+	Level.liborange_console_response = message
+	sector.liborange.get_signal("console_response").call(message)
+}
+
 setconsttable(console)
