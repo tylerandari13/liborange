@@ -1,7 +1,5 @@
 import("orange-api/orange_api_util.nut")
 
-local nan = sqrt(-1)
-
 enum keys {
 	TEXT
 	SWAP
@@ -24,13 +22,6 @@ enum errors {
 	INFO
 	WARNING
 	ERROR
-}
-
-function hide_player(player) {
-	player.set_visible(false)
-	player.set_ghost_mode(true)
-	player.deactivate()
-	player.set_pos(0, 0)
 }
 
 // functions to make menu things
@@ -123,7 +114,7 @@ function load_previous_scripts() {
 			newtab.push(action.run("\"" + i + "\"", function(){load_script(i)}))
 		}
 	} else {
-		newtab.push(action.text("No Levels previously loaded. Check \"Load a New Script\" to load one."))
+		newtab.push(action.text("No scripts previously loaded. Check \"Load a New Script\" to load one."))
 	}
 	newtab.push(action.back())
 	swap_menu(newtab)
@@ -152,10 +143,32 @@ function load_script(name = null) {
 	Level.liborange_previously_loaded_scripts[name] <- name
 }
 
+function manage_scripts() {
+	local newtab = []
+	if("liborange_loaded_scripts" in Level && Level.liborange_loaded_scripts.len() > 0) {
+		foreach(i, v in Level.liborange_loaded_scripts) {
+			newtab.push(action.run("\"" + i + "\"", function(){manage_script(Level.liborange_loaded_scripts[i])}))
+		}
+	} else {
+		newtab.push(action.text("No scripts currently loaded. Check \"Load a New Script\" to load one."))
+	}
+	newtab.push(action.swap("Back", "main"))
+	swap_menu(newtab)
+}
+
+function manage_script(script) {
+	local newtab = script.settings
+	local found = false
+	foreach(v in newtab) if(v.orange_API_key == keys.BACK) found = true
+	if(!found) newtab.push(action.back())
+	swap_menu(newtab)
+}
+
 local menus = {
 	main = [
 		action.run("Load a Previously Loaded Script", load_previous_scripts)
 		action.swap("Load a New Script", "new_script")
+		action.run("Manage Scripts", manage_scripts)
 		action.swap("Test Data Types", "test")
 		action.exit()
 	]
@@ -193,10 +206,10 @@ function load_script_thread() {
 	while(true) {
 		foreach(v in Level.liborange_loaded_scripts) {
 			try {
-				if(sector) OThread(v.sector()).call()
+				if(sector) OThread(v._sector()).call()
 			} catch(e){
 				try {
-					if(worldmap) OThread(v.worldmap()).call()
+					if(worldmap) OThread(v._worldmap()).call()
 				} catch(e){
 
 				}
@@ -211,6 +224,13 @@ function exit() {
 	sector.Text.fade_out(0.5)
 	wait(1)
 	Level.finish(false)
+}
+
+function hide_player(player) {
+	player.set_visible(false)
+	player.set_ghost_mode(true)
+	player.deactivate()
+	player.set_pos(0, 0)
 }
 
 class OMenuText extends OObject {
@@ -376,13 +396,32 @@ class OMenuText extends OObject {
 
 // global class thing for the custom script loader to ensure all functions are there for global scripts
 class OGlobalScript extends OObject {
+	settings = []
+
 	constructor(a = null) base.constructor(a == null ? class{}() : a)
 
-	function sector() {}
+	function _sector() {}
 
-	function worldmap() {}
+	function _worldmap() {}
 
-	function titlescreen() {} // temporarily out of order
+	function _titlescreen() {} // temporarily out of order
+
+	function get_setting(name)
+		foreach(v in settings)
+			if(v.text == name)
+				switch(v.orange_API_value) {
+					case values.NULL:
+						return null
+					case values.INT:
+					case values.FLOAT:
+						return v.num
+					case values.STRING:
+						return v.string
+					case values.BOOL:
+						return v.bool
+
+
+				}
 }
 
 api_table().init_script_loader <- function() {
