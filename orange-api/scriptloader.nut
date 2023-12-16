@@ -19,6 +19,13 @@ enum values {
 	BOOL
 }
 
+enum errors {
+	OK
+	INFO
+	WARNING
+	ERROR
+}
+
 function hide_player(player) {
 	player.set_visible(false)
 	player.set_ghost_mode(true)
@@ -111,9 +118,32 @@ function data::nil(text) return {
 
 function load_previous_scripts() {
 	local newtab = []
-
+	if("liborange_previously_loaded_scripts" in Level) {
+		// load them
+	} else {
+		newtab.push(action.text("No Levels previously loaded. Check \"Load a New Script\" to load one."))
+	}
 	newtab.push(action.back())
 	swap_menu(newtab)
+}
+
+function load_script() {
+	try{
+		import(get_item_from_name("Script Name").string)
+	} catch(e) try{
+		import("liborange-scripts/" + get_item_from_name("Script Name").string)
+	} catch(e) {
+		display_info("Could not find the desired script. You spelling everything correctly?", errors.ERROR)
+		return
+	}
+	if(!("liborange_loaded_scripts" in Level)) Level.liborange_loaded_scripts <- {}
+	Level.loaded_script_thread <- OThread(load_script_thread)
+	Level.loaded_script_thread.call()
+	Level.liborange_loaded_scripts[get_item_from_name("Script Name").string] <- (type(Level.liborange_loaded_script_class) == "class" ?
+																				Level.liborange_loaded_script_class() :
+																				Level.liborange_loaded_script_class)
+	Level.liborange_loaded_script_class = null
+	display_info("Script successfully loaded!", errors.OK)
 }
 
 local menus = {
@@ -125,7 +155,7 @@ local menus = {
 	]
 	new_script = [
 		data.string("Script Name")
-		action.run("Load Script", function(){})
+		action.run("Load Script", load_script)
 		action.back()
 	]
 	test = [
@@ -153,6 +183,26 @@ function get_released(...) {
 	return false
 }
 
+function load_script_thread() {
+	while(true) {
+		display("get")
+		foreach(v in Level.liborange_loaded_scripts) {
+			try {
+				if(sector) v.sector()
+				display("get sectord")
+			} catch(e){
+				try {
+					if(worldmap) v.worldmap()
+					display("get worldmapd")
+				} catch(e){
+
+				}
+			}
+		}
+		wait_for_screenswitch()
+	}
+}
+
 function exit() {
 	sector.Effect.fade_out(1)
 	sector.Text.fade_out(0.5)
@@ -165,6 +215,8 @@ class OMenuText extends OObject {
 
 	current_menu = {}
 	last_menu = {}
+
+	start_info = ""
 
 	thread = null
 	constructor(name) {
@@ -238,16 +290,8 @@ class OMenuText extends OObject {
 			drawnum++
 		}
 
-		set_text(drawtext)
+		set_text(start_info + "\n\n" + drawtext)
 	}
-
-	/*enum values {
-		NULL
-		INT
-		FLOAT
-		STRING
-		BOOL
-	}*/
 
 	function menu_select(dir = 0) {
 		local drawnum = 0
@@ -302,11 +346,44 @@ class OMenuText extends OObject {
 		} else current_menu = clone new_menu
 	}
 
+	function get_item_from_name(name) foreach(v in current_menu) if(v.text == name) return v
+
 	function run_function(func) (type(func) == "string" ? compilestring(func) : func).bindenv(this)()
 
 	function go_back() swap_menu(last_menu)
+
+	function display_info(message, type) OThread(function[this](message, type) {
+		local start_thing = ""
+		switch(type) {
+			case errors.OK:
+				start_thing = "Success: "
+			break
+			case errors.WARNING:
+				start_thing = "Warning: "
+			break
+			case errors.ERROR:
+				start_thing = "Error: "
+			break
+		}
+		start_info = start_thing + message
+		wait(5)
+		start_info = ""
+	}).call(message, type)
+}
+
+// global class thing for the custom script loader to ensure all functions are there for global scripts
+class OGlobalScript extends OObject {
+	constructor(a = null) base.constructor(a == null ? class{}() : a)
+
+	function sector() {}
+
+	function worldmap() {}
+
+	function titlescreen() {} // temporarily out of order
 }
 
 api_table().init_script_loader <- function() {
 	OMenuText("Text")
 }
+
+api_table().global_script <- OGlobalScript
