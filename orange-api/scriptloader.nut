@@ -118,8 +118,10 @@ function data::nil(text) return {
 
 function load_previous_scripts() {
 	local newtab = []
-	if("liborange_previously_loaded_scripts" in Level) {
-		// load them
+	if("liborange_previously_loaded_scripts" in Level && Level.liborange_previously_loaded_scripts.len() > 0) {
+		foreach(i, v in Level.liborange_previously_loaded_scripts) {
+			newtab.push(action.run("\"" + i + "\"", function(){load_script(i)}))
+		}
 	} else {
 		newtab.push(action.text("No Levels previously loaded. Check \"Load a New Script\" to load one."))
 	}
@@ -127,23 +129,27 @@ function load_previous_scripts() {
 	swap_menu(newtab)
 }
 
-function load_script() {
+function load_script(name = null) {
+	if(name == null) name = get_item_from_name("Script Name").string
 	try{
-		import(get_item_from_name("Script Name").string)
+		import(name)
 	} catch(e) try{
-		import("liborange-scripts/" + get_item_from_name("Script Name").string)
+		import("liborange-scripts/" + name)
 	} catch(e) {
-		display_info("Could not find the desired script. You spelling everything correctly?", errors.ERROR)
+		display_info("Could not find the desired script \"" + name + "\". You spelling everything correctly?", errors.ERROR)
 		return
 	}
 	if(!("liborange_loaded_scripts" in Level)) Level.liborange_loaded_scripts <- {}
 	Level.loaded_script_thread <- OThread(load_script_thread)
 	Level.loaded_script_thread.call()
-	Level.liborange_loaded_scripts[get_item_from_name("Script Name").string] <- (type(Level.liborange_loaded_script_class) == "class" ?
+	if(name in Level.liborange_loaded_scripts) delete Level.liborange_loaded_scripts[name]
+	Level.liborange_loaded_scripts[name] <- (type(Level.liborange_loaded_script_class) == "class" ?
 																				Level.liborange_loaded_script_class() :
 																				Level.liborange_loaded_script_class)
 	Level.liborange_loaded_script_class = null
 	display_info("Script successfully loaded!", errors.OK)
+	if(!("liborange_previously_loaded_scripts" in Level)) Level.liborange_previously_loaded_scripts <- {}
+	Level.liborange_previously_loaded_scripts[name] <- name
 }
 
 local menus = {
@@ -185,15 +191,12 @@ function get_released(...) {
 
 function load_script_thread() {
 	while(true) {
-		display("get")
 		foreach(v in Level.liborange_loaded_scripts) {
 			try {
-				if(sector) v.sector()
-				display("get sectord")
+				if(sector) OThread(v.sector()).call()
 			} catch(e){
 				try {
-					if(worldmap) v.worldmap()
-					display("get worldmapd")
+					if(worldmap) OThread(v.worldmap()).call()
 				} catch(e){
 
 				}
