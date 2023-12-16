@@ -6,3 +6,4 @@ profile*
 addons
 liborange-pocket.nut
 orange-api/liborange-pocket.nut-temp
+*.stl~
