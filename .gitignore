@@ -1,7 +1,7 @@
 
 config
 ver_info.nfo
-levels
+#levels
 profile*
 addons
 liborange-pocket.nut

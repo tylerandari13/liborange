@@ -1,0 +1,44 @@
+(supertux-level
+  (version 3)
+  (name (_ "liborange_script_loader"))
+  (author " ")
+  (note "If youre seeing this, somethings gone horribly wrong.")
+  (license " ")
+  (icon "")
+  (icon-locked "")
+  (sector
+    (name "main")
+    (init-script "import(\"liborange.nut\")
+liborange.init_script_loader()")
+    (ambient-light
+      (color 1 1 1)
+    )
+    (background
+      (color 1 1 1)
+      (scroll-speed-x -100)
+      (scroll-speed-y 100)
+      (speed 0)
+      (image "/orange-api/res/script_loader_bg.png")
+    )
+    (camera
+      (name "Camera")
+      (mode "normal")
+    )
+    (music
+    )
+    (spawnpoint
+      (name "main")
+      (x 0)
+      (y -16)
+    )
+    (tilemap
+      (solid #t)
+      (z-pos 0)
+      (width 300)
+      (height 1)
+      (tiles
+      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+      )
+    )
+  )
+)
