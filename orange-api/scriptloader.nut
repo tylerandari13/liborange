@@ -111,7 +111,7 @@ function load_previous_scripts() {
 	local newtab = []
 	if("liborange_previously_loaded_scripts" in Level && Level.liborange_previously_loaded_scripts.len() > 0) {
 		foreach(i, v in Level.liborange_previously_loaded_scripts) {
-			newtab.push(action.run("\"" + i + "\"", function(){load_script(i)}))
+			newtab.push(action.run((i in Level.liborange_loaded_scripts ? "Reload": "Load") + " Script \"" + i + "\"", function(){load_script(i)}))
 		}
 	} else {
 		newtab.push(action.text("No scripts previously loaded. Check \"Load a New Script\" to load one."))
@@ -147,7 +147,7 @@ function manage_scripts() {
 	local newtab = []
 	if("liborange_loaded_scripts" in Level && Level.liborange_loaded_scripts.len() > 0) {
 		foreach(i, v in Level.liborange_loaded_scripts) {
-			newtab.push(action.run("\"" + i + "\"", function(){manage_script(Level.liborange_loaded_scripts[i])}))
+			newtab.push(action.run("Manage Script \"" + i + "\"", function(){manage_script(Level.liborange_loaded_scripts[i])}))
 		}
 	} else {
 		newtab.push(action.text("No scripts currently loaded. Check \"Load a New Script\" to load one."))
@@ -169,7 +169,7 @@ local menus = {
 		action.run("Load a Previously Loaded Script", load_previous_scripts)
 		action.swap("Load a New Script", "new_script")
 		action.run("Manage Scripts", manage_scripts)
-		action.swap("Test Data Types", "test")
+		//action.swap("Test Data Types", "test")
 		action.exit()
 	]
 	new_script = [
@@ -419,8 +419,6 @@ class OGlobalScript extends OObject {
 						return v.string
 					case values.BOOL:
 						return v.bool
-
-
 				}
 }
 
