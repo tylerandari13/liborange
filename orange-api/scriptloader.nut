@@ -181,11 +181,7 @@ class OMenuText extends OObject {
 		swap_menu("main")
 	}
 
-	function temp_string(text) {
-		if(current_menu[current_item].orange_API_key == keys.CUSTOM && current_menu[current_item].orange_API_value == values.STRING) {
-			current_menu[current_item].string = text
-		}
-	}
+	function temp_string(text) if(current_menu[current_item].orange_API_key == keys.CUSTOM && current_menu[current_item].orange_API_value == values.STRING) current_menu[current_item].string = text
 
 	function thread_func() {
 		while(wait(0.01) == null && !get_pressed("escape", "menu-back")) {
