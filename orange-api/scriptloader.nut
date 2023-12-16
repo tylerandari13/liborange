@@ -187,7 +187,7 @@ class OMenuText extends OObject {
 			if(get_pressed("up", "peek-up")) current_item--
 			if(get_pressed("down", "peek-down")) current_item++
 
-			if(get_pressed("action", "menu-select", "menu-select-space")) menu_select()
+			if(get_pressed("action", "menu-select", "menu-select-space", "jump")) menu_select()
 			if(get_pressed("left", "peek-left")) menu_select(-1)
 			if(get_pressed("right", "peek-right")) menu_select(1)
 
