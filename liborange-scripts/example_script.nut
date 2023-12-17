@@ -5,6 +5,7 @@ class TemplateScript extends OGlobalScript {
 		data.float("jump height or whatever")
 		data.string("name i guess")
 		data.bool("is alive maybe")
+		data.enums("type" ["guh?", 0], ["guh!", 1], ["guh.", 2])
 		data.nil("nothing here")
 	]
 

@@ -15,6 +15,7 @@ enum values {
 	FLOAT
 	STRING
 	BOOL
+	ENUM
 }
 
 enum errors {
@@ -97,6 +98,14 @@ function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") re
 	bool = bool
 	true_text = true_text
 	false_text = false_text
+}
+
+function data::enums(text, index, ...) return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.ENUM
+	text = text
+	enums = vargv
+	index = index
 }
 
 function data::nil(text) return {
@@ -188,7 +197,7 @@ local menus = {
 		action.back()
 	]
 	liborange_settings = [
-
+		data.enums("Text Resizing", 0, ["On", 0], ["Off", 1], ["Adaptive", 2])
 		action.back()
 	]
 	test = [
@@ -232,6 +241,23 @@ function load_script_thread() {
 		wait_for_screenswitch()
 	}
 }
+
+function get_settings(name, item = menus.liborange_settings)
+		foreach(v in item)
+			if(v.text == name)
+				switch(v.orange_API_value) {
+					case values.NULL:
+						return null
+					case values.INT:
+					case values.FLOAT:
+						return v.num
+					case values.STRING:
+						return v.string
+					case values.BOOL:
+						return v.bool
+					case values.ENUM:
+						return v.enums[v.index][1]
+				}
 
 function exit() {
 	sector.Effect.fade_out(1)
@@ -318,6 +344,9 @@ class OMenuText extends OObject {
 						case values.BOOL:
 							drawline += v.bool ? v.true_text : v.false_text
 							break
+						case values.ENUM:
+							drawline += "<- " + v.enums[v.index][0] + "->"
+							break
 						default:
 							drawline += "<unknown>"
 							break
@@ -327,6 +356,21 @@ class OMenuText extends OObject {
 					drawline += v.text
 			}
 			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n\n"
+
+			switch(get_settings("Text Resizing")) {
+				case 1:
+					set_font("big")
+					break
+				case 0:
+					if(drawline.len() > 38) {
+						set_font("small")
+					} else if(drawline.len() > 30) set_font("normal")
+				case 2:
+					if(drawnum == current_item && drawline.len() > 38) {
+						set_font("small")
+					} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
+					break
+			}
 			if(drawnum == current_item && drawline.len() > 38) {
 				set_font("small")
 			} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
@@ -372,6 +416,11 @@ class OMenuText extends OObject {
 								break
 							case values.BOOL:
 								v.bool = !v.bool
+								break
+							case values.ENUM:
+								v.index += (dir == 0 ? 1 : dir)
+								if(v.index > v.enums.len() - 1) v.index = 0
+								if(v.index < 0) v.index = v.enums.len() - 1
 								break
 						}
 				}
@@ -425,20 +474,8 @@ class OGlobalScript extends OObject {
 
 	function _titlescreen() {} // temporarily out of order
 
-	function get_setting(name)
-		foreach(v in settings)
-			if(v.text == name)
-				switch(v.orange_API_value) {
-					case values.NULL:
-						return null
-					case values.INT:
-					case values.FLOAT:
-						return v.num
-					case values.STRING:
-						return v.string
-					case values.BOOL:
-						return v.bool
-				}
+	function get_setting(name) return get_settings(name, settings)
+
 }
 
 api_table().init_script_loader <- function() {
