@@ -1,6 +1,6 @@
 import("liborange.nut")
 class TemplateScript extends OGlobalScript {
-	settings = [ // see below `::data <- {}` for how to use these
+	settings = [ // see below `::data <- {}` in `scriptloader.nut` for how to use these
 		data.integer("speed or something")
 		data.float("jump height or whatever")
 		data.string("name i guess")

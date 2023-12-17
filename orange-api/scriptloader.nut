@@ -49,7 +49,7 @@ function action::back(text = "Back") return {
 	text = text
 }
 
-function action::exit(text = "Exit Script Loader") return {
+function action::exit(text = "Exit") return {
 	orange_API_key = keys.EXIT
 	text = text
 }
@@ -152,7 +152,7 @@ function manage_scripts() {
 	} else {
 		newtab.push(action.text("No scripts currently loaded. Check \"Load a New Script\" to load one."))
 	}
-	newtab.push(action.swap("Back", "main"))
+	newtab.push(action.swap("Back", "script_loader"))
 	swap_menu(newtab)
 }
 
@@ -166,15 +166,29 @@ function manage_script(script) {
 
 local menus = {
 	main = [
+		action.swap("Script Loader", "script_loader")
+		action.swap("Addon Settings", "addon_settings")
+		action.swap("liborange Settings", "liborange_settings")
+		//action.swap("Test Data Types", "test")
+		action.exit()
+	]
+	script_loader = [
 		action.run("Load a Previously Loaded Script", load_previous_scripts)
 		action.swap("Load a New Script", "new_script")
 		action.run("Manage Scripts", manage_scripts)
-		//action.swap("Test Data Types", "test")
-		action.exit()
+		action.swap("Back", "main")
 	]
 	new_script = [
 		data.string("Script Name")
 		action.run("Load Script", load_script)
+		action.back()
+	]
+	addon_settings = [
+		action.text("Coming Soon")
+		action.back()
+	]
+	liborange_settings = [
+
 		action.back()
 	]
 	test = [
@@ -281,38 +295,43 @@ class OMenuText extends OObject {
 		local drawtext = ""
 		local drawnum = 0
 
+		if(drawnum != current_item) set_font("big")
+
 		foreach(i, v in current_menu) {
+			local drawline = (drawnum == current_item ? "> " : "  ")
 			switch(v.orange_API_key) {
 				case keys.CUSTOM:
-					drawtext += v.text + " : "
+					drawline += v.text + " : "
 					switch(v.orange_API_value) {
 						case values.NULL:
-							drawtext += "<null>"
+							drawline += "<null>"
 							break
 						case values.INT:
-							drawtext += v.num
+							drawline += v.num
 							break
 						case values.FLOAT:
-							drawtext += v.num + (v.num == v.num.tointeger() ? ".0" : "")
+							drawline += v.num + (v.num == v.num.tointeger() ? ".0" : "")
 							break
 						case values.STRING:
-							drawtext += v.prefix + v.string + v.suffix
+							drawline += v.prefix + v.string + v.suffix
 							break
 						case values.BOOL:
-							drawtext += v.bool ? v.true_text : v.false_text
+							drawline += v.bool ? v.true_text : v.false_text
 							break
 						default:
-							drawtext += "<unknown>"
+							drawline += "<unknown>"
 							break
 					}
 					break
 				default:
-					drawtext += v.text
+					drawline += v.text
 			}
-			drawtext += (drawnum == current_item ? " <" : "") + "\n\n"
+			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n\n"
+			if(drawnum == current_item && drawline.len() > 38) {
+				set_font("small")
+			} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
 			drawnum++
 		}
-
 		set_text(start_info + "\n\n" + drawtext)
 	}
 
