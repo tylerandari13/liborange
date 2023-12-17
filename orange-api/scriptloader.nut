@@ -117,7 +117,7 @@ function data::nil(text) return {
 // menu stuff
 
 function load_previous_scripts() {
-	local newtab = []
+	local newtab = [action.text("Load Previous Scripts")]
 	if("liborange_previously_loaded_scripts" in Level && Level.liborange_previously_loaded_scripts.len() > 0) {
 		foreach(i, v in Level.liborange_previously_loaded_scripts) {
 			newtab.push(action.run((i in Level.liborange_loaded_scripts ? "Reload": "Load") + " Script \"" + i + "\"", function(){load_script(i)}))
@@ -131,6 +131,10 @@ function load_previous_scripts() {
 
 function load_script(name = null) {
 	if(name == null) name = get_item_from_name("Script Name").string
+	if(name == "") {
+		display_info("Could not find the desired script because you entered no text.", errors.ERROR)
+		return
+	}
 	try{
 		import(name)
 	} catch(e) try{
@@ -153,7 +157,7 @@ function load_script(name = null) {
 }
 
 function manage_scripts() {
-	local newtab = []
+	local newtab = [action.text("Manage Scripts")]
 	if("liborange_loaded_scripts" in Level && Level.liborange_loaded_scripts.len() > 0) {
 		foreach(i, v in Level.liborange_loaded_scripts) {
 			newtab.push(action.run("Manage Script \"" + i + "\"", function(){manage_script(Level.liborange_loaded_scripts[i])}))
@@ -167,6 +171,7 @@ function manage_scripts() {
 
 function manage_script(script) {
 	local newtab = script.settings
+	if(newtab[0].orange_API_key != keys.TEXT) newtab = [action.text("Manage Script")].extend(newtab)
 	local found = false
 	foreach(v in newtab) if(v.orange_API_key == keys.BACK) found = true
 	if(!found) newtab.push(action.back())
@@ -175,6 +180,7 @@ function manage_script(script) {
 
 local menus = {
 	main = [
+		action.text("liborange Menu")
 		action.swap("Script Loader", "script_loader")
 		action.swap("Addon Settings", "addon_settings")
 		action.swap("liborange Settings", "liborange_settings")
@@ -182,25 +188,30 @@ local menus = {
 		action.exit()
 	]
 	script_loader = [
+		action.text("Script Loader")
 		action.run("Load a Previously Loaded Script", load_previous_scripts)
 		action.swap("Load a New Script", "new_script")
 		action.run("Manage Scripts", manage_scripts)
 		action.swap("Back", "main")
 	]
 	new_script = [
+		action.text("Load a New Script")
 		data.string("Script Name")
 		action.run("Load Script", load_script)
 		action.back()
 	]
 	addon_settings = [
-		action.text("Coming Soon")
+		action.text("Addon Settings")
 		action.back()
+		action.text("Coming Soon")
 	]
 	liborange_settings = [
+		action.text("liborange Settings")
 		data.enums("Text Resizing", 0, ["On", 0], ["Off", 1], ["Adaptive", 2])
 		action.back()
 	]
 	test = [
+		action.text("Test Data Types")
 		data.integer("Integer", 0, -10, 10)
 		data.float("Float")
 		data.string("String")
@@ -312,6 +323,10 @@ class OMenuText extends OObject {
 			if(current_item < 0) current_item = current_menu.len() - 1
 			if(current_item >= current_menu.len()) current_item = 0
 
+			if(current_menu[current_item].orange_API_key == keys.TEXT) if(get_pressed("up", "peek-up")) {
+				current_item--
+			} else current_item++
+
 			draw_menu()
 		}
 		exit()
@@ -362,18 +377,15 @@ class OMenuText extends OObject {
 					set_font("big")
 					break
 				case 0:
-					if(drawline.len() > 38) {
+					if(drawline.len() >= 38 && v.orange_API_key != keys.TEXT) {
 						set_font("small")
-					} else if(drawline.len() > 30) set_font("normal")
+					} else if(drawline.len() >= 30 && v.orange_API_key != keys.TEXT) set_font("normal")
 				case 2:
-					if(drawnum == current_item && drawline.len() > 38) {
+					if(drawnum == current_item && drawline.len() > 38 && v.orange_API_key != keys.TEXT) {
 						set_font("small")
-					} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
+					} else if(drawnum == current_item && drawline.len() > 30 && v.orange_API_key != keys.TEXT) set_font("normal")
 					break
 			}
-			if(drawnum == current_item && drawline.len() >= 38) {
-				set_font("small")
-			} else if(drawnum == current_item && drawline.len() >= 30) set_font("normal")
 			drawnum++
 		}
 		set_text(start_info + "\n\n" + drawtext)
