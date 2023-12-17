@@ -1,118 +1,5 @@
 import("orange-api/orange_api_util.nut")
-
-enum keys {
-	TEXT
-	SWAP
-	FUNC
-	BACK
-	CUSTOM
-	EXIT
-}
-
-enum values {
-	NULL
-	INT
-	FLOAT
-	STRING
-	BOOL
-	ENUM
-}
-
-enum errors {
-	OK
-	INFO
-	WARNING
-	ERROR
-}
-
-// functions to make menu things
-::action <- {}
-
-function action::text(text)  return {
-	orange_API_key = keys.TEXT
-	text = "- " + text + " -"
-}
-
-function action::swap(text, menu) return {
-	orange_API_key = keys.SWAP
-	menu = menu
-	text = text
-}
-
-function action::run(text, func) return {
-	orange_API_key = keys.FUNC
-	func = func
-	text = text
-}
-
-function action::back(text = "Back") return {
-	orange_API_key = keys.BACK
-	text = text
-}
-
-function action::exit(text = "Exit") return {
-	orange_API_key = keys.EXIT
-	text = text
-}
-
-// data types
-::data <- {}
-
-function data::integer(text, num = 0, min = -2147483647, max = 2147483647, inc = 1) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.INT
-	text = text
-
-	num = num
-	min = min
-	max = max
-	inc = inc
-}
-
-function data::float(text, num = 0.0, min = -2147483647.0, max = 2147483647.0, inc = 0.5) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.FLOAT
-	text = text
-
-	num = num
-	min = min
-	max = max
-	inc = inc
-}
-
-function data::string(text, string = "", prefix = "\"", suffix = "\"") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.STRING
-	text = text
-
-	string = string
-	prefix = prefix
-	suffix = suffix
-}
-
-function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.BOOL
-	text = text
-
-	bool = bool
-	true_text = true_text
-	false_text = false_text
-}
-
-function data::enums(text, index, ...) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.ENUM
-	text = text
-	enums = vargv
-	index = index
-}
-
-function data::nil(text) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.NULL
-	text = text
-}
+import("orange-api/text.nut") // required
 
 // menu stuff
 
@@ -173,7 +60,7 @@ function manage_script(script) {
 	local newtab = script.settings
 	if(newtab[0].orange_API_key != keys.TEXT) newtab = [action.text("Manage Script")].extend(newtab)
 	local found = false
-	foreach(v in newtab) if(v.orange_API_key == keys.BACK) found = true
+	foreach(v in newtab) if(v.text.tolower() == "back") found = true
 	if(!found) newtab.push(action.back())
 	swap_menu(newtab)
 }
@@ -223,19 +110,6 @@ local menus = {
 
 // other stuff
 
-function get_pressed(...) {
-	foreach(v in vargv) if(sector.Tux.get_input_pressed(v)) return true
-	return false
-}
-function get_held(...) {
-	foreach(v in vargv) if(sector.Tux.get_input_held(v)) return true
-	return false
-}
-function get_released(...) {
-	foreach(v in vargv) if(sector.Tux.get_input_released(v)) return true
-	return false
-}
-
 function load_script_thread() {
 	while(true) {
 		foreach(v in Level.liborange_loaded_scripts) {
@@ -284,52 +158,14 @@ function hide_player(player) {
 	player.set_pos(0, 0)
 }
 
-class OMenuText extends OObject {
-	current_item = 0
-
-	current_menu = {}
-	last_menu = {}
-
-	start_info = ""
-
-	thread = null
+class OliborangeMenuText extends OMenuText {
 	constructor(name) {
 		base.constructor(name)
 		set_font("big")
 		set_back_fill_color(0, 0, 0, 0)
 		set_front_fill_color(0, 0, 0, 0)
 		set_visible(true)
-		set_text("Guh")
-		start_cutscene()
-		thread = OThread(thread_func.bindenv(this))
-		thread.call()
-		sector.liborange.get_signal("console_response").connect(temp_string.bindenv(this))
 		swap_menu("main")
-	}
-
-	function temp_string(text) if(current_menu[current_item].orange_API_key == keys.CUSTOM && current_menu[current_item].orange_API_value == values.STRING) current_menu[current_item].string = text
-
-	function thread_func() {
-		while(wait(0.01) == null && !get_pressed("escape", "menu-back")) {
-			foreach(i, player in get_players()) hide_player(player)
-
-			if(get_pressed("up", "peek-up")) current_item--
-			if(get_pressed("down", "peek-down")) current_item++
-
-			if(get_pressed("action", "menu-select", "menu-select-space", "jump")) menu_select()
-			if(get_pressed("left", "peek-left")) menu_select(-1)
-			if(get_pressed("right", "peek-right")) menu_select(1)
-
-			if(current_item < 0) current_item = current_menu.len() - 1
-			if(current_item >= current_menu.len()) current_item = 0
-
-			if(current_menu[current_item].orange_API_key == keys.TEXT) if(get_pressed("up", "peek-up")) {
-				current_item--
-			} else current_item++
-
-			draw_menu()
-		}
-		exit()
 	}
 
 	function draw_menu() {
@@ -391,56 +227,6 @@ class OMenuText extends OObject {
 		set_text(start_info + "\n\n" + drawtext)
 	}
 
-	function menu_select(dir = 0) {
-		local drawnum = 0
-		foreach(i, v in current_menu) {
-			if(drawnum == current_item) {
-				switch(v.orange_API_key) {
-					case keys.SWAP:
-						swap_menu(v.menu)
-						break
-					case keys.FUNC:
-						run_function(v.func)
-						break
-					case keys.BACK:
-						go_back()
-						break
-					case keys.EXIT:
-						exit()
-						break
-					case keys.CUSTOM:
-						switch(v.orange_API_value) {
-							case values.INT:
-							case values.FLOAT:
-								if(get_held("left", "peek-left")) {
-									if(v.num > v.min) {
-										v.num -= v.inc
-									} else v.num = v.min
-								}
-								if(get_held("right", "peek-right")) {
-									if(v.num < v.max) {
-										v.num += v.inc
-									} else v.num = v.max
-								}
-								break
-							case values.STRING:
-									// handled at temp_string()
-								break
-							case values.BOOL:
-								v.bool = !v.bool
-								break
-							case values.ENUM:
-								v.index += (dir == 0 ? 1 : dir)
-								if(v.index > v.enums.len() - 1) v.index = 0
-								if(v.index < 0) v.index = v.enums.len() - 1
-								break
-						}
-				}
-			}
-			drawnum++
-		}
-	}
-
 	function swap_menu(new_menu) {
 		current_item = 0
 		last_menu = current_menu
@@ -448,30 +234,6 @@ class OMenuText extends OObject {
 			current_menu = clone menus[new_menu]
 		} else current_menu = clone new_menu
 	}
-
-	function get_item_from_name(name) foreach(v in current_menu) if(v.text == name) return v
-
-	function run_function(func) (type(func) == "string" ? compilestring(func) : func).bindenv(this)()
-
-	function go_back() swap_menu(last_menu)
-
-	function display_info(message, type) OThread(function[this](message, type) {
-		local start_thing = ""
-		switch(type) {
-			case errors.OK:
-				start_thing = "Success: "
-			break
-			case errors.WARNING:
-				start_thing = "Warning: "
-			break
-			case errors.ERROR:
-				start_thing = "Error: "
-			break
-		}
-		start_info = start_thing + message
-		wait(5)
-		start_info = ""
-	}).call(message, type)
 }
 
 // global class thing for the custom script loader to ensure all functions are there for global scripts
@@ -491,7 +253,7 @@ class OGlobalScript extends OObject {
 }
 
 api_table().init_script_loader <- function() {
-	OMenuText("Text")
+	OliborangeMenuText("Text")
 }
 
 api_table().global_script <- OGlobalScript

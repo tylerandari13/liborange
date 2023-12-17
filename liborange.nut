@@ -16,6 +16,7 @@ foreach(file in [
 	"signal"
 	"table"
 	"test"
+	"text"
 	"thread"
 	"tilemap"
 	"trampoline"
