@@ -371,9 +371,9 @@ class OMenuText extends OObject {
 					} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
 					break
 			}
-			if(drawnum == current_item && drawline.len() > 38) {
+			if(drawnum == current_item && drawline.len() >= 38) {
 				set_font("small")
-			} else if(drawnum == current_item && drawline.len() > 30) set_font("normal")
+			} else if(drawnum == current_item && drawline.len() >= 30) set_font("normal")
 			drawnum++
 		}
 		set_text(start_info + "\n\n" + drawtext)
