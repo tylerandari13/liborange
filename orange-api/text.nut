@@ -297,3 +297,5 @@ class OMenuText extends OObject {
 		start_info = ""
 	}).call(message, type)
 }
+
+api_table().MenuText <- OMenuText
