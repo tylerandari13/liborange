@@ -1,4 +1,4 @@
-function init_liborange() foreach(file in [
+foreach(file in [
 	"bumper"
 	"button"
 	"camera"
@@ -21,7 +21,3 @@ function init_liborange() foreach(file in [
 	"tilemap"
 	"trampoline"
 ]) import("orange-api/" + file + ".nut")
-
-if(!("liborange" in getroottable())) init_liborange()
-
-get_sector().liborange <- getroottable().liborange.weakref()

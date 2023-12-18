@@ -1,7 +1,7 @@
 function get_sector() {
 	try {
 		return sector
-	} catch(e) {
+	} 	catch(e) {
 		try {
 			return worldmap
 		} catch(e) {
@@ -10,13 +10,14 @@ function get_sector() {
 	}
 }
 
-if(!("liborange" in getroottable())) getroottable().liborange <- {}
-if(!("liborange_data" in getroottable())) getroottable().liborange_data <- {}
+function api_table() return get_sector().liborange
+function api_storage() return get_sector().liborange.other_data
 
-function api_table() return getroottable().liborange
-function api_storage() return getroottable().liborange_data
+if(!("liborange" in get_sector())) get_sector().liborange <- class { // not a table so that ::display(sector) doesnt flood the console with orange api stuff
+	other_data = {}
+}
 
-if(!("orange_api" in getroottable())) getroottable().orange_api <- class {
+if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
 	theref = null
 	constructor(weak) {
 		theref = weak
