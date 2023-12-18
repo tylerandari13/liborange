@@ -174,6 +174,9 @@ class OliborangeMenuText extends OMenuText {
 
 	constructor(name, titlescreen = false) {
 		titlescreen_mode = titlescreen
+		//if(titlescreen_mode) {
+		//	set_text("Inputs cannot be inputted on the titlescreen. Please make an input to confirm youre not on the titlescreen. A good place to")
+		//}
 		base.constructor(name)
 		swap_menu("main")
 	}
