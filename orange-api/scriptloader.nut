@@ -1,6 +1,31 @@
 import("orange-api/orange_api_util.nut")
 import("orange-api/text.nut") // required
 
+enum keys {
+	TEXT
+	SWAP
+	FUNC
+	BACK
+	CUSTOM
+	EXIT
+}
+
+enum values {
+	NULL
+	INT
+	FLOAT
+	STRING
+	BOOL
+	ENUM
+}
+
+enum errors {
+	OK
+	INFO
+	WARNING
+	ERROR
+}
+
 // menu stuff
 
 function load_previous_scripts() {
@@ -127,7 +152,7 @@ function load_script_thread() {
 	}
 }
 
-function get_settings(name, item = menus.liborange_settings)
+function get_settings(name, item = menus.liborange_settings, enum_name = false)
 		foreach(v in item)
 			if(v.text == name)
 				switch(v.orange_API_value) {
@@ -141,30 +166,15 @@ function get_settings(name, item = menus.liborange_settings)
 					case values.BOOL:
 						return v.bool
 					case values.ENUM:
-						return v.enums[v.index][1]
+						return v.enums[v.index][enum_name.tointeger()]
 				}
 
-function exit() {
-	sector.Effect.fade_out(1)
-	sector.Text.fade_out(0.5)
-	wait(1)
-	Level.finish(false)
-}
-
-function hide_player(player) {
-	player.set_visible(false)
-	player.set_ghost_mode(true)
-	player.deactivate()
-	player.set_pos(0, 0)
-}
-
 class OliborangeMenuText extends OMenuText {
-	constructor(name) {
+	titlescreen_mode = null
+
+	constructor(name, titlescreen = false) {
+		titlescreen_mode = titlescreen
 		base.constructor(name)
-		set_font("big")
-		set_back_fill_color(0, 0, 0, 0)
-		set_front_fill_color(0, 0, 0, 0)
-		set_visible(true)
 		swap_menu("main")
 	}
 
@@ -234,13 +244,22 @@ class OliborangeMenuText extends OMenuText {
 			current_menu = clone menus[new_menu]
 		} else current_menu = clone new_menu
 	}
+
+	function exit() {
+		if(titlescreen_mode) {
+			grow_out(0.3)
+		} else {
+			sector.Effect.fade_out(1)
+			fade_out(0.5)
+			wait(1)
+			Level.finish(false)
+		}
+	}
 }
 
 // global class thing for the custom script loader to ensure all functions are there for global scripts
-class OGlobalScript extends OObject {
+class OGlobalScript {
 	settings = []
-
-	constructor(a = null) base.constructor(a == null ? class{}() : a)
 
 	function _sector() {}
 
@@ -252,8 +271,29 @@ class OGlobalScript extends OObject {
 
 }
 
+function hide_player(player) {
+	player.set_visible(false)
+	player.set_ghost_mode(true)
+	player.deactivate()
+	player.set_pos(0, 0)
+}
+
 api_table().init_script_loader <- function() {
+	sector.Text.set_font("big")
+	sector.Text.set_back_fill_color(0, 0, 0, 0)
+	sector.Text.set_front_fill_color(0, 0, 0, 0)
+	sector.Text.set_visible(true)
+	sector.Thing <- OThread(function() {while(wait(0.01) == null) {foreach(i, player in get_players()) hide_player(player)}})
+	sector.Thing.call()
 	OliborangeMenuText("Text")
+}
+
+api_table().init_script_loader_titlescreen <- function() {
+	sector.Text.set_font("big")
+	sector.Text.set_pos(50, 0)
+	sector.Text.grow_in(0.3)
+	sector.Text.set_anchor_point(ANCHOR_LEFT)
+	OliborangeMenuText("Text", true)
 }
 
 api_table().global_script <- OGlobalScript

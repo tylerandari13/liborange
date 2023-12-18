@@ -31,7 +31,11 @@ function console::liborange_init_script_loader() {
 function console::liborange_respond(message) Level.liborange_console_response = message
 */
 
-function console::liborange_init_script_loader() load_level("levels/test2/script_loader.stl")
+function console::liborange_init_script_loader() try {
+	load_level("levels/test2/script_loader.stl")
+} catch(e) {
+	api_table().init_script_loader_titlescreen()
+}
 
 function console::liborange_add_global_script(thing) Level.liborange_loaded_script_class <- thing
 

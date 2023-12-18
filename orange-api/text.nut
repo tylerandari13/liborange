@@ -148,7 +148,6 @@ class OMenuText extends OObject {
 
 	function thread_func() {
 		while(wait(0.01) == null && !get_pressed("escape", "menu-back")) {
-			foreach(i, player in get_players()) hide_player(player)
 
 			if(get_pressed("up", "peek-up")) current_item--
 			if(get_pressed("down", "peek-down")) current_item++
@@ -266,6 +265,8 @@ class OMenuText extends OObject {
 			drawnum++
 		}
 	}
+
+	function exit() set_visible(false)
 
 	function swap_menu(new_menu) {
 		current_item = 0
