@@ -1,4 +1,5 @@
 foreach(file in [
+	"badguy"
 	"bumper"
 	"button"
 	"camera"

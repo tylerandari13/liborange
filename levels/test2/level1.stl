@@ -22,7 +22,7 @@ display(player)
 liborange.init_signals()
 
 // OBadguy test
-liborange.Badguy(\"badguy1\")
+liborange.WalkingBadguy(\"badguy1\")
 
 // OThread test
 liborange.thread(function() {
