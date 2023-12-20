@@ -13,7 +13,7 @@ class OCamera extends OObject {
 	x_bounds = 150 // How far the camera goes in front of Tux. Where can i find this value in the source?
 	x_speed = 1
 
-	y_bounds = 4
+	y_bounds = 3.5
 
 	drag = null
 
@@ -21,31 +21,39 @@ class OCamera extends OObject {
 
 	thread = null
 
+	y_checking = false
+
 	constructor(name) {
 		base.constructor(name)
 		reset_drag()
 		object.set_mode("manual")
-		thread = OThread(thread_func)
-		thread.call(this)
+		thread = OThread(thread_func.bindenv(this))
+		thread.call()
 	}
 
-	function thread_func(camera) {
-		local cur_x = 0
-		local cur_y = camera.target.get_y() - (camera.get_height() * 0.5) + 16
-		local y_bounds = camera.get_height() / camera.y_bounds
-		while(true) {
-			switch(camera.mode) {
-				case camera_mode.NORMAL:
-					camera.object.scroll_to(camera.target.get_x() - (camera.get_width() * 0.5) + 16 + cur_x, cur_y, camera.drag)
+	function thread_func() {
+		local top_y = 9999999999
 
-					if(camera.target.get_velocity_x() != 0) {
-						cur_x += camera.x_speed * camera.target.get_velocity_x() / 125
-						if(cur_x > camera.x_bounds) cur_x = camera.x_bounds
-						if(cur_x < camera.x_bounds * -1) cur_x = camera.x_bounds * -1
+		local cur_x = 0
+		local cur_y = target.get_y() - (get_height() * 0.5) + 16
+		local y_bounds = get_height() / y_bounds
+		while(true) {
+			if(get_y() < top_y && y_checking) {
+				top_y = get_y()
+				print(top_y)
+			}
+			switch(mode) {
+				case camera_mode.NORMAL:
+					object.scroll_to(target.get_x() - (get_width() * 0.5) + 16 + cur_x, cur_y, drag)
+
+					if(target.get_velocity_x() != 0) {
+						cur_x += x_speed * target.get_velocity_x() / 125
+						if(cur_x > x_bounds) cur_x = x_bounds
+						if(cur_x < x_bounds * -1) cur_x = x_bounds * -1
 					}
 
-					if(camera.get_y() + y_bounds > camera.target.get_y()) cur_y = camera.target.get_y() - y_bounds
-					if(camera.get_y() + camera.get_height() - y_bounds < camera.target.get_y()) cur_y = camera.target.get_y() + y_bounds - camera.get_height()
+					if(get_y() + y_bounds > target.get_y()) cur_y = target.get_y() - y_bounds
+					if(get_y() + get_height() - y_bounds < target.get_y()) cur_y = target.get_y() + y_bounds - get_height()
 				break
 			}
 			wait(0.01)
