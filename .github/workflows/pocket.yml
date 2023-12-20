@@ -13,9 +13,9 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Run pocketlib.sh
+      - name: Run pocketlib.py
         run: |
-          ./pocketlib.sh
+          ./pocketlib.py
 
       - name: Remove unnecessary files
         run: |

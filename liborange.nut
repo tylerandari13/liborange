@@ -1,4 +1,7 @@
+// items are to be listed in order of importance. if a script needs stuff from another script to function put it above
 foreach(file in [
+	"orange_api_util"
+	"text"
 	"badguy"
 	"bumper"
 	"button"
@@ -13,11 +16,9 @@ foreach(file in [
 	"oobject"
 	"rand"
 	"scriptloader"
-	//"sexp"
 	"signal"
 	"table"
 	"test"
-	"text"
 	"thread"
 	"tilemap"
 	"trampoline"
