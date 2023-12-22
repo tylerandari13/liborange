@@ -17,6 +17,7 @@ foreach(file in [
 	"rand"
 	"scriptloader"
 	"signal"
+	"state"
 	"table"
 	"test"
 	"thread"
