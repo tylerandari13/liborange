@@ -1,5 +1,7 @@
 import("orange-api/orange_api_util.nut")
 
+if(WORLDMAP_GUARD) {
+
 enum camera_mode {
 	MANUAL
 	NORMAL
@@ -125,3 +127,5 @@ class OCamera extends OObject {
 api_table().Camera <- OCamera
 
 api_table().init_camera <- function() OCamera("Camera")
+
+}

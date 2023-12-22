@@ -152,6 +152,15 @@ class OThread extends OObject {
 	}
 }
 
+// some scripts shouldnt trigger on the worldmap. any scripts that shouldnt trigger should have some sorta `if(WORLDMAP_GUARD)` somewhere in it
+// this variable is true if youre not on the worldmap
+function WORLDMAP_GUARD() {
+	try {
+		return worldmap == null
+	} catch(e) return true
+}
+::WORLDMAP_GUARD <- WORLDMAP_GUARD()
+
 enum keys {
 	TEXT
 	SWAP

@@ -1,5 +1,7 @@
 import("orange-api/orange_api_util.nut")
 
+if(WORLDMAP_GUARD) {
+
 class OButton extends OObject {
 	direction = null
 	press_function = null
@@ -64,3 +66,5 @@ class OButton extends OObject {
 }
 
 api_table().Button <- OButton
+
+}

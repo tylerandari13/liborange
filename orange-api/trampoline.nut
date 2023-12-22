@@ -1,5 +1,7 @@
 import("orange-api/orange_api_util.nut")
 
+if(WORLDMAP_GUARD) {
+
 class OTrampoline extends OObject {
 	direction = null
 	speed_y = 0
@@ -53,3 +55,5 @@ class OTrampoline extends OObject {
 }
 
 api_table().Trampoline <- OTrampoline
+
+}

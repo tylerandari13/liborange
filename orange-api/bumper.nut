@@ -1,5 +1,7 @@
 import("orange-api/orange_api_util.nut")
 
+if(WORLDMAP_GUARD) {
+
 class OBumper extends OObject {
 	direction = null
 	speed_x = 0
@@ -45,3 +47,5 @@ class OBumper extends OObject {
 }
 
 api_table().Bumper <- OBumper
+
+}
