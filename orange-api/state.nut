@@ -21,7 +21,7 @@ function object_to_state(object) {
 		foreach(i, v in object) retobj[i] <- object_to_state(v)
 	} else if(type(object) == "weakref") {
 		retobj = {orange_API_key = forbidden_keys.WEAKREF}
-		retobj.ref <- object_to_state(object.ref())
+		retobj.reference <- object_to_state(object.ref())
 	} else retobj = object
 	::display(retobj)
 	return retobj
@@ -42,8 +42,8 @@ function state_to_object(object) if("orange_API_key" in object) {
 				break
 			case forbidden_keys.WEAKREF:
 				if(!("weakref_references" in api_storage())) api_storage().weakref_references <- []
-				api_storage().weakref_references.push(object.ref)
-				retobj = state_to_object(object.ref).weakref()
+				api_storage().weakref_references.push(object.reference)
+				retobj = state_to_object(object.reference).weakref()
 		default:
 			retobj = object
 			break
