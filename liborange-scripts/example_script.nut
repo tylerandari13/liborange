@@ -5,7 +5,7 @@ class TemplateScript extends OGlobalScript {
 		data.float("jump height or whatever")
 		data.string("name i guess")
 		data.bool("is alive maybe")
-		data.enums("type", ["guh?" 0], ["guh!" 1], ["guh." 2])
+		data.enums("type", "guh?", "guh!", "guh.")
 		data.nil("nothing here")
 	]
 
@@ -17,7 +17,7 @@ class TemplateScript extends OGlobalScript {
 		print("I run on the worldmap!")
 	}
 
-	function _titlescreen() { // temporarily out of order
+	function _titlescreen() { // temporarily out of order. do not use.
 		print("I run on the titlescreen!")
 	}
 }

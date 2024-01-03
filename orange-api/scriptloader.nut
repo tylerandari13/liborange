@@ -22,10 +22,10 @@ function load_script(name = null) {
 		display_info("Could not find the desired script because you entered no text.", errors.ERROR)
 		return
 	}
-	try{
-		import(name)
-	} catch(e) try{
-		import("liborange-scripts/" + name)
+	try {
+		import(name + (endswith(name, ".nut") ? "" : ".nut"))
+	} catch(e) try {
+		import("liborange-scripts/" + name + (endswith(name, ".nut") ? "" : ".nut"))
 	} catch(e) {
 		display_info("Could not find the desired script \"" + name + "\". You spelling everything correctly?", errors.ERROR)
 		return
@@ -94,7 +94,7 @@ local menus = {
 	]
 	liborange_settings = [
 		action.text("liborange Settings")
-		data.enums("Text Resizing", 0, ["On", 0], ["Off", 1], ["Adaptive", 2])
+		data.enums("Text Resizing", 0, "On", "Off", "Adaptive")
 		action.back()
 	]
 	test = [

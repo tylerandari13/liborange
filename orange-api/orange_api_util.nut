@@ -261,12 +261,22 @@ function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") re
 	false_text = false_text
 }
 
-function data::enums(text, index, ...) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.ENUM
-	text = text
-	enums = vargv
-	index = index
+function data::enums(text, index, ...) {
+	local enums = []
+	foreach(i, v in vargv) {
+		if(type(v) == "array") {
+			enums.push(v)
+		} else {
+			enums.push([v, i])
+		}
+	}
+	return {
+		orange_API_key = keys.CUSTOM
+		orange_API_value = values.ENUM
+		text = text
+		enums = enums
+		index = index
+	}
 }
 
 function data::nil(text) return {
