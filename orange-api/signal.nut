@@ -1,30 +1,5 @@
 import("orange-api/orange_api_util.nut")
 
-class OSignal extends OObject {
-	connections = null
-
-	constructor() {
-		base.constructor(class{}())
-		connections = []
-	}
-
-	function connect(func) {
-		if(type(func) == "string") {
-			connections.push(compilestring(func))
-		} else connections.push(func)
-	}
-
-	function disconnect(func) {
-		connections.remove(connections.find(func))
-	}
-
-	function call(...) foreach(connection in connections) {
-		local thrd = api_table().thread(connection)
-		thrd.call.acall([thrd].extend(vargv))
-	}
-	function fire(...) call.acall([this].extend(vargv))
-}
-
 api_table().signal <- OSignal
 
 api_table().init_signals <- function() {

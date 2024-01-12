@@ -92,9 +92,16 @@ class OObject {
 		} else object_name = obj
 	}
 
-	function display(ANY) { // for convenience
-		::display(ANY)
+	function display(ANY) ::display(ANY) // for convenience
+	function print(object) ::print(object)
+
+	function set_everything(stuff) {
+		foreach(i, v in stuff) {
+			if("set_" + i in this) this["set_" + i].acall([object].extend(type(v) == "array" ? v : [v]))
+		}
 	}
+
+	// no `get_everything()` because it would be kinda complicated considering i cant iterate over a class instance
 
 	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
 		if(key == "get_x" && "get_pos_x" in object) {
@@ -150,6 +157,31 @@ class OThread extends OObject {
 		}
 		throw null
 	}
+}
+
+class OSignal extends OObject {
+	connections = null
+
+	constructor() {
+		base.constructor(class{}())
+		connections = []
+	}
+
+	function connect(func) {
+		if(type(func) == "string") {
+			connections.push(compilestring(func))
+		} else connections.push(func)
+	}
+
+	function disconnect(func) {
+		connections.remove(connections.find(func))
+	}
+
+	function call(...) foreach(connection in connections) {
+		local thrd = api_table().thread(connection)
+		thrd.call.acall([thrd].extend(vargv))
+	}
+	function fire(...) call.acall([this].extend(vargv))
 }
 
 // some scripts shouldnt trigger on the worldmap. any scripts that shouldnt trigger should have some sorta `if(WORLDMAP_GUARD)` somewhere in it

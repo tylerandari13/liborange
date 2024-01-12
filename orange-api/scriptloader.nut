@@ -153,6 +153,7 @@ class OliborangeMenuText extends OMenuText {
 		//	set_text("Inputs cannot be inputted on the titlescreen. Please make an input to confirm youre not on the titlescreen. A good place to")
 		//}
 		base.constructor(name)
+		set_wrap_width(sector.Camera.get_screen_width())
 		swap_menu("main")
 	}
 

@@ -38,7 +38,37 @@ function get_released(...) {
 	return false
 }
 
-class OMenuText extends OObject {
+class OText extends OObject {
+	text = ""
+
+	constructor(name = null) {
+		if(name == null) {
+			base.constructor(::TextObject())
+		} else base.constructor(name)
+	}
+
+	// overridden functions
+
+	function set_text(_text = "") {
+		text = _text
+		object.set_text(_text)
+	}
+
+	//OText specific functions
+
+	function get_text() return text
+
+	function add_text(_text) set_text(get_text() + _text)
+
+	function typewrite(display_text, wait_time = 0.05, wait_on_end_chars = true) {
+		for(local i = 0; i < display_text.len(); i++) {
+			set_text(display_text.slice(0, i))
+			//wait(wait_time)
+		}
+	}
+}
+
+class OMenuText extends OText {
 	current_item = 0
 
 	current_menu = {}
@@ -212,4 +242,5 @@ class OMenuText extends OObject {
 	}).call(message, type)
 }
 
+api_table().Text <- OText
 api_table().MenuText <- OMenuText
