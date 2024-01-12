@@ -22,10 +22,28 @@ function load_script(name = null) {
 		display_info("Could not find the desired script because you entered no text.", errors.ERROR)
 		return
 	}
+	/*
 	try {
 		import(name + (endswith(name, ".nut") ? "" : ".nut"))
 	} catch(e) try {
 		import("liborange-scripts/" + name + (endswith(name, ".nut") ? "" : ".nut"))
+	} catch(e) {
+		display_info("Could not find the desired script \"" + name + "\". You spelling everything correctly?", errors.ERROR)
+		return
+	}
+	*/
+	try {
+		::print(name)
+		import(name)
+	} catch(e) try {
+		::print("liborange-scripts/" + name)
+		import("liborange-scripts/" + name)
+	} catch(e) try {
+		::print(name + ".nut")
+		import(name + ".nut")
+	} catch(e) try {
+		::print("liborange-scripts/" + name + ".nut")
+		import("liborange-scripts/" + name + ".nut")
 	} catch(e) {
 		display_info("Could not find the desired script \"" + name + "\". You spelling everything correctly?", errors.ERROR)
 		return
@@ -126,6 +144,28 @@ function load_script_thread() {
 		wait_for_screenswitch()
 	}
 }
+
+function get_value_from_type(value) {
+	if(type(value) == "table" && "orange_API_value" in value) {
+		return value.orange_API_value
+	} else if(type(value) == "integer") {
+		return values.INT
+	} else if(type(value) == "float") {
+		return values.FLOAT
+	} else if(type(value) == "string") {
+		return values.STRING
+	} else if(type(value) == "bool") {
+		return values.BOOL
+	}
+	return values.NULL
+}
+
+function set_settings(name, value, item = menus.liborange_settings) // NOTE: send data types (AKA data.<something>()), not raw values
+	item.apply(function[this](v, i, arr) {
+		if(v.text == name) {
+			return value
+		} else return v
+	})
 
 function get_settings(name, item = menus.liborange_settings, enum_name = false)
 		foreach(v in item)
@@ -246,8 +286,9 @@ class OGlobalScript {
 
 	function _titlescreen() _sector() // temporarily out of order
 
-	function get_setting(name) return get_settings(name, settings)
 
+	function set_setting(name, value) return set_settings(name, value, settings)
+	function get_setting(name, enum_name = false) return get_settings(name, settings, enum_name)
 }
 
 function hide_player(player) {
@@ -272,7 +313,7 @@ api_table().init_script_loader_titlescreen <- function() {
 	sector.Text.set_pos(50, 0)
 	sector.Text.grow_in(0.3)
 	sector.Text.set_anchor_point(ANCHOR_LEFT)
-	OliborangeMenuText("Text", true)
+	OliborangeMenuText(TextObject(), true)
 }
 
 api_table().global_script <- OGlobalScript

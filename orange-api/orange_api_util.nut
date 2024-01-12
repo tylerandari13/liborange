@@ -231,10 +231,11 @@ function action::swap(text, menu) return {
 	text = text
 }
 
-function action::run(text, func) return {
+function action::run(text, func, envobj = null) return {
 	orange_API_key = keys.FUNC
 	func = func
 	text = text
+	envobj = envobj
 }
 
 function action::back(text = "Back") return {

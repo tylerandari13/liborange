@@ -168,7 +168,7 @@ class OMenuText extends OText {
 						swap_menu(v.menu)
 						break
 					case keys.FUNC:
-						run_function(v.func)
+						run_function(v.func, v.envobj)
 						break
 					case keys.BACK:
 						go_back()
@@ -219,7 +219,7 @@ class OMenuText extends OText {
 
 	function get_item_from_name(name) foreach(v in current_menu) if(v.text == name) return v
 
-	function run_function(func) (type(func) == "string" ? compilestring(func) : func).bindenv(this)()
+	function run_function(func, envobj = null)(type(func) == "string" ? compilestring(func) : func).bindenv(envobj == null ? this : envobj)()
 
 	function go_back() swap_menu(last_menu)
 
