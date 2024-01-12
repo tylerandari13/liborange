@@ -244,7 +244,7 @@ class OGlobalScript {
 
 	function _worldmap() {}
 
-	function _titlescreen() {} // temporarily out of order
+	function _titlescreen() _sector() // temporarily out of order
 
 	function get_setting(name) return get_settings(name, settings)
 
