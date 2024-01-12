@@ -159,11 +159,10 @@ class OThread extends OObject {
 	}
 }
 
-class OSignal extends OObject {
+class OSignal {
 	connections = null
 
 	constructor() {
-		base.constructor(class{}())
 		connections = []
 	}
 
