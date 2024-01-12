@@ -92,12 +92,19 @@ class OCamera extends OObject {
 			return "unknown"
 	}
 
-	function set_target(_target) {
-		if(("is_OObject" in _target)) {
-			target = _target
-		} else {
-			target = OObject(_target)
-		}
+	function set_target(_target, smooth = true) {
+		target = ("is_OObject" in _target) ? _target : OObject(_target)
+		if(smooth) OThread(function() {
+			local target_drag = get_drag()
+			set_drag(100)
+			while(wait(0.01) == null) {
+				set_drag(get_drag() + (target_drag > get_drag() ? 1 : -1))
+				if(abs(get_drag()) < 2) {
+					set_drag(target_drag)
+					break
+				}
+			}
+		}.bindenv(this)).call()
 	}
 
 	/*function scale_to_objects(object_a, object_b, time) {
