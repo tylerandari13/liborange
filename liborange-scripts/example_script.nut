@@ -16,10 +16,6 @@ class TemplateScript extends OGlobalScript {
 	function _worldmap() {
 		print("I run on the worldmap!")
 	}
-
-	function _titlescreen() { // temporarily out of order. do not use.
-		print("I run on the titlescreen!")
-	}
 }
 
 liborange_add_global_script(TemplateScript)
