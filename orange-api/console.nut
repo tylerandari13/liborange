@@ -1,4 +1,3 @@
-import("orange-api/orange_api_util.nut")
 // This file adds new stuff to the console so it can function.
 
 ::console <- getconsttable()

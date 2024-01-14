@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 function table_to_sexp(table) {
 	local retstring = ""
 	foreach(i, v in table) {

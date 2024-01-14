@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 api_table().signal <- OSignal
 
 api_table().init_signals <- function() {

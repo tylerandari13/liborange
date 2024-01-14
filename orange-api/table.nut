@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 local actual_indent = "   "
 
 api_table().table_to_string <- function(list, indent = actual_indent, index = null) {

@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 if(WORLDMAP_GUARD) {
 
 enum camera_mode {

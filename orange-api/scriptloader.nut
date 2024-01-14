@@ -1,4 +1,3 @@
-import("orange-api/orange_api_util.nut")
 //import("orange-api/text.nut") // required
 
 // menu stuff

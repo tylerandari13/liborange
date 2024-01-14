@@ -23,8 +23,6 @@ enum errors {
 	ERROR
 }
 
-import("orange-api/orange_api_util.nut")
-
 function get_pressed(...) {
 	foreach(v in vargv) if(sector.Tux.get_input_pressed(v)) return true
 	return false

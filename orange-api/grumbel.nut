@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 function get_version() {
 	if("do_the_funny" in Level) return 1
 	if("grumbel_thread" in Level || "grumbel_v2" in Level) return 2

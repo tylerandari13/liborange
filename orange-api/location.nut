@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 api_table().in_level <- function() try {
     return sector != null
 } catch(e) return false

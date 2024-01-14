@@ -1,5 +1,3 @@
-import("orange-api/orange_api_util.nut")
-
 local alternating_tiles = []
 
 function tilemap_get_width(tilemap) {

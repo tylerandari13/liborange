@@ -1,3 +1,7 @@
+::liborange <- class { // not a table so that ::display(sector) doesnt flood the console with orange api stuff
+	other_data = {}
+}
+
 function get_sector() {
 	try {
 		return sector
@@ -10,24 +14,11 @@ function get_sector() {
 	}
 }
 
-function api_table() return get_sector().liborange
-function api_storage() return get_sector().liborange.other_data
-
-if(!("liborange" in get_sector())) get_sector().liborange <- class { // not a table so that ::display(sector) doesnt flood the console with orange api stuff
-	other_data = {}
+function api_table() {
+	if(!("liborange" in get_sector())) get_sector().liborange <- liborange
+	return liborange
 }
-
-if(!("orange_api" in get_sector())) get_sector().orange_api <- class {
-	theref = null
-	constructor(weak) {
-		theref = weak
-	}
-	function _get(key) {
-		::display(@"The function `""orange-api." + key + @"()""` is deprecated, please use `liborange." + key + "()` instead.")
-		return theref[key]
-	}
-}(api_table().weakref())
-
+function api_storage() return api_table().other_data
 
 function help() display_text_file("orange-api/help.stxt")
 
