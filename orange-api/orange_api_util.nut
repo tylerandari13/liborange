@@ -178,8 +178,8 @@ class OSignal {
 // this variable is true if youre not on the worldmap
 function WORLDMAP_GUARD() {
 	try {
-		return worldmap == null
-	} catch(e) return true
+		return sector != null
+	} catch(e) return false
 }
 ::WORLDMAP_GUARD <- WORLDMAP_GUARD()
 
