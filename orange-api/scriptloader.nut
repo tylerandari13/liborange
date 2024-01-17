@@ -32,18 +32,18 @@ function load_script(name = null) {
 	}
 	*/
 	try {
-		::print(name)
+		//::print(name)
 		import(name)
 	} catch(e) try {
-		::print("liborange-scripts/" + name)
+		//::print("liborange-scripts/" + name)
 		import("liborange-scripts/" + name)
-	} catch(e) try {
-		::print(name + ".nut")
+	} /*catch(e) try {
+		//::print(name + ".nut")
 		import(name + ".nut")
 	} catch(e) try {
-		::print("liborange-scripts/" + name + ".nut")
+		//::print("liborange-scripts/" + name + ".nut")
 		import("liborange-scripts/" + name + ".nut")
-	} catch(e) {
+	} */catch(e) {
 		display_info("Could not find the desired script \"" + name + "\". You spelling everything correctly?", errors.ERROR)
 		return
 	}
@@ -75,10 +75,10 @@ function manage_scripts() {
 
 function manage_script(script) {
 	local newtab = script.settings
-	if(newtab[0].orange_API_key != keys.TEXT) newtab = [action.text("Manage Script")].extend(newtab)
+	if(newtab.len() > 0 && newtab[0].orange_API_key != keys.TEXT) newtab = [action.text("Manage Script")].extend(newtab)
 	local found = false
 	foreach(v in newtab) if(v.text.tolower() == "back") found = true
-	if(!found) newtab.push(action.back())
+	if(!found) newtab.push(action.run("Back", manage_scripts))
 	swap_menu(newtab)
 }
 
@@ -131,10 +131,10 @@ function load_script_thread() {
 	while(true) {
 		foreach(v in Level.liborange_loaded_scripts) {
 			try {
-				if(sector) OThread(v._sector()).call()
-			} catch(e){
+				if(sector && !("custom_script_disable" in sector)) OThread(v._sector()).call()
+			} catch(e) {
 				try {
-					if(worldmap) OThread(v._worldmap()).call()
+					if(worldmap && !("custom_script_disable" in worldmap)) OThread(v._worldmap()).call()
 				} catch(e){
 
 				}
@@ -286,8 +286,8 @@ class OGlobalScript {
 	function _titlescreen() _sector() // temporarily out of order
 
 
-	function set_setting(name, value) return set_settings(name, value, settings)
-	function get_setting(name, enum_name = false) return get_settings(name, settings, enum_name)
+	function set_setting(name, value, setting) return set_settings(name, value, setting)
+	function get_setting(name, setting, enum_name = false) return get_settings(name, setting, enum_name)
 }
 
 function hide_player(player) {
@@ -298,12 +298,13 @@ function hide_player(player) {
 }
 
 api_table().init_script_loader <- function() {
+	sector.custom_script_disable <- true
 	sector.Text.set_font("big")
 	sector.Text.set_back_fill_color(0, 0, 0, 0)
 	sector.Text.set_front_fill_color(0, 0, 0, 0)
 	sector.Text.set_visible(true)
-	sector.Thing <- OThread(function() {while(wait(0.01) == null) {foreach(i, player in get_players()) hide_player(player)}})
-	sector.Thing.call()
+	/*sector.Thing <- OThread(function() {while(wait(0.01) == null) {*/foreach(i, player in get_players()) hide_player(player)//}})
+	//sector.Thing.call()
 	OliborangeMenuText("Text")
 }
 
