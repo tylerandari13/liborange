@@ -62,17 +62,19 @@ class OObject {
 	static is_OObject = true
 
 	object = null
-	object_name = null
+	object_name = ""
 	odata = null
+
+	// sector_ref = null
 
 	constructor(obj) {
 		odata = {} // we dont want all odatas to point to the same table
 		if(::type(obj) == "string") {
-			if("is_OObject" in get_sector()[obj]) {
-				object = get_sector()[obj].object
-			} else object = get_sector()[obj]
-			delete get_sector()[obj]
-			get_sector()[obj] <- this
+			if("is_OObject" in ::get_sector()[obj]) {
+				object = ::get_sector()[obj].object
+			} else object = ::get_sector()[obj]
+			delete ::get_sector()[obj]
+			::get_sector()[obj] <- this
 		} else {
 			if("is_OObject" in obj) {
 				object = obj.object
@@ -80,19 +82,21 @@ class OObject {
 		}
 		if("get_name" in object) {
 			object_name = object.get_name()
-		} else object_name = obj
+		} else object_name = obj.tostring()
+
+		// sector_ref = ::get_sector()
 	}
 
 	function display(ANY) ::display(ANY) // for convenience
 	function print(object) ::print(object)
 
-	function set_everything(stuff) {
-		foreach(i, v in stuff) {
-			if("set_" + i in this) this["set_" + i].acall([object].extend(type(v) == "array" ? v : [v]))
-		}
-	}
+	function set_everything(stuff) foreach(i, v in stuff) if("set_" + i in this) this["set_" + i].acall([object].extend(type(v) == "array" ? v : [v]))
 
 	// no `get_everything()` because it would be kinda complicated considering i cant iterate over a class instance
+
+	// function in_current_sector() return sector_ref != null && sector_ref == ::get_sector()
+
+	function get_name() return object_name
 
 	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
 		if(key == "get_x" && "get_pos_x" in object) {
@@ -182,128 +186,3 @@ function WORLDMAP_GUARD() {
 	} catch(e) return false
 }
 ::WORLDMAP_GUARD <- WORLDMAP_GUARD()
-
-enum keys {
-	TEXT
-	SWAP
-	FUNC
-	BACK
-	CUSTOM
-	EXIT
-}
-
-enum values {
-	NULL
-	INT
-	FLOAT
-	STRING
-	BOOL
-	ENUM
-}
-
-enum errors {
-	OK
-	INFO
-	WARNING
-	ERROR
-}
-
-// functions to make menu things
-::action <- {}
-
-function action::text(text)  return {
-	orange_API_key = keys.TEXT
-	text = "- " + text + " -"
-}
-
-function action::swap(text, menu) return {
-	orange_API_key = keys.SWAP
-	menu = menu
-	text = text
-}
-
-function action::run(text, func, envobj = null) return {
-	orange_API_key = keys.FUNC
-	func = func
-	text = text
-	envobj = envobj
-}
-
-function action::back(text = "Back") return {
-	orange_API_key = keys.BACK
-	text = text
-}
-
-function action::exit(text = "Exit") return {
-	orange_API_key = keys.EXIT
-	text = text
-}
-
-// data types
-::data <- {}
-
-function data::integer(text, num = 0, min = -2147483647, max = 2147483647, inc = 1) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.INT
-	text = text
-
-	num = num
-	min = min
-	max = max
-	inc = inc
-}
-
-function data::float(text, num = 0.0, min = -2147483647.0, max = 2147483647.0, inc = 0.5) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.FLOAT
-	text = text
-
-	num = num
-	min = min
-	max = max
-	inc = inc
-}
-
-function data::string(text, string = "", prefix = "\"", suffix = "\"") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.STRING
-	text = text
-
-	string = string
-	prefix = prefix
-	suffix = suffix
-}
-
-function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.BOOL
-	text = text
-
-	bool = bool
-	true_text = true_text
-	false_text = false_text
-}
-
-function data::enums(text, index, ...) {
-	local enums = []
-	foreach(i, v in vargv) {
-		if(type(v) == "array") {
-			enums.push(v)
-		} else {
-			enums.push([v, i])
-		}
-	}
-	return {
-		orange_API_key = keys.CUSTOM
-		orange_API_value = values.ENUM
-		text = text
-		enums = enums
-		index = index
-	}
-}
-
-function data::nil(text) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.NULL
-	text = text
-}

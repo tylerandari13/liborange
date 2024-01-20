@@ -1,5 +1,30 @@
 //import("orange-api/text.nut") // required
 
+enum keys {
+	TEXT
+	SWAP
+	FUNC
+	BACK
+	CUSTOM
+	EXIT
+}
+
+enum values {
+	NULL
+	INT
+	FLOAT
+	STRING
+	BOOL
+	ENUM
+}
+
+enum errors {
+	OK
+	INFO
+	WARNING
+	ERROR
+}
+
 // menu stuff
 
 function load_previous_scripts() {

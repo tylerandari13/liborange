@@ -23,6 +23,106 @@ enum errors {
 	ERROR
 }
 
+// functions to make menu things
+::action <- {}
+
+function action::text(text)  return {
+	orange_API_key = keys.TEXT
+	text = "- " + text + " -"
+}
+
+function action::swap(text, menu) return {
+	orange_API_key = keys.SWAP
+	menu = menu
+	text = text
+}
+
+function action::run(text, func, envobj = null) return {
+	orange_API_key = keys.FUNC
+	func = func
+	text = text
+	envobj = envobj
+}
+
+function action::back(text = "Back") return {
+	orange_API_key = keys.BACK
+	text = text
+}
+
+function action::exit(text = "Exit") return {
+	orange_API_key = keys.EXIT
+	text = text
+}
+
+// data types
+::data <- {}
+
+function data::integer(text, num = 0, min = -2147483647, max = 2147483647, inc = 1) return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.INT
+	text = text
+
+	num = num
+	min = min
+	max = max
+	inc = inc
+}
+
+function data::float(text, num = 0.0, min = -2147483647.0, max = 2147483647.0, inc = 0.5) return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.FLOAT
+	text = text
+
+	num = num
+	min = min
+	max = max
+	inc = inc
+}
+
+function data::string(text, string = "", prefix = "\"", suffix = "\"") return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.STRING
+	text = text
+
+	string = string
+	prefix = prefix
+	suffix = suffix
+}
+
+function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.BOOL
+	text = text
+
+	bool = bool
+	true_text = true_text
+	false_text = false_text
+}
+
+function data::enums(text, index, ...) {
+	local enums = []
+	foreach(i, v in vargv) {
+		if(type(v) == "array") {
+			enums.push(v)
+		} else {
+			enums.push([v, i])
+		}
+	}
+	return {
+		orange_API_key = keys.CUSTOM
+		orange_API_value = values.ENUM
+		text = text
+		enums = enums
+		index = index
+	}
+}
+
+function data::nil(text) return {
+	orange_API_key = keys.CUSTOM
+	orange_API_value = values.NULL
+	text = text
+}
+
 function get_pressed(...) {
 	foreach(v in vargv) if(sector.Tux.get_input_pressed(v)) return true
 	return false
