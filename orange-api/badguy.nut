@@ -51,7 +51,7 @@ class OWalkingBadguy extends OBadguy {
 			direction = get_nearest_player(get_x(), get_y()).get_x() > get_x() ? directions.RIGHT : directions.LEFT
 		} else direction = _direction
 		base.constructor(name, _direction, _health)
-		thread = OThread(thread_func.bindenv(this))
+		thread = newthread(thread_func.bindenv(this))
 		thread.call()
 	}
 

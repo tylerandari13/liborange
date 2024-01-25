@@ -27,7 +27,7 @@ class OCamera extends OObject {
 		base.constructor(name)
 		reset_drag()
 		object.set_mode("manual")
-		thread = OThread(thread_func.bindenv(this))
+		thread = newthread(thread_func.bindenv(this))
 		thread.call()
 	}
 
@@ -92,17 +92,21 @@ class OCamera extends OObject {
 
 	function set_target(_target, smooth = true) {
 		target = ("is_OObject" in _target) ? _target : OObject(_target)
-		if(smooth) OThread(function() {
-			local target_drag = get_drag()
-			set_drag(100)
-			while(wait(0.01) == null) {
-				set_drag(get_drag() + (target_drag > get_drag() ? 1 : -1))
-				if(abs(get_drag()) < 2) {
-					set_drag(target_drag)
-					break
+		if(smooth) {
+			local a = newthread(function() {
+				local target_drag = get_drag()
+				set_drag(100)
+				while(wait(0.01) == null) {
+					set_drag(get_drag() + (target_drag > get_drag() ? 1 : -1))
+					if(abs(get_drag()) < 2) {
+						set_drag(target_drag)
+						break
+					}
 				}
-			}
-		}.bindenv(this)).call()
+			}.bindenv(this))
+			api_table().thread_fix(a)
+			a.call()
+		}
 	}
 
 	/*function scale_to_objects(object_a, object_b, time) {

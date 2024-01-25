@@ -38,7 +38,9 @@ class OButton extends OObject {
 	function force_press(sound = true) {
 		if(!is_pressed) {
 			is_pressed = true
-			OThread(press_function).call()
+			local a = newthread(press_function)
+			api_table().thread_fix(a)
+			a.call()
 			set_action("on-" + direction)
 			if(sound) play_sound("sounds/switch.ogg")
 			wait(0.01)

@@ -17,7 +17,7 @@ api_table().Signal <- OSignal
 api_table().signal <- OSignal // compatibility
 
 api_table().init_signals <- function() {
-	local OSignal_thread = OThread(function() {
+	local OSignal_thread = newthread(function() {
 		local added_players = {}
 		while(true) {
 			foreach(i, v in get_players())
@@ -34,6 +34,7 @@ api_table().init_signals <- function() {
 			wait(0.01)
 		}
 	})
+	api_table().thread_fix(OSignal_thread)
 	OSignal_thread.call()
 }
 
