@@ -134,50 +134,6 @@ class OObject {
     }
 }
 
-class OThread extends OObject {
-	constructor(func) {
-		if(::type(func) == "string") {
-			base.constructor(::newthread(compilestring(func)))
-		} else base.constructor(::newthread(func))
-		if(!("OThreads" in ::api_storage())) ::api_storage().OThreads <- []
-		::api_storage().OThreads.push(object)
-	}
-	function _get(key) {
-		try {
-			return function(...) {
-				return object[key].acall([object].extend(vargv))
-			}
-		} catch(e) {
-			return base._get(key)
-		}
-		throw null
-	}
-}
-
-class OSignal {
-	connections = null
-
-	constructor() {
-		connections = []
-	}
-
-	function connect(func) {
-		if(type(func) == "string") {
-			connections.push(compilestring(func))
-		} else connections.push(func)
-	}
-
-	function disconnect(func) {
-		connections.remove(connections.find(func))
-	}
-
-	function call(...) foreach(connection in connections) {
-		local thrd = api_table().thread(connection)
-		thrd.call.acall([thrd].extend(vargv))
-	}
-	function fire(...) call.acall([this].extend(vargv))
-}
-
 // some scripts shouldnt trigger on the worldmap. any scripts that shouldnt trigger should have some sorta `if(WORLDMAP_GUARD)` somewhere in it
 // this variable is true if youre not on the worldmap
 function WORLDMAP_GUARD() {

@@ -1,4 +1,20 @@
-api_table().signal <- OSignal
+class OSignal extends OCallback {
+	function connect(func) {
+		if(type(func) == "string") {
+			func = compilestring(func)
+        }
+        connections.push(func)
+	}
+
+	function call(...) foreach(connection in connections) {
+		local a = ::newthread(connection)
+		api_table().thread_fix(a)
+		a.call.acall([a].extend(vargv))
+	}
+}
+
+api_table().Signal <- OSignal
+api_table().signal <- OSignal // compatibility
 
 api_table().init_signals <- function() {
 	local OSignal_thread = OThread(function() {
