@@ -16,10 +16,11 @@ class OSignal extends OCallback {
 api_table().Signal <- OSignal
 api_table().signal <- OSignal // compatibility
 
-api_table().init_signals <- function() {
+api_table().init_signals <- function() if(!("signals_innitted" in api_storage())) {
+	api_storage().signals_innitted <- true
 	local OSignal_thread = newthread(function() {
 		local added_players = {}
-		while(true) {
+		while(wait(0) == null) {
 			foreach(i, v in get_players())
 				if(!(i in added_players)) {
 					added_players[i] <- v
@@ -31,7 +32,7 @@ api_table().init_signals <- function() {
 							delete added_players[i]
 						}
 				}
-			wait(0.01)
+			api_table().get_signal("process").call()
 		}
 	})
 	api_table().thread_fix(OSignal_thread)
