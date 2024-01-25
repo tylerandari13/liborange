@@ -31,7 +31,9 @@ class OThread extends OObject {
 }*/
 
 function OThread(func) {
-	print("[liborange] The class \"liborange.Thread()\" is deprecated. Use \"newthread()\" in combination with \"liborange.thread_fix()\" instead.")
+	::print("[liborange] The class \"liborange.Thread()\" is deprecated. Use \"newthread()\" in combination with \"liborange.thread_fix()\" instead.")
+	::print(getstackinfos(2).src + " : line " + getstackinfos(2).line)
+	::print(startswith(getstackinfos(2).src, "liborange") || startswith(getstackinfos(2).src, "orange-api") ? "Please report to Orange with the above info." : "...")
 	local object = ::newthread(::type(func) == "string" ? compilestring(func) : func)
 	if(!("OThreads" in ::api_storage())) ::api_storage().OThreads <- []
 	::api_storage().OThreads.push(object)
