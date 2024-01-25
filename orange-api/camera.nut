@@ -19,44 +19,41 @@ class OCamera extends OObject {
 
 	target = sector.Tux
 
-	thread = null
-
 	y_checking = false
+
+	top_y = 9999999999
+
+	cur_x = 0
+	cur_y = null
 
 	constructor(name) {
 		base.constructor(name)
+		cur_y = target.get_y() - (get_height() * 0.5) + 16
+		y_bounds = get_height() / y_bounds
 		reset_drag()
 		object.set_mode("manual")
-		thread = newthread(thread_func.bindenv(this))
-		thread.call()
+		api_table().get_signal("process").connect(process_func.bindenv(this))
+		api_table().init_signals()
 	}
 
-	function thread_func() {
-		local top_y = 9999999999
+	function process_func() {
+		if(get_y() < top_y && y_checking) {
+			top_y = get_y()
+			print(top_y)
+		}
+		switch(mode) {
+			case camera_mode.NORMAL:
+				object.scroll_to(target.get_x() - (get_width() * 0.5) + 16 + cur_x, cur_y, drag)
 
-		local cur_x = 0
-		local cur_y = target.get_y() - (get_height() * 0.5) + 16
-		local y_bounds = get_height() / y_bounds
-		while(true) {
-			if(get_y() < top_y && y_checking) {
-				top_y = get_y()
-				print(top_y)
-			}
-			switch(mode) {
-				case camera_mode.NORMAL:
-					object.scroll_to(target.get_x() - (get_width() * 0.5) + 16 + cur_x, cur_y, drag)
+				if(target.get_velocity_x() != 0) {
+					cur_x += x_speed * target.get_velocity_x() / 125
+					if(cur_x > x_bounds) cur_x = x_bounds
+					if(cur_x < x_bounds * -1) cur_x = x_bounds * -1
+				}
 
-					if(target.get_velocity_x() != 0) {
-						cur_x += x_speed * target.get_velocity_x() / 125
-						if(cur_x > x_bounds) cur_x = x_bounds
-						if(cur_x < x_bounds * -1) cur_x = x_bounds * -1
-					}
-
-					if(get_y() + y_bounds > target.get_y()) cur_y = target.get_y() - y_bounds
-					if(get_y() + get_height() - y_bounds < target.get_y()) cur_y = target.get_y() + y_bounds - get_height()
-				break
-			}
-			wait(0.01)
+				if(get_y() + y_bounds > target.get_y()) cur_y = target.get_y() - y_bounds
+				if(get_y() + get_height() - y_bounds < target.get_y()) cur_y = target.get_y() + y_bounds - get_height()
+			break
 		}
 	}
 
