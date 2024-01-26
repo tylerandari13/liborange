@@ -7,6 +7,7 @@ foreach(file in [
 	"text"
 	"thread"
 
+	"background"
 	"badguy"
 	"bumper"
 	"button"

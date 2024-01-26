@@ -35,7 +35,13 @@ a++
 display(\"OThread finished\")
 }).call()
 
-// button test
+// OBackground test
+liborange.Background(\"BG\")
+BG.add_animation_frame(null, \"images/background/misc/black_800px.png\")
+BG.add_animation_frame()
+BG.play_animation()
+
+// button test`
 liborange.Button(\"button1\", \"up\", \"button2.unpress()\")
 liborange.Button(\"button2\", \"down\", \"button1.unpress()\")
 liborange.Button(\"button3\", \"left\", \"button4.unpress()\")
@@ -93,6 +99,7 @@ liborange.Button(\"button8\", \"left\", button8_script)")
       (color 1 1 1)
     )
     (background
+      (name "BG")
       (color 1 1 1)
       (speed 0.5)
       (image "images/background/antarctic/arctis2.png")
