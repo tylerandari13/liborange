@@ -3,6 +3,7 @@ foreach(file in [
 	"orange_api_util"
 
 	"callback"
+	"misc"
 	"signal"
 	"text"
 	"thread"
@@ -17,7 +18,6 @@ foreach(file in [
 	"control"
 	"grumbel"
 	"location"
-	"misc"
 	"multiplayer"
 	"oobject"
 	"rand"

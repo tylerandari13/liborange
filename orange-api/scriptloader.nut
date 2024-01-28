@@ -259,7 +259,7 @@ class OliborangeMenuText extends OMenuText {
 				default:
 					drawline += v.text
 			}
-			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n\n"
+			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n"
 
 			switch(get_settings("Text Resizing")) {
 				case 1:
@@ -277,7 +277,7 @@ class OliborangeMenuText extends OMenuText {
 			}
 			drawnum++
 		}
-		set_text(start_info + "\n\n" + drawtext)
+		set_text(start_info + "\n" + drawtext)
 	}
 
 	function swap_menu(new_menu) {

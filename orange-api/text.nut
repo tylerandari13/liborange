@@ -149,6 +149,8 @@ class OText extends OObject {
 
 	function set_text(_text = "") {
 		text = _text
+		// _text = api_table().replace(_text, "\n", "\n\n")
+		_text = api_table().replace(_text, "\t", "  ")
 		object.set_text(_text)
 	}
 
@@ -179,6 +181,7 @@ class OMenuText extends OText {
 		base.constructor(name)
 		set_font("big")
 		set_text("Guh")
+		set_centered(true)
 		start_cutscene()
 		thread = OThread(thread_func.bindenv(this))
 		thread.call()
@@ -247,13 +250,13 @@ class OMenuText extends OText {
 				default:
 					drawline += v.text
 			}
-			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n\n"
+			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n"
 
 			if(drawline.len() > largest_drawline.len()) largest_drawline = drawline
 
 			drawnum++
 		}
-		set_text(start_info + "\n\n" + drawtext)
+		set_text(start_info + "\n" + drawtext)
 		return largest_drawline
 	}
 

@@ -35,3 +35,14 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 		return retvalue
 	}
 }
+
+api_table().replace <- function(string, findstring, replacestring) {
+	local newstring = ""
+	for(local i = 0; i < string.len(); i++) {
+		local a = string.slice(i,  i + 1)
+		if(a == findstring) {
+			newstring += replacestring
+		} else newstring += a
+	}
+	return newstring
+}
