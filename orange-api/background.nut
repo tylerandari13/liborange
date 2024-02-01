@@ -14,7 +14,7 @@ class OBackground extends OObject {
 		local inc = 0
 		while(wait(speed) == null) {
 			if(playing && animation_frames.len() > 0) {
-				display(animation_frames[inc % animation_frames.len()])
+				//display(animation_frames[inc % animation_frames.len()])
 				set_images("top" in animation_frames[inc % animation_frames.len()] ? animation_frames[inc % animation_frames.len()].top : "images/background/misc/transparent_up.png"
 						   "middle" in animation_frames[inc % animation_frames.len()] ? animation_frames[inc % animation_frames.len()].middle : "images/background/misc/transparent_up.png"
 						   "bottom" in animation_frames[inc % animation_frames.len()] ? animation_frames[inc % animation_frames.len()].bottom : "images/background/misc/transparent_up.png"
