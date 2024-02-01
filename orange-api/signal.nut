@@ -21,18 +21,24 @@ api_table().init_signals <- function() if(!("signals_innitted" in api_storage())
 	local OSignal_thread = newthread(function() {
 		local added_players = {}
 		while(wait(0) == null) {
-			foreach(i, v in get_players())
+			foreach(i, v in get_players()) {
 				if(!(i in added_players)) {
 					added_players[i] <- v
-					api_table().get_signal("player_added").call(v, i)
+					api_table().get_signal("player-added").call(v, i)
 				} else if(added_players.len() > get_players().len()) {
 					foreach(i, v in added_players)
 						if(!(i in get_players())) {
-							api_table().get_signal("player_removed").call(v, i)
+							api_table().get_signal("player-removed").call(v, i)
 							delete added_players[i]
 						}
 				}
-			api_table().get_signal("process").call()
+				foreach(v in added_players) foreach(w in controls) {
+					if(v.get_input_pressed(w)) api_table().get_signal("input-pressed").call(w, v)
+				//	if(v.get_input_held(w)) api_table().get_signal("input-held").call(w, v)
+					if(v.get_input_released(w)) api_table().get_signal("input-released").call(w, v)
+				}
+			}
+			api_table().get_callback("process").call()
 		}
 	})
 	api_table().thread_fix(OSignal_thread)
@@ -40,17 +46,22 @@ api_table().init_signals <- function() if(!("signals_innitted" in api_storage())
 }
 
 api_table().add_signal <- function(name) {
-	if(!("OSignals" in api_table())) api_table().OSignals <- {}
-	api_table().OSignals[name.tolower()] <- OSignal()
+	if(!("OSignals" in api_storage())) api_storage().OSignals <- {}
+	api_storage().OSignals[name.tolower()] <- OSignal()
 }
 
 api_table().get_signal <- function(name) {
-	if(!("OSignals" in api_table())) api_table().add_signal(name)
-	if(!(name in api_table().OSignals)) api_table().add_signal(name)
-	return api_table().OSignals[name.tolower()]
+	if(name == "process") throw getstackinfos(2).src + " line " + getstackinfos(2).line + ". If this is not your doing, report this to Orange immediately."
+	if(!("OSignals" in api_storage())) api_table().add_signal(name)
+	if(!(name in api_storage().OSignals)) api_table().add_signal(name)
+	return api_storage().OSignals[name.tolower()]
 }
 
 api_table().remove_signal <- function(name) {
-	if(!("OSignals" in api_table())) api_table().OSignals <- {}
-	delete api_table().OSignals[name.tolower()]
+	if(!("OSignals" in api_storage())) api_storage().OSignals <- {}
+	delete api_storage().OSignals[name.tolower()]
 }
+
+
+// consistency
+api_table().init_callbacks <- api_table().init_signals

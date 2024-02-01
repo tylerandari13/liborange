@@ -32,7 +32,7 @@ class OCamera extends OObject {
 		y_bounds = get_height() / y_bounds
 		reset_drag()
 		object.set_mode("manual")
-		api_table().get_signal("process").connect(process_func.bindenv(this))
+		api_table().get_callback("process").connect(this, process_func)
 		api_table().init_signals()
 	}
 

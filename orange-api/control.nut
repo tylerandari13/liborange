@@ -1,4 +1,4 @@
-local controls = [
+::controls <- [
 "left"
 "right"
 "up"
