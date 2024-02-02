@@ -12,7 +12,7 @@ class OTimer extends OSignal {
 
 	function thread_func() {
 		wait(time)
-		OSignal.call.acall([this].extend(vars))
+		OSignal.call.acall([this, time].extend(vars))
 	}
 }
 
@@ -24,7 +24,7 @@ class OCallbackTimer extends OCallback {
 
 	function thread_func() {
 		wait(time)
-		OCallback.call.acall([this].extend(vars))
+		OCallback.call.acall([this, time].extend(vars))
 	}
 }
 
