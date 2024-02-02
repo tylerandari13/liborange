@@ -1,8 +1,14 @@
 class OCallback {
 	connections = null
 
+	fire = null
+	emit = null
+
 	constructor() {
 		connections = []
+
+		fire = call
+		emit = call
 	}
 
 	function connect(env, func) {
@@ -22,7 +28,6 @@ class OCallback {
 	function call(...) foreach(connection in connections) {
 		connection.func.acall([connection.env].extend(vargv))
 	}
-	function fire(...) call.acall([this].extend(vargv))
 }
 
 api_table().Callback <- OCallback
