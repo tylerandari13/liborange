@@ -5,12 +5,14 @@ class OTimer extends OSignal {
 	function call(_time, ...) {
 		time = _time
 		vars = vargv
-		local a = newthread(function(the_stuff) {
-			wait(time)
-			base.call.acall([this].extend(vars))
-		}.bindenv(this))
+		local a = newthread(thread_func.bindenv(this))
 		api_table().thread_fix(a)
-		a.call(vargv)
+		a.call()
+	}
+
+	function thread_func() {
+		wait(time)
+		OSignal.call.acall([this].extend(vars))
 	}
 }
 
@@ -19,6 +21,11 @@ class OCallbackTimer extends OCallback {
 	vars = OTimer.vars
 
 	call = OTimer.call
+
+	function thread_func() {
+		wait(time)
+		OCallback.call.acall([this].extend(vars))
+	}
 }
 
 ::OSignalTimer <- OTimer // consistency
