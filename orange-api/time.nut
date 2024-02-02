@@ -25,4 +25,4 @@ class OCallbackTimer extends OCallback {
 
 api_table().Timer <- OTimer
 api_table().SignalTimer <- OSignalTimer
-api_table().CallbackTimer <- OCallBackTimer
+api_table().CallbackTimer <- OCallbackTimer
