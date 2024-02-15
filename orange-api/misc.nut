@@ -1,15 +1,3 @@
-function table_to_sexp(table) {
-	local retstring = ""
-	foreach(i, v in table) {
-		if(type(v) == "string") {
-			retstring += "(" + i.tostring() + " \"" + v + "\")"
-		} else if(type(v) == "bool") {
-			retstring += "(" + i.tostring() + " " + (v ? "#t" : "#f") + ")"
-		} else retstring += "(" + i.tostring() + " " + v.tostring() + ")"
-	}
-	return retstring
-}
-
 api_table().min <- function(num, limit) return num < limit ? limit : num
 
 api_table().max <- function(num, limit) return num > limit ? limit : num
@@ -18,11 +6,24 @@ api_table().char_at_index <- function(string, index) return string.slice(index, 
 
 api_table().distance_from_point_to_point <- distance_from_point_to_point
 
-api_table().table_to_sexp <- table_to_sexp
+api_table().table_to_sexp <- function(table) {
+	local retstring = ""
+	foreach(i, v in table) {
+		local retstring2 = ""
+		if(type(v) == "string") {
+			retstring2 += "(" + i.tostring() + " \"" + v + "\")"
+		} else if(type(v) == "bool") {
+			retstring2 += "(" + i.tostring() + " " + (v ? "#t" : "#f") + ")"
+		} else retstring2 += "(" + i.tostring() + " " + v.tostring() + ")"
+		if(retstring2.find("_")) retstring2 += api_table().replace(retstring2, "_", "-")
+		retstring += retstring2
+	}
+	return retstring
+}
 
 api_table().add_object <- function(class_name, name = "", x = 0, y = 0, direction = "auto", data = "", return_object = true) {
 	if(name == "") return_object = false
-	if(type(data) == "table") data = table_to_sexp(data)
+	if(type(data) == "table") data = api_table().table_to_sexp(data)
 	local unexposed = name.tolower() == "unexposeme"
 	if(unexposed) name += "-" + class_name + "-" + rand().tostring()
 	if(class_name == "checkpoint") class_name = "firefly" //somebody change this please
