@@ -19,6 +19,10 @@ function api_table() {
 	return liborange
 }
 function api_storage() return api_table().other_data
+function api_sector_storage() {
+	if(!("_liborange_other_data" in get_sector())) get_sector()._liborange_other_data <- class{}
+	return get_sector()._liborange_other_data
+}
 
 function help() display_text_file("orange-api/help.stxt")
 

@@ -46,20 +46,20 @@ api_table().init_signals <- function() if(!("signals_innitted" in api_storage())
 }
 
 api_table().add_signal <- function(name) {
-	if(!("OSignals" in api_storage())) api_storage().OSignals <- {}
-	api_storage().OSignals[name.tolower()] <- OSignal()
+	if(!("OSignals" in api_sector_storage())) api_sector_storage().OSignals <- {}
+	api_sector_storage().OSignals[name.tolower()] <- OSignal()
 }
 
 api_table().get_signal <- function(name) {
 	if(name == "process") throw getstackinfos(2).src + " line " + getstackinfos(2).line + ". If this is not your doing, report this to Orange immediately."
-	if(!("OSignals" in api_storage())) api_table().add_signal(name)
-	if(!(name in api_storage().OSignals)) api_table().add_signal(name)
-	return api_storage().OSignals[name.tolower()]
+	if(!("OSignals" in api_sector_storage())) api_table().add_signal(name)
+	if(!(name in api_sector_storage().OSignals)) api_table().add_signal(name)
+	return api_sector_storage().OSignals[name.tolower()]
 }
 
 api_table().remove_signal <- function(name) {
-	if(!("OSignals" in api_storage())) api_storage().OSignals <- {}
-	delete api_storage().OSignals[name.tolower()]
+	if(!("OSignals" in api_sector_storage())) api_sector_storage().OSignals <- {}
+	delete api_sector_storage().OSignals[name.tolower()]
 }
 
 
