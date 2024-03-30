@@ -40,8 +40,8 @@ api_table().init_callbacks <- function() {
 	}
 }
 
-api_table().init_signals <- function() if(!("signals_innitted" in api_storage())) {
-	api_storage().signals_innitted <- true
+api_table().init_signals <- function() if(!("signals_innitted" in api_sector_storage())) {
+	api_sector_storage().signals_innitted <- true
 	api_table().sector_thread(api_table().init_callbacks).wakeup()
 }
 
