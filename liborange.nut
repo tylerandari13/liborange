@@ -4,6 +4,7 @@ foreach(file in [
 
 	"callback"
 	"control"
+	"factory"
 	"misc"
 	"signal"
 	"text"
@@ -16,7 +17,6 @@ foreach(file in [
 	"camera"
 	"class"
 	"console"
-	"factory"
 	"grumbel"
 	"location"
 	"multiplayer"
