@@ -58,7 +58,7 @@ if(WORLDMAP_GUARD) api_table().sector_thread <- function(func, wakeup_param = fa
 		wakeup_param = wakeup_param
 	}
 
-	api_table().add_object("scripttrigger", "", sector.Tux.get_x() + 1, sector.Tux.get_y() + 1, "auto" {
+	api_table().add_object("scripttrigger", "", sector.Tux.get_x() + 16, sector.Tux.get_y() + 16, "auto" {
 		width = 1
 		height = 1
 		oneshot = true
