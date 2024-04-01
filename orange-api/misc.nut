@@ -15,13 +15,16 @@ api_table().table_to_sexp <- function(table) {
 		} else if(type(v) == "bool") {
 			retstring2 += "(" + i.tostring() + " " + (v ? "#t" : "#f") + ")"
 		} else retstring2 += "(" + i.tostring() + " " + v.tostring() + ")"
-		if(retstring2.find("_")) retstring2 += api_table().replace(retstring2, "_", "-")
+		if(i.find("_")) retstring2 += api_table().table_to_sexp({[api_table().replace(i, "_", "-")] = v})
 		retstring += retstring2
 	}
 	return retstring
 }
 
 api_table().add_object <- function(class_name, name = "", x = 0, y = 0, direction = "auto", data = "", return_object = true) {
+	print(getstackinfos(2).src + " on line " + getstackinfos(2).line)
+	print("[liborange] `liborange.add_object()` is deprecated. Please use `liborange.GameObject()` instead.")
+
 	if(name == "") return_object = false
 	if(type(data) == "table") data = api_table().table_to_sexp(data)
 	local unexposed = name.tolower() == "unexposeme"
@@ -36,6 +39,18 @@ api_table().add_object <- function(class_name, name = "", x = 0, y = 0, directio
 		return retvalue
 	}
 }
+
+/*api_table().add_object <- function(class_name, name = "", x = 0, y = 0, direction = "auto", data = "", return_object = true) {
+	print(getstackinfos(2).src + " on line " + getstackinfos(2).line)
+	print("[liborange] `liborange.add_object()` is deprecated. Please use `liborange.GameObject()` instead.")
+	local object = api_table().GameObject(class_name)
+	object.set_pos(x, y)
+	object.direction = direction
+	if(type(data) == "string") {
+		object.add_raw_data(data)
+	} else object.data = data
+	return object.initialize({}, return_object)
+}*/
 
 api_table().replace <- function(string, findstring, replacestring) {
 	local newstring = ""

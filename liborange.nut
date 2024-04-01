@@ -16,6 +16,7 @@ foreach(file in [
 	"camera"
 	"class"
 	"console"
+	"factory"
 	"grumbel"
 	"location"
 	"multiplayer"
