@@ -146,3 +146,4 @@ function WORLDMAP_GUARD() {
 	} catch(e) return false
 }
 ::WORLDMAP_GUARD <- WORLDMAP_GUARD()
+::SECTOR_GUARD <- !WORLDMAP_GUARD
