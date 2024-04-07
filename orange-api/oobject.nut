@@ -1,3 +1,4 @@
+api_table().Object <- OObject
 api_table().OObject <- OObject
 
 api_table().convert_to_OObject <- function(sector = get_sector())
