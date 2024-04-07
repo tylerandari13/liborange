@@ -154,7 +154,23 @@ class OText extends OObject {
 		object.set_text(_text)
 	}
 
+	function set_front_fill_color(...) {
+		api_table().parse_color.bindenv(this)(vargv, "set_front_fill_color")
+	}
+
+	function set_back_fill_color(...) {
+		api_table().parse_color.bindenv(this)(vargv, "set_back_fill_color")
+	}
+
+	function set_text_color(...) {
+		api_table().parse_color.bindenv(this)(vargv, "set_text_color")
+	}
+
 	//OText specific functions
+
+	function get_pos() {
+		return api_table().Vector(get_x(), get_y())
+	}
 
 	function get_text() return text
 

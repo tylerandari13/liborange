@@ -3,6 +3,7 @@ foreach(file in [
 	"orange_api_util"
 
 	"callback"
+	"containers"
 	"control"
 	"factory"
 	"misc"
@@ -16,6 +17,7 @@ foreach(file in [
 	"button"
 	"camera"
 	"class"
+	"colors"
 	"console"
 	"grumbel"
 	"location"
