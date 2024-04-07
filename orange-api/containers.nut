@@ -21,10 +21,16 @@ class OVector {
 	}
 
 	function _add(other) {
+		if(type(other) == "integer" || type(other) == "float") {
+			return OVector(x + other, y + other)
+		}
 		return OVector(x + other.x, x + other.y)
 	}
 
 	function _sub(other) {
+		if(type(other) == "integer" || type(other) == "float") {
+			return OVector(x - other, y - other)
+		}
 		return OVector(x - other.x, x - other.y)
 	}
 
