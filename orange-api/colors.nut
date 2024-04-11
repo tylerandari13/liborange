@@ -147,7 +147,6 @@ local colors = {
 	WHITE_SMOKE = OColor(0.960784, 0.960784, 0.960784, 1)
 	YELLOW = OColor(1, 1, 0, 1)
 	YELLOW_GREEN = OColor(0.603922, 0.803922, 0.196078, 1)
-
 }
 
 local colors_delegate = {

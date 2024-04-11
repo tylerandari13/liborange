@@ -1,7 +1,3 @@
-api_table().min <- function(num, limit) return num < limit ? limit : num
-
-api_table().max <- function(num, limit) return num > limit ? limit : num
-
 api_table().char_at_index <- function(string, index) return string.slice(index, api_table().mod_max(index + 1, string.len()))
 
 api_table().distance_from_point_to_point <- distance_from_point_to_point

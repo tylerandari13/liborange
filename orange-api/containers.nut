@@ -20,6 +20,17 @@ class OVector {
 		}
 	}
 
+	function distance_to(...) {
+		switch(vargv.len()) {
+			case 1: // distance_to(other)
+				return api_table().distance_rom_point_to_point(this, vargv[0])
+			break
+			case 2: // distance_to(other_x, other_y)
+				return api_table().distance_rom_point_to_point(x, y, vargv[0], vargv[1])
+			break
+		}
+	}
+
 	function _add(other) {
 		if(type(other) == "integer" || type(other) == "float") {
 			return OVector(x + other, y + other)
@@ -131,10 +142,16 @@ class ORect {
 	}
 
 	function _add(other) {
+		if(type(other) == "integer" || type(other) == "float") {
+			return ORect(position + other, size + other)
+		}
 		return ORect(position + other.position, size + other.size)
 	}
 
 	function _sub(other) {
+		if(type(other) == "integer" || type(other) == "float") {
+			return ORect(position - other, size - other)
+		}
 		return ORect(position - other.position, size - other.size)
 	}
 
@@ -250,7 +267,90 @@ class OColor {
 		return retval
 	}
 
-	//function shift_hue() // TODO: add this
+	/*
+	Basically:
+		- convert the current RGB values to HSV
+		- shift the H in the new values
+		- convert back to RGB
+	*/
+	/*function hue_shift(degrees) {
+		// convert the current RGB values to HSV
+		local h
+		local s
+		local v
+
+		local max = api_table().max(r, g, b)
+		local delta = max - api_table().min(r, g, b)
+
+		if(delta > 0) {
+			if(max == r) {
+				h = 60 * ((g - b) / delta) % 6
+			} else if(max == g) {
+				h = 60 * (((b - r) / delta) + 2)
+			} else if(max == b) {
+				h = 60 * (((r - g) / delta) + 4)
+			}
+
+			if(max > 0) {
+				s = delta / max
+			} else {
+				s = 0
+			}
+
+		} else {
+			h = 0
+			s = 0
+		}
+
+		v = max
+
+		if(h < 0) {
+			h = 360 + h
+		}
+
+		// shift the H in the new values
+		h += degrees
+
+		// convert back to RGB
+		local c = v * s // Chroma
+		local h_prime = h / (60.0 % 6)
+		local x = c * (1 - fabs((h_prime % 2) - 1))
+		local m = v - c
+
+		if(0 <= h_prime && h_prime < 1) {
+			r = c
+			g = x
+			b = 0
+		} else if(1 <= h_prime && h_prime < 2) {
+			r = x
+			g = c
+			b = 0
+		} else if(2 <= h_prime && h_prime < 3) {
+			r = 0
+			g = c
+			b = x
+		} else if(3 <= h_prime && h_prime < 4) {
+			r = 0
+			g = x
+			b = c
+		} else if(4 <= h_prime && h_prime < 5) {
+			r = x
+			g = 0
+			b = c
+		} else if(5 <= h_prime && h_prime < 6) {
+			r = c
+			g = 0
+			b = x
+		} else {
+			r = 0
+			g = 0
+			b = 0
+		}
+
+		r += m
+		g += m
+		b += m
+	}*/
 
 	function _add(other) {
 		return OColor(r + other.r, g + other.g, b + other.b, a + other.a)

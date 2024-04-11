@@ -26,7 +26,30 @@ function api_sector_storage() {
 
 function help() display_text_file("orange-api/help.stxt")
 
-function distance_from_point_to_point(x1, y1, x2, y2) return sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2))
+function distance_from_point_to_point(...) {
+	local x1 = 0
+	local y1 = 0
+	local x2 = 0
+	local y2 = 0
+	switch(vargv.len()) {
+		case 2: // distance_from_point_to_point(pos1, pos2)
+			x1 = vargv[0].x
+			x2 = vargv[1].x
+			y1 = vargv[0].y
+			y2 = vargv[1].y
+		break
+		case 4: // distance_from_point_to_point(x1, y1, x2, y2)
+			x1 = vargv[0]
+			x2 = vargv[2]
+			y1 = vargv[1]
+			y2 = vargv[3]
+		break
+		default:
+			throw "wrong number of parameters"
+		break
+	}
+	return sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2))
+}
 
 function get_players(include_OObjects = true) {
     local arroy = {}
@@ -60,82 +83,6 @@ function collided_with_any_player(x1, y1, w1, h1, direction = "auto") {
 		if(objects_collided(player.get_x(), player.get_y(), 32, (player.get_bonus() == "none" ? 32 : 64), x1, y1, w1, h1, direction))
 			collided[1] <- player
 	return collided
-}
-
-class OObject {
-	static is_OObject = true
-
-	object = null
-	object_name = ""
-	odata = null
-
-	// sector_ref = null
-
-	constructor(obj) {
-		odata = {} // we dont want all odatas to point to the same table
-		if(::type(obj) == "string") {
-			if("is_OObject" in ::get_sector()[obj]) {
-				object = ::get_sector()[obj].object
-			} else object = ::get_sector()[obj]
-			delete ::get_sector()[obj]
-			::get_sector()[obj] <- this
-		} else {
-			if("is_OObject" in obj) {
-				object = obj.object
-			} else object = obj
-		}
-		if("get_name" in object) {
-			object_name = object.get_name()
-		} else object_name = obj.tostring()
-
-		// sector_ref = ::get_sector()
-	}
-
-	function display(ANY) ::display(ANY) // for convenience
-	function print(object) ::print(object)
-
-	function set_everything(stuff) foreach(i, v in stuff) if("set_" + i in this) this["set_" + i].acall([object].extend(type(v) == "array" ? v : [v]))
-
-	// no `get_everything()` because it would be kinda complicated considering i cant iterate over a class instance
-
-	// function in_current_sector() return sector_ref != null && sector_ref == ::get_sector()
-
-	function get_name() return object_name
-
-	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
-		if(key == "get_x" && "get_pos_x" in object) {
-			return object.get_pos_x.bindenv(object)
-		} else if(key == "get_y" && "get_pos_y" in object) {
-			return object.get_pos_y.bindenv(object)
-		} else if(key in object) {
-			if(::type(object[key]) == "function") {
-				return object[key].bindenv(object)
-			} else {
-				return object[key]
-			}
-		} else if(key in odata) {
-			return odata[key]
-// Godot-like get_*() and set_*() functions. if theres a variable in an OObject called `value` then typing `OObject.get_value()` will return `value`
-		} /*else if(key.slice(0, 4) == "get_") {
-			return function[this]() return this[key.slice(4)]
-		}else if(key.slice(0, 4) == "set_") {
-			return function[this](value) return this[key.slice(4)] = value
-		}*/
-		throw null
-	}
-
-	function _set(key, value) {
-		if(key in odata) return odata[key] = value
-		throw null
-	}
-
-	function _newslot(key, value) {
-		return odata[key] <- value
-	}
-
-	function _delslot(key) {
-		return delete odata[key]
-    }
 }
 
 // some scripts shouldnt trigger on the worldmap. any scripts that shouldnt trigger should have some sorta `if(WORLDMAP_GUARD)` somewhere in it
