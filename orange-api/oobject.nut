@@ -1,12 +1,35 @@
+/** \class OObject oobject.nut "oobject.nut"
+ * @class OObject
+ * @summary Base class for everything that uses the overwriting capabilities of liborange.
+ *
+ * If `obj` is a string it will overwrite `sector[obj]` with the new OObject. For example if you had a scripted object named `scripted_object0` in the sector you could call `OObject("scripted_object0")`. Now `scripted_object0` is an OObject.
+ * If `obj` is an instance it wont overwrite it in the sector, but will still give you an OObject like how a normal class works. For example if you had a scripted object named `scripted_object0` in the sector you could call `local object = OObject(sector.scripted_object0)`. `scripted_object0` is not an OObject in the sector but `object` is.
+ */
 class OObject {
+	/**
+	 * @property {bool} is_OObject This means that the object is an OObject. When checking whether an instance is an oobject please use `if("is_OObject" in object)`.
+	 */
 	static is_OObject = true
 
+	/**
+	 * @property {instance} object A reference to the original object that was overtaken.
+	 */
 	object = null
+	/**
+	 * @property {string} object_name The name of the OObject. It can be gotten using get_name(). If the original object had a `get_name()` function it will be whatever that returns, else it will be whatever `obj` was.
+	 */
 	object_name = ""
+	/**
+	 * @property {table} odata Extra data stored in the OObject. Data is usually set via metamethods, and not by editing the table directly.
+	 */
 	odata = null
 
 	// sector_ref = null
 
+	/**
+	 * @function constructor
+	 * @param {string|instance} obj The object to be initialized by the OObject.
+ 	*/
 	constructor(obj) {
 		odata = {} // we dont want all odatas to point to the same table
 		if(::type(obj) == "string") {
@@ -27,15 +50,31 @@ class OObject {
 		// sector_ref = ::get_sector()
 	}
 
-	function display(ANY) ::display(ANY) // for convenience
+	/**
+	 * @function display Wrapper for SuperTuxs `display()` function. For convenience.
+	 * @param {ANY} ANY The value to be displayed.
+	 */
+	function display(ANY) ::display(ANY)
+	/**
+	 * @function display Wrapper for SuperTuxs `print()` function. For convenience.
+	 * @param {ANY} object The value to be printed.
+	 */
 	function print(object) ::print(object)
 
+	/**
+	 * @function set_everything Allows for setting a lot of `set_*()` functions at once.
+	 * @param {table} stuff The table of stuff. Example: `{color = [0, 0, 0, 0]}`
+	 * @deprecated This is a stupid function. Please dont use it.
+	 */
 	function set_everything(stuff) foreach(i, v in stuff) if("set_" + i in this) this["set_" + i].acall([object].extend(type(v) == "array" ? v : [v]))
 
 	// no `get_everything()` because it would be kinda complicated considering i cant iterate over a class instance
 
 	// function in_current_sector() return sector_ref != null && sector_ref == ::get_sector()
 
+	/**
+	 * @function get_name Gets the name of the OObject. (Basically returns object_name)
+	 */
 	function get_name() return object_name
 
 	function _get(key) { // Returning just the function doesnt work. We need to bind the object to the enviroment to get it to work.
