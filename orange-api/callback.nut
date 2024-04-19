@@ -11,14 +11,22 @@ class OCallback {
 		emit = call
 	}
 
-	function connect(env, func) {
-		if(type(func) == "string") {
-			func = compilestring(func)
+	function connect(...) {
+		if(type(vargv[0]) == "string") {
+			vargv[0] = compilestring(vargv[0])
 		}
-		connections.push({
-			env = env
-			func = func
-		})
+		switch(vargv.len()) {
+			case 1: // connect(func)
+				connections.push(vargv[0])
+			break
+			case 2: // connect(env, func)
+				print("[liborange] The function `OCallback.connect(env, func)` is deprecated. Please use `OCallback.connect(func)` or `OCallback.connect(func.bindenv(env))` instead.")
+				connections.push(vargv[1].bindenv(vargv[0]))
+			break
+			default:
+				throw "wrong number of parameters"
+			break
+		}
 	}
 
 	function disconnect(func) {
@@ -26,7 +34,7 @@ class OCallback {
 	}
 
 	function call(...) foreach(connection in connections) {
-		connection.func.acall([connection.env].extend(vargv))
+		connection.acall([this].extend(vargv))
 	}
 }
 
