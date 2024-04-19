@@ -25,6 +25,7 @@ foreach(file in [
 	"location"
 	"multiplayer"
 	"rand"
+	"scripted_object"
 	"scriptloader"
 	"state"
 	"table"
