@@ -13,13 +13,13 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Run pocketlib.py
+      - name: Run pocketlib.nut
         run: |
-          python pocketlib.py
+          squirrel pocketlib.nut
 
       - name: Remove unnecessary files
         run: |
-          find . ! -name 'liborange-pocket.nut' -type f -exec rm -f {} +
+          find . ! -name 'liborange.nut' -type f -exec rm -f {} +
 
       - name: Upload archive
         uses: actions/upload-artifact@v3
