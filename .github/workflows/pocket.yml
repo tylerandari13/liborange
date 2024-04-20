@@ -19,7 +19,7 @@ jobs:
 
       - name: Run pocketlib.nut
         run: |
-          squirrel pocketlib.nut
+          squirrel workflow-util/pocketlib.nut
 
       - name: Remove unnecessary files
         run: |
