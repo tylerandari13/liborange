@@ -15,7 +15,7 @@ jobs:
       
       - name: Install Squirrel
         run: |
-          apt install squirrel
+          sudo apt install squirrel
 
       - name: Run pocketlib.nut
         run: |
