@@ -30,6 +30,7 @@ foreach(file in [
 	"state"
 	"table"
 	"test"
+	"tether"
 	"tilemap"
 	"time"
 	"trampoline"
