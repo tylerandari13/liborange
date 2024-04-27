@@ -27,30 +27,31 @@ enum errors {
 ::action <- {}
 
 function action::text(text)  return {
-	orange_API_key = keys.TEXT
+	key = keys.TEXT
 	text = "- " + text + " -"
+	skip = true
 }
 
 function action::swap(text, menu) return {
-	orange_API_key = keys.SWAP
+	key = keys.SWAP
 	menu = menu
 	text = text
 }
 
 function action::run(text, func, envobj = null) return {
-	orange_API_key = keys.FUNC
+	key = keys.FUNC
 	func = func
 	text = text
 	envobj = envobj
 }
 
 function action::back(text = "Back") return {
-	orange_API_key = keys.BACK
+	key = keys.BACK
 	text = text
 }
 
 function action::exit(text = "Exit") return {
-	orange_API_key = keys.EXIT
+	key = keys.EXIT
 	text = text
 }
 
@@ -58,8 +59,8 @@ function action::exit(text = "Exit") return {
 ::data <- {}
 
 function data::integer(text, num = 0, min = -2147483647, max = 2147483647, inc = 1) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.INT
+	key = keys.CUSTOM
+	value = values.INT
 	text = text
 
 	num = num
@@ -69,8 +70,8 @@ function data::integer(text, num = 0, min = -2147483647, max = 2147483647, inc =
 }
 
 function data::float(text, num = 0.0, min = -2147483647.0, max = 2147483647.0, inc = 0.5) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.FLOAT
+	key = keys.CUSTOM
+	value = values.FLOAT
 	text = text
 
 	num = num
@@ -80,8 +81,8 @@ function data::float(text, num = 0.0, min = -2147483647.0, max = 2147483647.0, i
 }
 
 function data::string(text, string = "", prefix = "\"", suffix = "\"") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.STRING
+	key = keys.CUSTOM
+	value = values.STRING
 	text = text
 
 	string = string
@@ -90,8 +91,8 @@ function data::string(text, string = "", prefix = "\"", suffix = "\"") return {
 }
 
 function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.BOOL
+	key = keys.CUSTOM
+	value = values.BOOL
 	text = text
 
 	bool = bool
@@ -99,27 +100,17 @@ function data::bool(text, bool = false, true_text = "ON", false_text = "OFF") re
 	false_text = false_text
 }
 
-function data::enums(text, index, ...) {
-	local enums = []
-	foreach(i, v in vargv) {
-		if(type(v) == "array") {
-			enums.push(v)
-		} else {
-			enums.push([v, i])
-		}
-	}
-	return {
-		orange_API_key = keys.CUSTOM
-		orange_API_value = values.ENUM
-		text = text
-		enums = enums
-		index = index
-	}
+function data::enums(text, index, ...) return {
+	key = keys.CUSTOM
+	value = values.ENUM
+	text = text
+	enums = vargv
+	index = index
 }
 
 function data::nil(text) return {
-	orange_API_key = keys.CUSTOM
-	orange_API_value = values.NULL
+	key = keys.CUSTOM
+	value = values.NULL
 	text = text
 }
 
@@ -185,178 +176,191 @@ class OText extends OObject {
 }
 
 class OMenuText extends OText {
-	current_item = 0
+	visible = false
+	exited = null
 
-	current_menu = {}
-	last_menu = {}
+	menu = []
+	selected = 0
 
-	start_info = ""
+	//history = []
+	last_menu = null
 
-	thread = null
-	constructor(name) {
+	constructor(name = null) {
 		base.constructor(name)
-		set_font("big")
-		set_text("Guh")
 		set_centered(true)
-		start_cutscene()
-		thread = OThread(thread_func.bindenv(this))
-		thread.call()
-		sector.liborange.get_signal("console_response").connect(temp_string.bindenv(this))
+		process = process_func.bindenv(this)
+		input_pressed = input_pressed_func.bindenv(this)
+		api_table().init_signals()
+		exited = OSignal()
 	}
 
-	function temp_string(text) if(current_menu[current_item].orange_API_key == keys.CUSTOM && current_menu[current_item].orange_API_value == values.STRING) current_menu[current_item].string = text
-
-	function thread_func() {
-		while(wait(0.01) == null && !get_pressed("escape", "menu-back")) {
-
-			if(get_pressed("up", "peek-up")) current_item--
-			if(get_pressed("down", "peek-down")) current_item++
-
-			if(get_pressed("action", "menu-select", "menu-select-space", "jump")) menu_select()
-			if(get_pressed("left", "peek-left")) menu_select(-1)
-			if(get_pressed("right", "peek-right")) menu_select(1)
-
-			if(current_item < 0) current_item = current_menu.len() - 1
-			if(current_item >= current_menu.len()) current_item = 0
-
-			if(current_menu[current_item].orange_API_key == keys.TEXT) if(get_pressed("up", "peek-up")) {
-				current_item--
-			} else current_item++
-
-			draw_menu()
-		}
-		exit()
-	}
-
-	function draw_menu() {
-		local drawtext = ""
-		local drawnum = 0
-
-		local largest_drawline = ""
-
-		foreach(i, v in current_menu) {
-			local drawline = (drawnum == current_item ? "> " : "  ")
-			switch(v.orange_API_key) {
-				case keys.CUSTOM:
-					drawline += v.text + " : "
-					switch(v.orange_API_value) {
-						case values.NULL:
-							drawline += "<null>"
-							break
-						case values.INT:
-							drawline += v.num
-							break
-						case values.FLOAT:
-							drawline += v.num + (v.num == v.num.tointeger() ? ".0" : "")
-							break
-						case values.STRING:
-							drawline += v.prefix + v.string + v.suffix
-							break
-						case values.BOOL:
-							drawline += v.bool ? v.true_text : v.false_text
-							break
-						case values.ENUM:
-							drawline += "<- " + v.enums[v.index][0] + "->"
-							break
-						default:
-							drawline += "<unknown>"
-							break
-					}
-					break
-				default:
-					drawline += v.text
-			}
-			drawtext += drawline + (drawnum == current_item ? " <" : "") + "\n"
-
-			if(drawline.len() > largest_drawline.len()) largest_drawline = drawline
-
-			drawnum++
-		}
-		set_text(start_info + "\n" + drawtext)
-		return largest_drawline
-	}
-
-	function menu_select(dir = 0) {
-		local drawnum = 0
-		foreach(i, v in current_menu) {
-			if(drawnum == current_item) {
-				switch(v.orange_API_key) {
-					case keys.SWAP:
-						swap_menu(v.menu)
-						break
-					case keys.FUNC:
-						run_function(v.func, v.envobj)
-						break
-					case keys.BACK:
-						go_back()
-						break
-					case keys.EXIT:
-						exit()
-						break
-					case keys.CUSTOM:
-						switch(v.orange_API_value) {
-							case values.INT:
-							case values.FLOAT:
-								if(get_held("left", "peek-left")) {
-									if(v.num > v.min) {
-										v.num -= v.inc
-									} else v.num = v.min
-								}
-								if(get_held("right", "peek-right")) {
-									if(v.num < v.max) {
-										v.num += v.inc
-									} else v.num = v.max
-								}
-								break
-							case values.STRING:
-									// handled at temp_string()
-								break
-							case values.BOOL:
-								v.bool = !v.bool
-								break
-							case values.ENUM:
-								v.index += (dir == 0 ? 1 : dir)
-								if(v.index > v.enums.len() - 1) v.index = 0
-								if(v.index < 0) v.index = v.enums.len() - 1
-								break
-						}
-				}
-			}
-			drawnum++
+	function update(_visible) {
+		visible = _visible
+		if(visible) {
+			api_table().get_callback("process").connect(process)
+			api_table().get_signal("input-pressed").connect(input_pressed)
+		} else {
+			api_table().get_callback("process").disconnect(process)
+			api_table().get_signal("input-pressed").disconnect(input_pressed)
+			exited.call()
 		}
 	}
-
-	function exit() set_visible(false)
 
 	function swap_menu(new_menu) {
-		current_item = 0
-		last_menu = current_menu
-		current_menu = clone new_menu
+		//history.push(menu)
+		last_menu = menu
+		//menu = clone new_menu
+		menu = new_menu
+		selected = 0
 	}
 
-	function get_item_from_name(name) foreach(v in current_menu) if(v.text == name) return v
-
-	function run_function(func, envobj = null)(type(func) == "string" ? compilestring(func) : func).bindenv(envobj == null ? this : envobj)()
-
-	function go_back() swap_menu(last_menu)
-
-	function display_info(message, type) OThread(function[this](message, type) {
-		local start_thing = ""
-		switch(type) {
-			case errors.OK:
-				start_thing = "Success: "
+	function select() {
+		local selected_item = menu[selected]
+		switch(selected_item.key) {
+			case keys.SWAP:
+				swap_menu(selected_item.menu)
 			break
-			case errors.WARNING:
-				start_thing = "Warning: "
+			case keys.FUNC:
+				if(selected_item.envobj == null) {
+					selected_item.func()
+				} else {
+					selected_item.func.bindenv(selected_item.envobj)()
+				}
 			break
-			case errors.ERROR:
-				start_thing = "Error: "
+			case keys.BACK:
+				swap_menu(last_menu)
+			break
+			case keys.EXIT:
+				set_visible(false)
 			break
 		}
-		start_info = start_thing + message
-		wait(5)
-		start_info = ""
-	}).call(message, type)
+	}
+
+	function change_value(amount) {
+		local selected_item = menu[selected]
+		switch(selected_item.value) {
+			case values.INT:
+			case values.FLOAT:
+				if(api_table().anyone_held("action")) {
+					amount = amount * (selected_item.value == values.INT ? 2 : 0.1)
+				}
+				if(api_table().anyone_held("menu-select")) {
+					amount = amount * (selected_item.value == values.INT ? 10 : 0.5)
+				}
+				selected_item.num += amount
+			break
+			//case values.STRING:
+				// nothing yet (how am i supposed to do this?)
+			//break
+			case values.BOOL:
+				selected_item.bool = !selected_item.bool
+			break
+			case values.ENUM:
+				selected_item.index += amount
+				if(selected_item.index < 0)
+					selected_item.index = selected_item.enums.len() - 1
+				if(selected_item.index >= selected_item.enums.len())
+					selected_item.index = 0
+			break
+		}
+	}
+
+	function move_selected(amount) {
+		selected += amount
+		if(selected < 0) selected = menu.len() - 1
+		if(selected >= menu.len()) selected = 0
+	}
+
+	process = null
+	function process_func() {
+		local selected_item = menu[selected]
+		if("skip" in selected_item) {
+			local a = api_table().anyone_axis("up", "down") +
+					api_table().anyone_axis("peek-up", "peek-down")
+			move_selected(a == 0 ? 1 : a)
+			return
+		}
+		set_text("")
+		foreach(i, item in menu) {
+			add_text(i == selected ? "> " : " ")
+			add_text(item.text)
+			if(item.key == keys.CUSTOM) {
+				add_text(" = ")
+				switch(item.value) {
+					case values.INT:
+						add_text(item.num)
+					break
+					case values.FLOAT:
+						add_text(item.num)
+						if(floor(item.num) == item.num) {
+							add_text(".0")
+						}
+					break
+					case values.STRING:
+						add_text(item.prefix + item.string + item.suffix)
+					break
+					case values.BOOL:
+						add_text((item.bool ? item.true_text : item.false_text))
+					break
+					case values.ENUM:
+						add_text(item.enums[item.index])
+					break
+					case values.NULL:
+						add_text("<null>")
+					break
+					default:
+						add_text("???")
+					break
+				}
+			}
+			add_text(i == selected ? " <" : "")
+			if(i < menu.len() - 1) add_text("\n")
+		}
+	}
+
+	input_pressed = null
+	function input_pressed_func(input, player) {
+		local selected_item = menu[selected]
+		move_selected(api_table().anyone_axis("up", "down") +
+					api_table().anyone_axis("peek-up", "peek-down"))
+		if(input == "menu-select") {
+			if(selected_item.key == keys.CUSTOM) {
+				change_value(1)
+			} else {
+				select()
+			}
+		}
+		local horiz_axis = api_table().anyone_axis("left", "right") +
+		api_table().anyone_axis("peek-left", "peek-right")
+		if(horiz_axis != 0 && selected_item.key == keys.CUSTOM) {
+			change_value(horiz_axis)
+		}
+	}
+
+	function set_visible(_visible) {
+		object.set_visible(_visible)
+		update(_visible)
+	}
+
+	function fade_in(fadetime) {
+		object.fade_in(fadetime)
+		update(true)
+	}
+
+	function fade_out(fadetime) {
+		object.fade_out(fadetime)
+		update(false)
+	}
+
+	function grow_in(fadetime) {
+		object.grow_in(fadetime)
+		update(true)
+	}
+
+	function grow_out(fadetime) {
+		object.grow_out(fadetime)
+		update(false)
+	}
 }
 
 api_table().Text <- OText

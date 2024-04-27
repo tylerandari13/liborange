@@ -33,8 +33,21 @@ api_table().wait_for_any_pressed <- function(player = 1) {
 	return input
 }
 
-api_table().anyone_pressed <- function(input) foreach(v in get_players()) if(v.get_input_pressed(input)) return input
+api_table().anyone_pressed <- function(input) foreach(v in get_players()) if(v.get_input_pressed(input)) return v
 
-api_table().anyone_held <- function(input) foreach(v in get_players()) if(v.get_input_held(input)) return input
+api_table().anyone_held <- function(input) foreach(v in get_players()) if(v.get_input_held(input)) return v
 
-api_table().anyone_released <- function(input) foreach(v in get_players()) if(v.get_input_released(input)) return input
+api_table().anyone_released <- function(input) foreach(v in get_players()) if(v.get_input_released(input)) return v
+
+api_table().anyone_axis <- function(negative, positive) {
+	local axis = 0
+	foreach(v in get_players()) {
+		if(v.get_input_held(negative))
+			axis--
+		if(v.get_input_held(positive))
+			axis++
+	}
+	if(axis == 0) {
+		return 0
+	} else return (axis > 0 ? 1 : -1)
+}
