@@ -32,8 +32,10 @@ class OTether {
 			}
 		if(functions) {
 			return function[this](...) {
+				local retval2 = []
 				foreach(i, v in retval)
-					v.acall([tethered_objects[i]].extend(vargv))
+					retval2.push(v.acall([tethered_objects[i]].extend(vargv)))
+				return retval2
 			}
 		} else {
 			return retval
