@@ -196,6 +196,7 @@ class OMenuText extends OText {
 
 	function update(_visible) {
 		visible = _visible
+		selected = 0
 		if(visible) {
 			api_table().get_callback("process").connect(process)
 			api_table().get_signal("input-pressed").connect(input_pressed)
