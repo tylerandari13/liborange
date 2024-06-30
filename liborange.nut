@@ -1,37 +1,27 @@
-// items are to be listed in order of importance. if a script needs stuff from another script to function put it above. other than that i guess just follow alphabetical order
-foreach(file in [
-	"orange_api_util"
+function get_sector() {
+	try {
+		return sector
+	} catch(e) {
+		try {
+			return worldmap
+		} catch(e) {
+			return {}
+		}
+	}
+}
 
-	"callback"
-	"containers"
-	"control"
-	"factory"
-	"math"
-	"misc"
-	"oobject"
-	"signal"
-	"text"
-	"thread"
+if(!("liborange" in get_sector())) get_sector().liborange <- {}
 
-	"background"
-	"badguy"
-	"bumper"
-	"button"
-	"camera"
-	"class"
-	"colors"
-	"console"
-	"grumbel"
-	"location"
-	"multiplayer"
-	"rand"
-	"scripted_object"
-	"scriptloader"
-	"state"
-	"table"
-	"test"
-	"tether"
-	"tilemap"
-	"time"
-	"trampoline"
-]) import("orange-api/" + file + ".nut")
+::liborange <- get_sector().liborange
+
+function add_module(name) {
+	if(!(name in liborange)) {
+		liborange[name] <- {}
+	}
+}
+
+function require(name) {
+	if(!(name in liborange)) {
+		throw "[liborange] The module \"" + name + "\" doesnt exist. Please put `import(\"liborange/" + name + "\".nut) somewhere at the top of your script."
+	}
+}

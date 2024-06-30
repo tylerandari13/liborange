@@ -1,7 +1,8 @@
 (supertux-level-subset
-  (title (_ "test"))
+  (title (_ "liborange"))
   (description (_ ""))
   (levelset #t)
   (contrib-type "user")
   (hide-from-contribs #f)
+  (title-level "")
 )
