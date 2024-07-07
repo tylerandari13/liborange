@@ -7,10 +7,13 @@
   (icon-locked "")
   (sector
     (name "main")
-    (init-script "import(\"liborange.nut\")
-import(\"liborange/object.nut\")
-print_stacktrace()
-OObject(\"huh\")")
+    (init-script "//import(\"liborange.nut\")
+//import(\"liborange/object.nut\")
+
+import(\"liborange-tests.nut\")
+test()
+
+//OObject(\"huh\")")
     (ambient-light
       (color 1 1 1)
     )
