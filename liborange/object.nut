@@ -7,7 +7,8 @@ class OObject {
 	object = null
 
 	constructor(obj) {
-		if(!(this in liborange.meta)) liborange.meta[this] <- {}
+		get_module("meta")[this] <- {}
+
 		if(type(obj) == "string") {
 			object = get_sector()[obj]
 			get_sector()[obj] = this
@@ -17,15 +18,15 @@ class OObject {
 	}
 
 	function has_meta(key) {
-		return key in liborange.meta[this]
+		return key in get_module("meta")[this]
 	}
 
 	function get_meta(key, default_value = null) {
-		return has_meta(key) ? liborange.meta[this][key] : default_value
+		return has_meta(key) ? get_module("meta")[this][key] : default_value
 	}
 
 	function set_meta(key, value) {
-		liborange.meta[this][key] <- value
+		get_module("meta")[this][key] <- value
 	}
 
 	function _get(key) {
@@ -40,9 +41,8 @@ class OObject {
 	}
 
 	function _set(key, value) {
-		if(key in object) {
-				return object[key] = value
-		}
+		if(key in object)
+			return object[key] = value
 		throw null
 	}
 }

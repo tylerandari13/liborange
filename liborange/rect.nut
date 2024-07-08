@@ -6,6 +6,7 @@ class ORect {
 	size = null
 
 	constructor(...) {
+		::print(vargv.len())
 		switch(vargv.len()) {
 			case 0: // ORect()
 				position = OVector()
@@ -14,6 +15,7 @@ class ORect {
 			case 2: // ORect(position, size)
 				position = vargv[0]
 				size = vargv[1]
+			break
 			case 4: // ORect(x, y, w, h)
 				position = OVector(vargv[0], vargv[1])
 				size = OVector(vargv[2], vargv[3])

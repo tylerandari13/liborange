@@ -1,3 +1,5 @@
+// add_module("color")
+
 class OColor {
 	r = null
 	g = null
@@ -151,12 +153,12 @@ local from_hex = function(hex) {
 // List taken from Godot's documentation. https://docs.godotengine.org/en/4.1/classes/class_color.html#constants
 local colors = {
 	ALICE_BLUE = OColor(0.941176, 0.972549, 1)
-	ALLIE_PINK = from_hex(0xE41A3E)
+	ALLIE_PINK = from_hex(0xe41a3e)
 	ANTIQUE_WHITE = OColor(0.980392, 0.921569, 0.843137)
 	AQUA = OColor(0, 1, 1)
 	AQUAMARINE = OColor(0.498039, 1, 0.831373)
 	AZURE = OColor(0.941176, 1, 1)
-	BAMBI_GREEN = from_hex(0x0DB402)
+	BAMBI_GREEN = from_hex(0x0db402)
 	BEIGE = OColor(0.960784, 0.960784, 0.862745)
 	BISQUE = OColor(1, 0.894118, 0.768627)
 	BLACK = OColor(0, 0, 0)
@@ -172,7 +174,7 @@ local colors = {
 	CORNFLOWER_BLUE = OColor(0.392157, 0.584314, 0.929412)
 	CORNSILK = OColor(1, 0.972549, 0.862745)
 	CRIMSON = OColor(0.862745, 0.0784314, 0.235294)
-	CRYSTAL_MINT = from_hex(0x01FF7F)
+	CRYSTAL_MINT = from_hex(0x01ff7f)
 	CYAN = OColor(0, 1, 1)
 	DARK_BLUE = OColor(0, 0, 0.545098)
 	DARK_CYAN = OColor(0, 0.545098, 0.545098)
@@ -341,8 +343,12 @@ colors.print <- function(a = null) {
 		::print(a)
 	} else {
 		local str = "\n"
-		foreach(i, v in this) str += i + " = " + v.tostring() + "\n"
-		::display(str + "\n")
+		foreach(i, v in this) //{
+			::print(i)
+		//	::print(v)
+		//	str += i + " = " + v + "\n"
+		//}
+		//::display(str + "\n")
 	}
 }
 

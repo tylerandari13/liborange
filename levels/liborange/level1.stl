@@ -7,13 +7,8 @@
   (icon-locked "")
   (sector
     (name "main")
-    (init-script "//import(\"liborange.nut\")
-//import(\"liborange/object.nut\")
-
-import(\"liborange-tests.nut\")
-test()
-
-//OObject(\"huh\")")
+    (init-script "import(\"liborange-tests.nut\")
+test()")
     (ambient-light
       (color 1 1 1)
     )
@@ -37,8 +32,8 @@ test()
       (z-pos 50)
       (name "huh")
       (sprite "images/objects/bonus_block/brick.sprite")
-      (x 416)
-      (y 512)
+      (x 304)
+      (y 464)
     )
     (spawnpoint
       (name "main")
