@@ -1,4 +1,5 @@
 require("vector")
+
 add_module("rect")
 
 class ORect {
@@ -24,6 +25,19 @@ class ORect {
 				throw "wrong number of parameters"
 			break
 		}
+	}
+
+	function grow(amount) {
+		position.x -= amount
+		position.y -= amount
+		size.x += amount * 2
+		size.y += amount * 2
+	}
+
+	function grown(amount) {
+		local retval = clone this
+		retval.grow(amount)
+		return retval
 	}
 
 	function _get(key) {
@@ -63,7 +77,7 @@ class ORect {
 	}
 
 	function _add(other) {
-		if((typeof other) == "ORect") {
+		if(typeof other == "ORect") {
 			return ORect(
 				position.x + other.position.x,
 				position.y + other.position.y,
@@ -76,7 +90,7 @@ class ORect {
 	}
 
 	function _sub(other) {
-		if((typeof other) == "ORect") {
+		if(typeof other == "ORect") {
 			return ORect(
 				position.x - other.position.x,
 				position.y - other.position.y,
@@ -89,7 +103,7 @@ class ORect {
 	}
 
 	function _mul(other) {
-		if((typeof other) == "ORect") {
+		if(typeof other == "ORect") {
 			return ORect(
 				position.x * other.position.x,
 				position.y * other.position.y,
@@ -102,7 +116,7 @@ class ORect {
 	}
 
 	function _div(other) {
-		if((typeof other) == "ORect") {
+		if(typeof other == "ORect") {
 			return ORect(
 				position.x / other.position.x,
 				position.y / other.position.y,
@@ -115,7 +129,7 @@ class ORect {
 	}
 
 	function modulo(other) {
-		if((typeof other) == "ORect") {
+		if(typeof other == "ORect") {
 			return ORect(
 				position.x % other.position.x,
 				position.y % other.position.y,

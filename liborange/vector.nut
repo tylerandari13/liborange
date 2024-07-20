@@ -1,3 +1,5 @@
+add_module("vector")
+
 class OVector {
 	x = null
 	y = null
@@ -18,8 +20,23 @@ class OVector {
 		}
 	}
 
+	function len() {
+		return sqrt((x * x) + (y * y))
+	}
+
+	function normalize() {
+		x = x / len()
+		y = y / len()
+	}
+
+	function normalized() {
+		local retval = clone this
+		retval.normalize()
+		return retval
+	}
+
 	function _add(other) {
-		if((typeof other) == "OVector") {
+		if(typeof other == "OVector") {
 			return OVector(x + other.x, y + other.y)
 		} else {
 			throw "Cannot add \"" + typeof other + "\" to an OVector. Please only add OVectors to OVectors."
@@ -27,7 +44,7 @@ class OVector {
 	}
 
 	function _sub(other) {
-		if((typeof other) == "OVector") {
+		if(typeof other == "OVector") {
 			return OVector(x - other.x, y - other.y)
 		} else {
 			throw "Cannot subtract \"" + typeof other + "\" from an OVector. Please only subtract OVectors from OVectors."
@@ -35,7 +52,7 @@ class OVector {
 	}
 
 	function _mul(other) {
-		if((typeof other) == "OVector") {
+		if(typeof other == "OVector") {
 			return OVector(x * other.x, y * other.y)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OVector(x * other, y * other)
@@ -45,7 +62,7 @@ class OVector {
 	}
 
 	function _div(other) {
-		if((typeof other) == "OVector") {
+		if(typeof other == "OVector") {
 			return OVector(x / other.x, y / other.y)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OVector(x / other, y / other)
@@ -55,7 +72,7 @@ class OVector {
 	}
 
 	function modulo(other) {
-		if((typeof other) == "OVector") {
+		if(typeof other == "OVector") {
 			return OVector(x % other.x, y % other.y)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OVector(x % other, y % other)
@@ -81,6 +98,7 @@ class OVector {
 		return "OVector(" + x + ", " + y + ")"
 	}
 }
+OVector.length <- OVector.len
 
 add_module("vector", {
 	ZERO = OVector(),

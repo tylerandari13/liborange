@@ -1,4 +1,4 @@
-// add_module("color")
+add_module("color")
 
 class OColor {
 	r = null
@@ -33,7 +33,7 @@ class OColor {
 	}
 
 	function _add(other) {
-		if((typeof other) == "OColor") {
+		if(typeof other == "OColor") {
 			return OColor(r + other.r, g + other.g, b + other.b, a + other.a)
 		} else {
 			throw "Cannot add \"" + typeof other + "\" to an OColor. Please only add OColors to OColors."
@@ -41,7 +41,7 @@ class OColor {
 	}
 
 	function _sub(other) {
-		if((typeof other) == "OColor") {
+		if(typeof other == "OColor") {
 			return OColor(r - other.r, g - other.g, b - other.b, a - other.a)
 		} else {
 			throw "Cannot subtract \"" + typeof other + "\" from an OColor. Please only subtract OColors from OColors."
@@ -49,7 +49,7 @@ class OColor {
 	}
 
 	function _mul(other) {
-		if((typeof other) == "OColor") {
+		if(typeof other == "OColor") {
 			return OColor(r * other.r, g * other.g, b * other.b, a * other.a)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OColor(r * other, g * other, b * other, a * other)
@@ -59,7 +59,7 @@ class OColor {
 	}
 
 	function _div(other) {
-		if((typeof other) == "OColor") {
+		if(typeof other == "OColor") {
 			return OColor(r / other.r, g / other.g, b / other.b, a / other.a)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OColor(r / other, g / other, b / other, a / other)
@@ -69,7 +69,7 @@ class OColor {
 	}
 
 	function modulo(other) {
-		if((typeof other) == "OColor") {
+		if(typeof other == "OColor") {
 			return OColor(r % other.r, g % other.g, b % other.b, a % other.a)
 		} else if(type(other) == "integer" || type(other) == "float") {
 			return OColor(r % other, g % other, b % other, a % other)
@@ -79,7 +79,7 @@ class OColor {
 	}
 
 	function _unm() {
-		return OColor(-x, -y)
+		return OColor(-r, -g, -b)
 	}
 
 	function _typeof() {
@@ -87,12 +87,14 @@ class OColor {
 	}
 
 	function _cloned(original) {
-		x = original.x
-		y = original.y
+		r = original.r
+		g = original.g
+		b = original.b
+		a = original.a
 	}
 
 	function _tostring() {
-		return "OColor(" + x + ", " + y + ")"
+		return "OColor(" + r + ", " + g + ", " + b + ", " + a + ")"
 	}
 }
 
@@ -151,7 +153,7 @@ local from_hex = function(hex) {
 }
 
 // List taken from Godot's documentation. https://docs.godotengine.org/en/4.1/classes/class_color.html#constants
-local colors = {
+local colors = add_module("color", {
 	ALICE_BLUE = OColor(0.941176, 0.972549, 1)
 	ALLIE_PINK = from_hex(0xe41a3e)
 	ANTIQUE_WHITE = OColor(0.980392, 0.921569, 0.843137)
@@ -313,7 +315,7 @@ local colors = {
 	WHITE_SMOKE = OColor(0.960784, 0.960784, 0.960784)
 	YELLOW = OColor(1, 1, 0)
 	YELLOW_GREEN = OColor(0.603922, 0.803922, 0.196078)
-}
+})
 
 local colors_delegate = {
 	_get = function(key) {
@@ -342,14 +344,27 @@ colors.print <- function(a = null) {
 	if(a != null) {
 		::print(a)
 	} else {
-		local str = "\n"
-		foreach(i, v in this) //{
-			::print(i)
-		//	::print(v)
-		//	str += i + " = " + v + "\n"
-		//}
-		//::display(str + "\n")
+		local str = ""
+		local str2 = ""
+		foreach(i, v in this)
+			if(typeof v == "OColor") {
+				str += i + " = " + v + "\n\n"
+			} else {
+				str2 += i + " = " + v + "\n\n"
+			}
+		::display("\nCOLORS:\n\n" + str + "\nOTHER VARIABLES:\n\n" + str2 + "\n")
 	}
 }
 
-add_module("color", colors.setdelegate(colors_delegate))
+get_module("color").setdelegate(colors_delegate)
+
+// TODO: implement this
+/*
+function color_helper(...) {
+
+}
+
+function color_helper_noaplha(...) {
+
+}
+*/

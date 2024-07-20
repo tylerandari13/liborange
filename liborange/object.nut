@@ -1,5 +1,6 @@
 add_module("object")
-add_module("meta") // metadata
+
+local meta = {}
 
 class OObject {
 	is_oobject = true
@@ -7,7 +8,7 @@ class OObject {
 	object = null
 
 	constructor(obj) {
-		get_module("meta")[this] <- {}
+		meta[this] <- {}
 
 		if(type(obj) == "string") {
 			object = get_sector()[obj]
@@ -18,15 +19,15 @@ class OObject {
 	}
 
 	function has_meta(key) {
-		return key in get_module("meta")[this]
+		return key in meta[this]
 	}
 
 	function get_meta(key, default_value = null) {
-		return has_meta(key) ? get_module("meta")[this][key] : default_value
+		return has_meta(key) ? meta[this][key] : default_value
 	}
 
 	function set_meta(key, value) {
-		get_module("meta")[this][key] <- value
+		meta[this][key] <- value
 	}
 
 	function _get(key) {

@@ -20,6 +20,7 @@ function add_module(name, mod = {}) {
 	if(!(name in liborange))
 		liborange[name] <- {}
 	foreach(i, v in mod) liborange[name][i] <- v
+	return liborange[name]
 }
 
 function get_module(name) {
