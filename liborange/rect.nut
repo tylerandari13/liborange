@@ -1,13 +1,43 @@
+/**
+ * @file Houses the ORect.
+ * @requires vector
+ */
 require("vector")
 
 add_module("rect")
 
+/**
+ * @class ORect
+ * @description Stores 2 values. A position and a size, and allows you to manipulate them with ease. Useful for collision detection where the game allows for it.
+ */
 class ORect {
+	/**
+	 * @member {OVector} position
+	 * @description The top-left corner of the ORect.
+	 */
 	position = null
+	/**
+	 * @member {OVector} size
+	 * @description The size of the ORect.
+	 */
 	size = null
 
+	/**
+	 * @constructor Constructs an empty ORect. The x, y, width, and height are all equal to 0.
+	 */
+	/**
+	 * @constructor Constructs an ORect with the given position and size.
+	 * @param {OVector} position The position of the ORect.
+	 * @param {OVector} size The size of the ORect.
+	 */
+	/**
+	 * @constructor Constructs the ORect with the given x, y, width, and height.
+	 * @param {number} x The x position of this ORect.
+	 * @param {number} y The y position of this ORect.
+	 * @param {number} w The width of this ORect.
+	 * @param {number} h The height of this ORect.
+	 */
 	constructor(...) {
-		::print(vargv.len())
 		switch(vargv.len()) {
 			case 0: // ORect()
 				position = OVector()
@@ -27,6 +57,11 @@ class ORect {
 		}
 	}
 
+	/**
+	 * @function grow
+	 * @param {number} amount The amount to grow the ORect.
+	 * @description Grows the square by extending each side outward by the amount specified. Pass a negative value to shrink the ORect.
+	 */
 	function grow(amount) {
 		position.x -= amount
 		position.y -= amount
@@ -34,6 +69,12 @@ class ORect {
 		size.y += amount * 2
 	}
 
+	/**
+	 * @function grown
+	 * @param {number} amount The amount to grow the new ORect.
+	 * @return {ORect}
+	 * @description Returns a new ORect grown by extending each side outward by the amount specified. Pass a negative value to shrink the new ORect.
+	 */
 	function grown(amount) {
 		local retval = clone this
 		retval.grow(amount)
@@ -61,6 +102,7 @@ class ORect {
 		}
 	}
 
+	// TODO: Implement setters for left, right, top, and bottom.
 	function _set(key, value) {
 		switch(key) {
 			case "x":
@@ -158,3 +200,7 @@ class ORect {
 		return "ORect(" + position.x + ", " + position.y + ", " + size.x + ", " + size.y + ")"
 	}
 }
+
+/**
+ * @classend
+ */

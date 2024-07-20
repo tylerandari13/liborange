@@ -1,15 +1,28 @@
+/**
+ * @file Houses the OGameObject.
+ * @requires sexp
+ */
 require("sexp")
 
 add_module("game_object")
 
 local RAW = rand() + "" + rand()
 
+/**
+ * @class OGameObject
+ * @classdesc Not to be confused with the OObject, the OGameObject is an alternative to `sector.settings.add_object()`
+ * that allows for spawning in game objects with ease.
+ */
 class OGameObject {
+	/**
+	 * @member {table} data
+	 * @description The data for this game object. Prefer using the functions or metamethods for setting data in this table.
+	 */
 	data = null
 
-	constructor(type) {
+	constructor(class_name) {
 		data = {
-			class_name = type
+			class_name = class_name
 			name = ""
 			x = 0
 			y = 0
@@ -66,3 +79,7 @@ class OGameObject {
 		return add_data(key, value)
 	}
 }
+
+/**
+ * @classend
+ */

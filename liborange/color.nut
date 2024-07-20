@@ -1,11 +1,48 @@
+/**
+ * @file Houses the OColor and helper functions.
+ */
+
 add_module("color")
 
+/**
+ * @class OColor
+ * @description Conaines 4 numbers that range from 0-1 that represent an RGBA value and allows you to manipulate them.
+ * Certain OObjects may also allow you to pass an OColor instead of the 4 RGBA values seperately, for convenience.
+ */
 class OColor {
+	/**
+	 * @member {number} r The red value of this OColor. Valid values are 0-1.
+	 */
 	r = null
+	/**
+	 * @member {number} g The green value of this OColor. Valid values are 0-1.
+	 */
 	g = null
+	/**
+	 * @member {number} b The blue value of this OColor. Valid values are 0-1.
+	 */
 	b = null
+	/**
+	 * @member {number} a The alpha value of this OColor. Valid values are 0-1.
+	 */
 	a = null
 
+	/**
+	 * @constructor Constructs a black OColor. The red, green, and blue values are 0 and the alpha value is one.
+	 */
+	/**
+	 * @constructor Constructs an OColor with the given RGB values. The alpha value will be 1.
+	 * @param {number} r The red value of this OColor.
+	 * @param {number} g The green value of this OColor.
+	 * @param {number} b The blue value of this OColor.
+	 */
+	/**
+	 * @constructor Constructs an OColor with the given RGBA values.
+	 * @param {number} r The red value of this OColor.
+	 * @param {number} g The green value of this OColor.
+	 * @param {number} b The blue value of this OColor.
+	 * @param {number} a The alpha value of this OColor.
+	 */
 	constructor(...) {
 		switch(vargv.len()) {
 			case 0: // OColor()
@@ -98,6 +135,10 @@ class OColor {
 	}
 }
 
+/**
+ * @classend
+ */
+
 local hex_letter_to_number = function(hex) {
 	switch(hex) {
 		case "a":
@@ -130,6 +171,7 @@ local hex_bit_to_number = function(hex) {
 
 local from_255 = function(r, g, b, a = 255) return OColor(r / 255, g / 255, b / 255, a / 255)
 
+// FIXME: returns only black OColors
 local from_hex = function(hex) {
 	if(type(hex) == "string") {
 		hex = hex.tolower()
@@ -326,11 +368,35 @@ local colors_delegate = {
 	}
 }
 
+/**
+ * @function from_255
+ * @param {number} r The red value of this OColor. Valid values are 0-255.
+ * @param {number} g The green value of this OColor.Valid values are 0-255.
+ * @param {number} b The blue value of this OColor.Valid values are 0-255.
+ * @param {number} a The alpha value of this OColor.Valid values are 0-255.
+ * @default 255
+ * @description Takes 3-4 numbers from 0-255 and turns them into an OColor.
+ */
 colors.from_255 <- from_255
+/**
+ * @function from_888
+ * @see from_255
+ */
 colors.from_888 <- from_255
 
+/**
+ * @function from_hex
+ * @param {string|integer} hex The hex value.
+ * @description Takes a hex value and turns it into an OColor.
+ */
 colors.from_hex <- from_hex
 
+/**
+ * @function random
+ * @param {bool} random_alpha Whether to make the alpha random as well as the color. If false the color will always be 1.
+ * @default false
+ * @description Returns a random color.
+ */
 colors.random <- function(random_alpha = false) {
 	return from_255(
 		rand().tofloat() % 255.0,
@@ -340,6 +406,11 @@ colors.random <- function(random_alpha = false) {
 	)
 }
 
+/**
+ * @function print
+ * @description Prints all the avaliable OColor contstants to the console. (An example of a constant would be `liborange.color.RED`)
+ * The list of colors is too big to be reasonably documented, but its the same list that can be found in [Godot 4's Documentation](https://docs.godotengine.org/en/4.1/classes/class_color.html#constants).
+ */
 colors.print <- function(a = null) {
 	if(a != null) {
 		::print(a)
