@@ -11,7 +11,7 @@ add_module("moving_obejct")
 /**
  * @class OMovingObject
  * @extends OObject
- * @classdesc The parallel to SuperTux's MovingObject. Allows you to use OVectors to manipulate its position.
+ * @description The parallel to SuperTux's MovingObject. Allows you to use OVectors to manipulate its position.
  */
 class OMovingObject extends OObject {
 	/**

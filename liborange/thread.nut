@@ -1,3 +1,7 @@
+/**
+ * @file Houses the sector thread.
+ */
+
 require("game_object")
 
 local thread = add_module("thread")
@@ -19,6 +23,14 @@ internal.thread_func <- function(key) {
 	}
 }
 
+/**
+ * @function sector_thread
+ * @param {function} func The function that the thread will run.
+ * @param {bool} param Whether the function accepts a parameter. A function using a sector thread can only have one parameter.
+ * @returns {thread}
+ * @description Returns a special thread thats tied to the sector to prevent thread unsafe code.
+ * Use `thread.wakeup()` to start the thread. If `param` is true you can pass one parameter into `wakeup` that will go to the function.
+ */
 thread.sector_thread <- function(func, param = false) {
 	local key = rand() + "" + rand()
 	trigger.script = "liborange[\"_thread\"].thread_func(\"" + key + "\")"

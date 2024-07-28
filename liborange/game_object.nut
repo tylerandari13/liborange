@@ -10,7 +10,7 @@ local RAW = rand() + "" + rand()
 
 /**
  * @class OGameObject
- * @classdesc Not to be confused with the OObject, the OGameObject is an alternative to `sector.settings.add_object()`
+ * @description Not to be confused with the OObject, the OGameObject is an alternative to `sector.settings.add_object()`
  * that allows for spawning in game objects with ease.
  */
 class OGameObject {
@@ -20,6 +20,11 @@ class OGameObject {
 	 */
 	data = null
 
+	//TODO: document where a list of objects can be found.
+	/**
+	 * @constructor Constructs an OGameObject.
+	 * @param {string} class_name The class name of the object the OGameObject will spawn.
+	 */
 	constructor(class_name) {
 		data = {
 			class_name = class_name
@@ -30,14 +35,30 @@ class OGameObject {
 		}
 	}
 
+	/**
+	 * @function add_data
+	 * @param {string} item The item you want to set the data of.
+	 * @param {ANY} data
+	 * @description Adds data to the object. Check the objects in the level files to see what can be applied.
+	 */
 	function add_data(item, _data) {
 		data[item] <- _data
 	}
 
+	/**
+	 * @function get_data
+	 * @param {string} item
+	 * @description Gets data from the object.
+	 */
 	function get_data(item) {
 		return data[item]
 	}
 
+	/**
+	 * @function get_data
+	 * @param {string} item
+	 * @description Gets data from the object.
+	 */
 	function has_data(item) {
 		return item in data
 	}

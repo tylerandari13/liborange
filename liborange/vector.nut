@@ -5,7 +5,7 @@ add_module("vector")
 
 /**
  * @class OVector
- * @classdesc Stores 2 values, an x and a y, and allows you to manipulate them using vector math.
+ * @description Stores 2 values, an x and a y, and allows you to manipulate them using vector math.
  * On OMovingObjects you are able to pass in OVectors instead of the usual 2 x and y parameters, for convenience.
  */
 class OVector {

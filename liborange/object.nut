@@ -8,7 +8,7 @@ local meta = {}
 
 /**
  * @class OObject
- * @classdesc The core of liborange's custom scripting.
+ * @description The core of liborange's custom scripting.
  * Allows you to "take over" objects in the sector and inject your own custom code and functionality.
  */
 class OObject {
