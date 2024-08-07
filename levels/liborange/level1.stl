@@ -36,25 +36,6 @@ test()")
     )
     (music
     )
-    (rock
-      (type "large")
-      (z-pos 50)
-      (x 304)
-      (y 448)
-    )
-    (rock
-      (name "sigma")
-      (z-pos 50)
-      (x 208)
-      (y 480)
-    )
-    (scriptedobject
-      (z-pos 50)
-      (name "huh")
-      (sprite "images/objects/bonus_block/brick.sprite")
-      (x 544)
-      (y 384)
-    )
     (spawnpoint
       (name "main")
       (x 64)

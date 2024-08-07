@@ -60,7 +60,7 @@ class ORect {
 	/**
 	 * @function grow
 	 * @param {number} amount The amount to grow the ORect.
-	 * @description Grows the square by extending each side outward by the amount specified. Pass a negative value to shrink the ORect.
+	 * @description Grows the ORect by extending each side outward by the amount specified. Pass a negative value to shrink the ORect.
 	 */
 	function grow(amount) {
 		position.x -= amount

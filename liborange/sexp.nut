@@ -1,5 +1,17 @@
+/**
+ * @file Houses s-expression related functions.
+ */
 add_module("sexp")
 
+/**
+ * @enum SexpMode
+ * @member WANDER
+ * @member TOKEN
+ * @member NUMBER
+ * @member STRING
+ * @member BOOL
+ * @description The mode for the sexp functions state machine. Used internally, so don't worry about it.
+ */
 enum SexpMode {
 	WANDER,
 	TOKEN,
@@ -25,6 +37,12 @@ local is_whitespace = function(str) {
 	return false
 }
 
+/**
+ * @function from_array
+ * @param {array} arr
+ * @return {string}
+ * @description Returns a string of s-expression containing the data given.
+ */
 sexp.from_array <- function(arr) {
 	local final = "("
 	foreach(v in arr) {
@@ -53,8 +71,13 @@ sexp.from_array <- function(arr) {
 	return final.slice(0, -1) + ")"
 }
 
+/**
+ * @function to_array
+ * @param {string} atr
+ * @return {array}
+ * @description Returns the data passed in as an s-expression string.
+ */
 // FIXME: This could be implemented better. It cannot handle strings with a ")".
-
 sexp.to_array <- function(str) {
 	local final = []
 	local mode = SexpMode.WANDER

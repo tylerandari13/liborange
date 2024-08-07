@@ -63,14 +63,32 @@ class OGameObject {
 		return item in data
 	}
 
+	/**
+	 * @function remove_data
+	 * @param {string} item
+	 * @description Removes data from the object.
+	 * Can also remove data added with `add_raw_data` by passing in the data you originally passed.
+	 */
 	function remove_data(item) {
 		delete data[item]
 	}
 
+	/**
+	 * @function add_raw_data
+	 * @param {string} data
+	 * @description Adds data in the form of raw s-expression. An example of such would be `(color 1 0 1 1)`.
+	 */
 	function add_raw_data(_data) {
 		data[_data] <- RAW
 	}
 
+	/**
+	 * @function initialize
+	 * @param {table} overrides
+	 * @param {bool} return_object
+	 * @default return_object true
+	 * @description Adds data in the form of raw s-expression. An example of such would be `(color 1 0 1 1)`.
+	 */
 	function initialize(overrides = {}, return_object = true) {
 		local actual_data = {}
 		foreach(i, v in data) actual_data[i] <- v

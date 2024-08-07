@@ -1,3 +1,7 @@
+/**
+ * @file Supposed to house debug related functions. Do not use as it is unfinished.
+ * @requires sexp
+ */
 local debug = add_module("debug")
 
 debug.error_test <- function(...) {

@@ -374,7 +374,7 @@ local colors_delegate = {
  * @param {number} g The green value of this OColor.Valid values are 0-255.
  * @param {number} b The blue value of this OColor.Valid values are 0-255.
  * @param {number} a The alpha value of this OColor.Valid values are 0-255.
- * @default 255
+ * @default a 255
  * @description Takes 3-4 numbers from 0-255 and turns them into an OColor.
  */
 colors.from_255 <- from_255
@@ -394,7 +394,7 @@ colors.from_hex <- from_hex
 /**
  * @function random
  * @param {bool} random_alpha Whether to make the alpha random as well as the color. If false the color will always be 1.
- * @default false
+ * @default random_alpha false
  * @description Returns a random color.
  */
 colors.random <- function(random_alpha = false) {

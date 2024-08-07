@@ -14,7 +14,7 @@ local meta = {}
 class OObject {
 	/**
 	 * @member {bool} is_oobject
-	 * @default true
+	 * @default is_oobject true
 	 * @description This object is an OObject!
 	 * When checking for if an object is an OObject please check for if this member exists, not whether its true.
 	 */
@@ -59,7 +59,7 @@ class OObject {
 	 * @function get_meta
 	 * @param {string} key
 	 * @param {ANY} default_value If the metadata was not found it will return this instead.
-	 * @default null
+	 * @default default_value null
 	 * @return {ANY}
 	 * @description Finds metadata with the given key for this object and returns it.
 	 */
