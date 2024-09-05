@@ -1,12 +1,15 @@
 /**
- * @file Houses the OMovingObject.
+ * @file Houses the OMovingObject, and functions related to object pooling.
  * @requires rect
  * @requires object
+ * @requires signal
  */
 require("rect")
 require("object")
+require("signal")
 
-add_module("moving_obejct")
+local moving_object = add_module("moving_obejct")
+local internal = add_module("_moving_obejct")
 
 /**
  * @class OMovingObject
@@ -43,8 +46,8 @@ class OMovingObject extends OObject {
 
 	/**
 	 * @function set_pos
-	 * @param {number} x
-	 * @param {number} y
+	 * @param {float} x
+	 * @param {float} y
 	 * @description Sets the position to the specified x and y cooridnates. Works identical to the SuperTux implementation.
 	 */
 	/**
@@ -59,14 +62,14 @@ class OMovingObject extends OObject {
 			case 2: // set_pos(x, y)
 				return object.set_pos(vargv[0], vargv[1])
 			default:
-				throw "wrong number of parameters"
+				throw liborange_texts.error_wrong_param
 		}
 	}
 
 	/**
 	 * @function move
-	 * @param {number} x
-	 * @param {number} y
+	 * @param {float} x
+	 * @param {float} y
 	 * @description Moves x pixels to the right and y pixels down. Works identical to the SuperTux implementation.
 	 */
 	/**
@@ -81,7 +84,7 @@ class OMovingObject extends OObject {
 			case 2: // move(x, y)
 				return object.move(vargv[0], vargv[1])
 			default:
-				throw "wrong number of parameters"
+				throw liborange_texts.error_wrong_param
 		}
 	}
 }
@@ -89,3 +92,17 @@ class OMovingObject extends OObject {
 /**
  * @classend
  */
+
+internal.held_objects <- []
+
+moving_object.hold <- @(name) internal.held_objects.push(name)
+moving_object.stop_holding <- @(name) internal.held_objects.remove(internal.held_objects.find(name))
+
+liborange.signal.process.connect(function() {
+	local offset = -64
+	foreach(name in internal.held_objects) {
+		local object = sector[name]
+		object.set_pos(object.get_width() + 32, offset)
+		offset -= object.get_height() + 64
+	}
+})

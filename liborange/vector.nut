@@ -1,6 +1,9 @@
 /**
  * @file Houses the OVector.
+ * @requires math
  */
+require("math")
+
 add_module("vector")
 
 /**
@@ -10,12 +13,12 @@ add_module("vector")
  */
 class OVector {
 	/**
-	 * @member {number} x
+	 * @member {float} x
 	 * @description The x value of this OVector.
 	 */
 	x = null
 	/**
-	 * @member {number} y
+	 * @member {float} y
 	 * @description The y value of this OVector.
 	 */
 	y = null
@@ -25,8 +28,8 @@ class OVector {
 	 */
 	/**
 	 * @constructor Constructs an OVector with the given x and y.
-	 * @param {number} x The x value of this OVector.
-	 * @param {number} y The y value of this OVector.
+	 * @param {float} x The x value of this OVector.
+	 * @param {float} y The y value of this OVector.
 	 */
 	constructor(...) {
 		switch(vargv.len()) {
@@ -39,18 +42,32 @@ class OVector {
 				y = vargv[1]
 			break
 			default:
-				throw "wrong number of parameters"
+				throw liborange_texts.error_wrong_param
 			break
 		}
 	}
 
 	/**
 	 * @function len
-	 * @return {number}
+	 * @return {float}
 	 * @description Returns the length of the OVector by squaring the x and y, adding the squared numbers together, and returning the square root.
 	 */
 	function len() {
 		return sqrt((x * x) + (y * y))
+	}
+
+	function distance_to(...) {
+		switch(vargv.len()) {
+			case 1:
+				return liborange.math.distance(this, vargv[0])
+			break
+			case 2:
+				return liborange.math.distance(x, y, vargv[0], vargv[1])
+			break
+			default:
+				throw liborange_texts.error_wrong_param
+			break
+		}
 	}
 
 	/**
@@ -91,7 +108,7 @@ class OVector {
 	function _mul(other) {
 		if(typeof other == "OVector") {
 			return OVector(x * other.x, y * other.y)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OVector(x * other, y * other)
 		} else {
 			throw "Cannot multiply \"" + typeof other + "\" with an OVector. Please only multiply OVectors with OVectors and numbers."
@@ -101,7 +118,7 @@ class OVector {
 	function _div(other) {
 		if(typeof other == "OVector") {
 			return OVector(x / other.x, y / other.y)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OVector(x / other, y / other)
 		} else {
 			throw "Cannot divide \"" + typeof other + "\" by an OVector. Please only multiply OVectors by OVectors and numbers."
@@ -111,7 +128,7 @@ class OVector {
 	function modulo(other) {
 		if(typeof other == "OVector") {
 			return OVector(x % other.x, y % other.y)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OVector(x % other, y % other)
 		} else {
 			throw "Cannot perform modulo on \"" + typeof other + "\" and an OVector. Please only perform modulo on OVectors using OVectors and numbers."

@@ -1,8 +1,10 @@
 /**
  * @file Houses the input related signals.
  * @requires signal
+ * @requires multiplayer
  */
 require("signal")
+require("multiplayer")
 
 local input = add_module("input")
 
@@ -31,6 +33,51 @@ input.inputs <- [
 	"peek-up"
 	"peek-down"
 ]
+
+/**
+ * @function input_pressed
+ * @param {string} input
+ * @return {array}
+ * @description Returns an array of players that have just pressed the given input.
+ */
+input.input_pressed <- function(input) {
+	local retval = []
+	foreach(v in liborange.multiplayer.get_players())
+		if(v.get_input_pressed(input))
+			retval.push(v)
+	return retval
+}
+
+/**
+ * @function input_held
+ * @param {string} input
+ * @return {array}
+ * @description Returns an array of players that have the given input held.
+ */
+input.input_held <- function(input) {
+	local retval = []
+	foreach(v in liborange.multiplayer.get_players())
+		if(v.get_input_held(input))
+			retval.push(v)
+	return retval
+}
+
+/**
+ * @function input_released
+ * @param {string} input
+ * @return {array}
+ * @description Returns an array of players that have just released the given input.
+ */
+input.input_released <- function(input) {
+	local retval = []
+	foreach(v in liborange.multiplayer.get_players())
+		if(v.get_input_released(input))
+			retval.push(v)
+	return retval
+}
+
+
+// TODO: add `get_axis()` and `get_vector()`.
 
 /**
  * @signal input_pressed

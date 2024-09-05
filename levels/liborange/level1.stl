@@ -8,7 +8,13 @@
   (sector
     (name "main")
     (init-script "import(\"liborange-tests.nut\")
-test()")
+test()
+
+wait(1)
+
+return
+thun.thunder()
+thun.lightning()")
     (ambient-light
       (color 1 1 1)
     )
@@ -36,6 +42,30 @@ test()")
     )
     (music
     )
+    (scriptedobject
+      (z-pos 50)
+      (name "yeah")
+      (sprite "images/objects/bonus_block/brick.sprite")
+      (x 1664)
+      (y 512)
+    )
+    (scriptedobject
+      (z-pos 50)
+      (physic-enabled #f)
+      (solid #f)
+      (name "rock")
+      (sprite "/images/objects/rock/rock-b.png")
+      (x 608)
+      (y 432)
+    )
+    (scriptedobject
+      (z-pos 50)
+      (physic-enabled #f)
+      (name "indicator")
+      (sprite "images/objects/bonus_block/brick.sprite")
+      (x 704)
+      (y 384)
+    )
     (spawnpoint
       (name "main")
       (x 64)
@@ -45,6 +75,17 @@ test()")
       (name "guh")
       (x 432)
       (y 480)
+    )
+    (switch
+      (name "switchy")
+      (z-pos 1)
+      (script "test_switch()")
+      (x 224)
+      (y 368)
+    )
+    (thunderstorm
+      (running #f)
+      (name "thun")
     )
     (tilemap
       (solid #f)

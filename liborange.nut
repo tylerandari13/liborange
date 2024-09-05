@@ -23,9 +23,13 @@ function get_sector() {
 }
 if(get_sector() == null) temp = {}
 
-if(!("liborange" in get_sector())) get_sector().liborange <- {}
+if(!("liborange" in get_sector())) get_sector().liborange <- class{}
 
 ::liborange <- get_sector().liborange
+
+::liborange_texts <- {
+	error_wrong_param = "wrong number of parameters"
+}
 
 /**
  * @function add_module

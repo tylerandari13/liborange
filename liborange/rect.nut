@@ -32,10 +32,10 @@ class ORect {
 	 */
 	/**
 	 * @constructor Constructs the ORect with the given x, y, width, and height.
-	 * @param {number} x The x position of this ORect.
-	 * @param {number} y The y position of this ORect.
-	 * @param {number} w The width of this ORect.
-	 * @param {number} h The height of this ORect.
+	 * @param {float} x The x position of this ORect.
+	 * @param {float} y The y position of this ORect.
+	 * @param {float} w The width of this ORect.
+	 * @param {float} h The height of this ORect.
 	 */
 	constructor(...) {
 		switch(vargv.len()) {
@@ -52,14 +52,14 @@ class ORect {
 				size = OVector(vargv[2], vargv[3])
 			break
 			default:
-				throw "wrong number of parameters"
+				throw liborange_texts.error_wrong_param
 			break
 		}
 	}
 
 	/**
 	 * @function grow
-	 * @param {number} amount The amount to grow the ORect.
+	 * @param {float} amount The amount to grow the ORect.
 	 * @description Grows the ORect by extending each side outward by the amount specified. Pass a negative value to shrink the ORect.
 	 */
 	function grow(amount) {
@@ -71,7 +71,7 @@ class ORect {
 
 	/**
 	 * @function grown
-	 * @param {number} amount The amount to grow the new ORect.
+	 * @param {float} amount The amount to grow the new ORect.
 	 * @return {ORect}
 	 * @description Returns a new ORect grown by extending each side outward by the amount specified. Pass a negative value to shrink the new ORect.
 	 */
@@ -81,40 +81,87 @@ class ORect {
 		return retval
 	}
 
-	function _get(key) {
-		switch(key) {
-			case "x":
-			case "left":
-				return position.x
-			case "y":
-			case "top":
-				return position.y
-			case "w":
-				return size.x
-			case "h":
-				return size.y
-			case "right":
-				return position.x + size.x
-			case "bottom":
-				return position.y + size.y
+	/**
+	 * @function get_left
+	 * @return {float}
+	 * @description Returns the x position of the left side of this ORect.
+	 */
+	function get_left() {
+		return position.x
+	}
+
+	/**
+	 * @function get_top
+	 * @return {float}
+	 * @description Returns the y position of the top side of this ORect.
+	 */
+	function get_top() {
+		return position.y
+	}
+
+	/**
+	 * @function get_right
+	 * @return {float}
+	 * @description Returns the x position of the right side of this ORect.
+	 */
+	function get_right() {
+		return get_left() + size.x
+	}
+
+	/**
+	 * @function get_bottom
+	 * @return {float}
+	 * @description Returns the y position of the bottom side of this ORect.
+	 */
+	function get_bottom() {
+		return get_top() + size.y
+	}
+
+	/**
+	 * @function get_center
+	 * @return {OVector}
+	 * @description Returns the position at the center of this ORect.
+	 */
+	function get_center() {
+		return OVector(position.x + (size.x * 0.5), position.y + (size.y * 0.5))
+	}
+
+	function point_is_inside(...) {
+		switch(vargv.len()) {
+			case 1:
+				return vargv[0].x > get_left() &&
+					vargv[0].x < get_right() &&
+					vargv[0].y > get_top() &&
+					vargv[0].y < get_bottom()
+			case 2:
+				return callee()(OVector(vargv[0], vargv[1]))
 			default:
-				throw null
+				throw liborange_texts.error_wrong_param
+			break
 		}
 	}
 
-	// TODO: Implement setters for left, right, top, and bottom.
-	function _set(key, value) {
-		switch(key) {
-			case "x":
-				return position.x = value
-			case "y":
-				return position.y = value
-			case "w":
-				return size.x = value
-			case "h":
-				return size.y = value
+	/**
+	 * @function get_center
+	 * @return {OVector}
+	 * @description Returns whether the given ORect.
+	 */
+	//TODO: make it so rects bigger than other rects are still detected
+	function overlaps(...) {
+		switch(vargv.len()) {
+			case 1: // overlaps(rect)
+				return point_is_inside(vargv[0].position) ||
+					point_is_inside(vargv[0].position + vargv[0].size) ||
+					point_is_inside(vargv[0].position + OVector(0, vargv[0].size.y)) ||
+					point_is_inside(vargv[0].position + OVector(vargv[0].size.x, 0)) ||
+					point_is_inside(vargv[0].get_center())
+			case 2: // overlaps(position, size)
+				return callee()(ORect(vargv[0], vargv[1]))
+			case 4: // overlaps(x, y, w, h)
+				return callee()(ORect(vargv[0], vargv[1], vargv[2], vargv[3]))
 			default:
-				throw null
+				throw liborange_texts.error_wrong_param
+			break
 		}
 	}
 

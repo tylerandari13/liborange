@@ -35,7 +35,7 @@ thread.sector_thread <- function(func, param = false) {
 	local key = rand() + "" + rand()
 	trigger.script = "liborange[\"_thread\"].thread_func(\"" + key + "\")"
 	internal[key] <- {
-		object = trigger.initialize({x = sector.Tux.get_x(), y = sector.Tux.get_y()}),
+		object = sector[trigger.instantiate({x = sector.Tux.get_x(), y = sector.Tux.get_y()})],
 		param = param
 		func = func
 	}

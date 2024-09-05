@@ -11,19 +11,19 @@ add_module("color")
  */
 class OColor {
 	/**
-	 * @member {number} r The red value of this OColor. Valid values are 0-1.
+	 * @member {float} r The red value of this OColor. Valid values are 0-1.
 	 */
 	r = null
 	/**
-	 * @member {number} g The green value of this OColor. Valid values are 0-1.
+	 * @member {float} g The green value of this OColor. Valid values are 0-1.
 	 */
 	g = null
 	/**
-	 * @member {number} b The blue value of this OColor. Valid values are 0-1.
+	 * @member {float} b The blue value of this OColor. Valid values are 0-1.
 	 */
 	b = null
 	/**
-	 * @member {number} a The alpha value of this OColor. Valid values are 0-1.
+	 * @member {float} a The alpha value of this OColor. Valid values are 0-1.
 	 */
 	a = null
 
@@ -32,16 +32,16 @@ class OColor {
 	 */
 	/**
 	 * @constructor Constructs an OColor with the given RGB values. The alpha value will be 1.
-	 * @param {number} r The red value of this OColor.
-	 * @param {number} g The green value of this OColor.
-	 * @param {number} b The blue value of this OColor.
+	 * @param {float} r The red value of this OColor.
+	 * @param {float} g The green value of this OColor.
+	 * @param {float} b The blue value of this OColor.
 	 */
 	/**
 	 * @constructor Constructs an OColor with the given RGBA values.
-	 * @param {number} r The red value of this OColor.
-	 * @param {number} g The green value of this OColor.
-	 * @param {number} b The blue value of this OColor.
-	 * @param {number} a The alpha value of this OColor.
+	 * @param {float} r The red value of this OColor.
+	 * @param {float} g The green value of this OColor.
+	 * @param {float} b The blue value of this OColor.
+	 * @param {float} a The alpha value of this OColor.
 	 */
 	constructor(...) {
 		switch(vargv.len()) {
@@ -64,7 +64,7 @@ class OColor {
 				a = vargv[3]
 			break
 			default:
-				throw "wrong number of parameters"
+				throw liborange_texts.error_wrong_param
 			break
 		}
 	}
@@ -88,7 +88,7 @@ class OColor {
 	function _mul(other) {
 		if(typeof other == "OColor") {
 			return OColor(r * other.r, g * other.g, b * other.b, a * other.a)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OColor(r * other, g * other, b * other, a * other)
 		} else {
 			throw "Cannot multiply \"" + typeof other + "\" with an OColor. Please only multiply OColors with OColors and numbers."
@@ -98,7 +98,7 @@ class OColor {
 	function _div(other) {
 		if(typeof other == "OColor") {
 			return OColor(r / other.r, g / other.g, b / other.b, a / other.a)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OColor(r / other, g / other, b / other, a / other)
 		} else {
 			throw "Cannot divide \"" + typeof other + "\" by an OColor. Please only divide OColors by OColors and numbers."
@@ -108,7 +108,7 @@ class OColor {
 	function modulo(other) {
 		if(typeof other == "OColor") {
 			return OColor(r % other.r, g % other.g, b % other.b, a % other.a)
-		} else if(type(other) == "integer" || type(other) == "float") {
+		} else if(typeof other == "integer" || typeof other == "float") {
 			return OColor(r % other, g % other, b % other, a % other)
 		} else {
 			throw "Cannot perform modulo on \"" + typeof other + "\" and an OColor. Please only perform modulo on OColors using OColors and numbers."
@@ -173,7 +173,7 @@ local from_255 = function(r, g, b, a = 255) return OColor(r / 255, g / 255, b / 
 
 // FIXME: returns only black OColors
 local from_hex = function(hex) {
-	if(type(hex) == "string") {
+	if(typeof hex == "string") {
 		hex = hex.tolower()
 		if(startswith(hex, "#")) {
 			hex = hex.slice(1)
@@ -370,10 +370,10 @@ local colors_delegate = {
 
 /**
  * @function from_255
- * @param {number} r The red value of this OColor. Valid values are 0-255.
- * @param {number} g The green value of this OColor.Valid values are 0-255.
- * @param {number} b The blue value of this OColor.Valid values are 0-255.
- * @param {number} a The alpha value of this OColor.Valid values are 0-255.
+ * @param {float} r The red value of this OColor. Valid values are 0-255.
+ * @param {float} g The green value of this OColor.Valid values are 0-255.
+ * @param {float} b The blue value of this OColor.Valid values are 0-255.
+ * @param {float} a The alpha value of this OColor.Valid values are 0-255.
  * @default a 255
  * @description Takes 3-4 numbers from 0-255 and turns them into an OColor.
  */

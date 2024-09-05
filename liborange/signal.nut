@@ -5,7 +5,10 @@
 require("thread")
 
 local signal = add_module("signal")
-local internal = {}
+local internal = add_module("_signal" {
+	signals = {}
+	processes = {}
+})
 
 /**
  * @class OSignal
@@ -81,13 +84,16 @@ class OSignal {
  * Prefer using the metamethod for getting signals instead.
  */
 signal.get_signal <- function(name) {
-	if(!(name in internal)) internal[name] <- ::OSignal()
-	return internal[name]
+	if(!(name in internal.signals)) internal.signals[name] <- ::OSignal()
+	return internal.signals[name]
 }
 
+local frame = 0
 local signal_function = function() {
-	while(wait(0) == null)
+	while(wait(0) == null) {
 		::liborange.signal.get_signal("process").call()
+		frame++
+	}
 }
 
 /**
@@ -95,13 +101,24 @@ local signal_function = function() {
  * @description Starts calling the process signal every frame. You can get the process signal using `liborange.signal.process`.
  */
 signal.init_process <- function() {
-	local thread = ::get_module("_process_thread")
-	if(thread != null) return
-
-	local thrd = ::liborange.thread.sector_thread(signal_function)
-	::add_module("_process_thread", {thread = thrd})
-	thrd.wakeup()
+	if("process_thread" in internal) return
+	internal.process_thread <- ::liborange.thread.sector_thread(signal_function)
+	internal.process_thread.wakeup()
 }
+
+/**
+ * @function is_proces_initted
+ * @return {bool}
+ * @description Returns true if `liborange.signal.process` has been called, else returns false.
+ */
+signal.is_proces_initted <- @() "process_thread" in internal
+
+/**
+ * @function get_frame
+ * @return {integer}
+ * @description Returns amount of times the process signal has been called. Will always return 0 if `liborange.signal.init_process` has not been called.
+ */
+signal.get_frame <- @() frame
 
 signal.setdelegate({
 	_get = function(key) {

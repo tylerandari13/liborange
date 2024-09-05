@@ -1,6 +1,9 @@
 /**
  * @file Houses s-expression related functions.
+ * @requires string
  */
+require("string")
+
 add_module("sexp")
 
 /**
@@ -47,7 +50,7 @@ sexp.from_array <- function(arr) {
 	local final = "("
 	foreach(v in arr) {
 		if(arr.find(v) == 0) {
-			final += v + " "
+			final += liborange.string.replace(v, "_", "-") + " "
 		} else {
 			switch(typeof v) {
 				case "bool":
@@ -73,7 +76,7 @@ sexp.from_array <- function(arr) {
 
 /**
  * @function to_array
- * @param {string} atr
+ * @param {string} str
  * @return {array}
  * @description Returns the data passed in as an s-expression string.
  */

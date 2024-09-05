@@ -2,7 +2,10 @@
  * @file Houses the OObject.
  */
 
-add_module("object")
+local object = add_module("object")
+
+::o <- add_module("o")
+get_sector().o <- o
 
 local meta = {}
 
@@ -21,10 +24,10 @@ class OObject {
 	is_oobject = true
 
 	/**
-	 * @member {instance} object
-	 * @description The raw object this OObject has taken over. If you ever need to access the original object explicitly its right here.
+	 * @member {string} name
+	 * @description The name of the object this OObject has taken over. If you ever need to access the original object explicitly use `sector[name]`.
 	 */
-	object = null
+	name = null
 
 	/**
 	 * @constructor
@@ -32,17 +35,17 @@ class OObject {
 	 */
 	/**
 	 * @constructor
-	 * @param {instance} obj The object you would like to Tuen into an OObject.
+	 * @param {instance} obj The object you would like to turn into an OObject.
 	 */
 	constructor(obj) {
-		meta[this] <- {}
-
-		if(type(obj) == "string") {
-			object = get_sector()[obj]
-			get_sector()[obj] = this
+		if(typeof obj == "string") {
+			name = obj
 		} else {
-			object = obj
+			name = obj.get_name()
 		}
+
+		::o[name] <- this
+		meta[name] <- {}
 	}
 
 	/**
@@ -52,7 +55,7 @@ class OObject {
 	 * @description Checks if any metadata with the given key exists for this object.
 	 */
 	function has_meta(key) {
-		return key in meta[this]
+		return key in meta[name]
 	}
 
 	/**
@@ -64,7 +67,7 @@ class OObject {
 	 * @description Finds metadata with the given key for this object and returns it.
 	 */
 	function get_meta(key, default_value = null) {
-		return has_meta(key) ? meta[this][key] : default_value
+		return has_meta(key) ? meta[name][key] : default_value
 	}
 
 	/**
@@ -75,23 +78,23 @@ class OObject {
 	 * If the key doesnt exist it is created.
 	 */
 	function set_meta(key, value) {
-		meta[this][key] <- value
+		meta[name][key] <- value
 	}
 
 	function _get(key) {
-		if(key in object) {
-			if(type(object[key]) == "function") {
-				return object[key].bindenv(object)
+		if(key in ::get_sector()[name]) {
+			if(typeof ::get_sector()[name][key] == "function") {
+				return ::get_sector()[name][key].bindenv(::get_sector()[name])
 			} else {
-				return object[key]
+				return ::get_sector()[name][key]
 			}
 		}
 		throw null
 	}
 
 	function _set(key, value) {
-		if(key in object)
-			return object[key] = value
+		if(key in ::get_sector()[name])
+			return ::get_sector()[name][key] = value
 		throw null
 	}
 }
@@ -99,3 +102,18 @@ class OObject {
 /**
  * @classend
  */
+
+/**
+ * @function init
+ * @param {string} obj_prefix The prefix that will be searched when finding the objects.
+ * @param {class} obj_class Not the instance, the actual class.
+ * @description Finds all objects in the sector with the given prefix and turns them all into OObject of the specified class.
+ * The class' constructor's first parameter must be the name of the object it will spawn, otherwise this function wont work with the class.
+ */
+object.init <- function(obj_prefix, obj_class, ...) {
+	foreach(name, obj in sector)
+		if(startswith(name, obj_prefix) && !("is_OObject" in obj)) {
+			local cls = obj_class.instance()
+			cls.constructor.acall([cls, name].extend(vargv))
+		}
+}
