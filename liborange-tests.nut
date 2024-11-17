@@ -17,6 +17,7 @@ import("liborange/time.nut")
 import("liborange/random.nut")
 import("liborange/camera.nut")
 import("liborange/tween.nut")
+import("liborange/player.nut")
 
 import("liborange/debug.nut")
 
@@ -25,7 +26,7 @@ local pos
 function test() {
     OMovingObject("rock")
     OMovingObject("indicator")
-    OMovingObject("Tux")
+    OPlayer("Tux")
     local p = indicator.get_y()
     liborange.signal.process.connect(function() {
         local v = o.rock.get_rect().overlaps(o.Tux.get_rect())
@@ -35,4 +36,5 @@ function test() {
 }
 
 function test_switch() {
+    print(o.Tux.get_generic_action())
 }

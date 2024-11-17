@@ -1,5 +1,5 @@
 /**
- * @file Houses the OMovingObject, and functions related to object pooling.
+ * @file Houses the OMovingObject, and functions related to object holding.
  * @requires rect
  * @requires object
  * @requires signal
