@@ -110,6 +110,13 @@ class OAnonObject extends OBase {
  * @classend
  */
 
+o.setdelegate({
+	_get = function(key) {
+		if(typeof ::get_sector()[key] == "instance") return OAnonObject(::get_sector()[key])
+
+		throw null
+	}
+})
 
 /**
  * @function init
