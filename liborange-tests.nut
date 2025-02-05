@@ -18,23 +18,25 @@ import("liborange/random.nut")
 import("liborange/camera.nut")
 import("liborange/tween.nut")
 import("liborange/player.nut")
+import("liborange/text.nut")
 
 import("liborange/debug.nut")
 
 local pos
 
 function test() {
-    OMovingObject("rock")
-    OMovingObject("indicator")
-    OPlayer("Tux")
-    local p = indicator.get_y()
-    liborange.signal.process.connect(function() {
-        local v = o.rock.get_rect().overlaps(o.Tux.get_rect())
-        indicator.set_pos(indicator.get_x(), v ? p : -128)
-    })
-    liborange.signal.init_process()
+	OMovingObject("rock")
+	OMovingObject("indicator")
+	OPlayer("Tux")
+	local p = indicator.get_y()
+	liborange.signal.process.connect(function() {
+		local v = o.rock.get_rect().overlaps(o.Tux.get_rect())
+		indicator.set_pos(indicator.get_x(), v ? p : -128)
+	})
+	liborange.signal.init_process()
 }
 
 function test_switch() {
-    print(o.Tux.get_generic_action())
+	//print(o.Tux.get_generic_action())
+	o.rock.move(OVector(0, -64))
 }

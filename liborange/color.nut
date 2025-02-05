@@ -28,7 +28,7 @@ class OColor {
 	a = null
 
 	/**
-	 * @constructor Constructs a black OColor. The red, green, and blue values are 0 and the alpha value is one.
+	 * @constructor Constructs a black OColor. The red, green, and blue values are 0 and the alpha value is 1.
 	 */
 	/**
 	 * @constructor Constructs an OColor with the given RGB values. The alpha value will be 1.
@@ -62,6 +62,37 @@ class OColor {
 				g = vargv[1]
 				b = vargv[2]
 				a = vargv[3]
+			break
+			default:
+				throw liborange_texts.error_wrong_param
+			break
+		}
+	}
+
+	function _wrapper(args) {
+		switch(args.len()) {
+			case 1:
+				if(type(args[0]) == "string") { // set_color("COLOR_NAME")
+					return [
+						liborange.color[args[0]].r,
+						liborange.color[args[0]].g,
+						liborange.color[args[0]].b,
+						liborange.color[args[0]].a
+					]
+				} else { // set_color(OColor(...))
+					return [
+						args[0].r,
+						args[0].g,
+						args[0].b,
+						args[0].a
+					]
+				}
+			break
+			case 3: // set_color(r, g, b)
+				return args.extend([1])
+			break
+			case 4: // set_color(r, g, b, a)
+				return [args]
 			break
 			default:
 				throw liborange_texts.error_wrong_param
@@ -105,7 +136,7 @@ class OColor {
 		}
 	}
 
-	function modulo(other) {
+	function _modulo(other) {
 		if(typeof other == "OColor") {
 			return OColor(r % other.r, g % other.g, b % other.b, a % other.a)
 		} else if(typeof other == "integer" || typeof other == "float") {
@@ -428,14 +459,3 @@ colors.print <- function(a = null) {
 }
 
 get_module("color").setdelegate(colors_delegate)
-
-// TODO: implement this
-/*
-function color_helper(...) {
-
-}
-
-function color_helper_noaplha(...) {
-
-}
-*/

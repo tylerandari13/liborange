@@ -101,46 +101,20 @@ class OCamera extends OObject {
 
 	/**
 	 * @function set_pos
-	 * @param {float} x
-	 * @param {float} y
-	 * @description Sets the position to the specified x and y cooridnates. Works identical to the SuperTux implementation.
-	 */
-	/**
-	 * @function set_pos
 	 * @param {OVector} pos
 	 * @description Sets the camera's position to the specified OVector.
 	 */
 	function set_pos(...) {
-		switch(vargv.len()) {
-			case 1: // set_pos(pos)
-				return object.set_pos(vargv[0].x, vargv[0].y)
-			case 2: // set_pos(x, y)
-				return object.set_pos(vargv[0], vargv[1])
-			default:
-				throw liborange_texts.error_wrong_param
-		}
+		object.set_pos.acall([object].extend(OVector._wrapper(vargv)))
 	}
 
-	/**
-	 * @function move
-	 * @param {float} x
-	 * @param {float} y
-	 * @description Moves the camera x pixels to the right and y pixels down. Works identical to the SuperTux implementation.
-	 */
 	/**
 	 * @function move
 	 * @param {OVector} amount
 	 * @description Sets the position to the camera's current position plus the specified OVector.
 	 */
 	function move(...) {
-		switch(vargv.len()) {
-			case 1: // move(amount)
-				return object.move(vargv[0].x, vargv[0].y)
-			case 2: // move(x, y)
-				return object.move(vargv[0], vargv[1])
-			default:
-				throw liborange_texts.error_wrong_param
-		}
+		object.move.acall([object].extend(OVector._wrapper(vargv)))
 	}
 
 	function get_width() { return get_screen_width() }

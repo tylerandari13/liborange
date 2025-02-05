@@ -7,14 +7,11 @@ local object = add_module("object")
 ::o <- add_module("o")
 get_sector().o <- o
 
-local meta = {}
-
 /**
- * @class OObject
- * @description The core of liborange's custom scripting.
- * Allows you to "take over" objects in the sector and inject your own custom code and functionality.
+ * @class OBase
+ * @description Abstract base class for all OObjects.
  */
-class OObject {
+class OBase {
 	/**
 	 * @member {bool} is_oobject
 	 * @default is_oobject true
@@ -24,77 +21,29 @@ class OObject {
 	is_oobject = true
 
 	/**
-	 * @member {string} name
-	 * @description The name of the object this OObject has taken over. If you ever need to access the original object explicitly use `sector[name]`.
+	 * @get_object
+	 * @returns {instance}
+	 * @description Returns the object the OObject has taken over.
 	 */
-	name = null
-
-	/**
-	 * @constructor
-	 * @param {string} obj The name of the object in the sector you want to overtake.
-	 */
-	/**
-	 * @constructor
-	 * @param {instance} obj The object you would like to turn into an OObject.
-	 */
-	constructor(obj) {
-		if(typeof obj == "string") {
-			name = obj
-		} else {
-			name = obj.get_name()
-		}
-
-		::o[name] <- this
-		meta[name] <- {}
-	}
-
-	/**
-	 * @function has_meta
-	 * @param {string} key
-	 * @return {bool}
-	 * @description Checks if any metadata with the given key exists for this object.
-	 */
-	function has_meta(key) {
-		return key in meta[name]
-	}
-
-	/**
-	 * @function get_meta
-	 * @param {string} key
-	 * @param {ANY} default_value If the metadata was not found it will return this instead.
-	 * @default default_value null
-	 * @return {ANY}
-	 * @description Finds metadata with the given key for this object and returns it.
-	 */
-	function get_meta(key, default_value = null) {
-		return has_meta(key) ? meta[name][key] : default_value
-	}
-
-	/**
-	 * @function set_meta
-	 * @param {string} key
-	 * @param {ANY} value
-	 * @description Sets the metadata for this object with the given key to the given value.
-	 * If the key doesnt exist it is created.
-	 */
-	function set_meta(key, value) {
-		meta[name][key] <- value
+	function get_object() {
+		return {}
 	}
 
 	function _get(key) {
-		if(key in ::get_sector()[name]) {
-			if(typeof ::get_sector()[name][key] == "function") {
-				return ::get_sector()[name][key].bindenv(::get_sector()[name])
+		if(key in get_object()) {
+			if(typeof get_object()[key] == "function") {
+				return get_object()[key].bindenv(get_object())
 			} else {
-				return ::get_sector()[name][key]
+				return get_object()[key]
 			}
 		}
+		if(key == "object") return get_object()
 		throw null
 	}
 
 	function _set(key, value) {
-		if(key in ::get_sector()[name])
-			return ::get_sector()[name][key] = value
+		if(key in get_object())
+			return get_object()[key] = value
 		throw null
 	}
 }
@@ -102,6 +51,65 @@ class OObject {
 /**
  * @classend
  */
+
+/**
+ * @class OObject
+ * @description The core of liborange's custom scripting.
+ * Allows you to "take over" objects in the sector and inject your own custom code and functionality.
+ */
+class OObject extends OBase {
+	/**
+	 * @member {string} name
+	 * @description The name of the object this OObject has taken over. If you ever need to access the original object explicitly use `sector[name]`.
+	 */
+	name = null
+
+	/**
+	 * @constructor
+	 * @param {string} name The name of the object in the sector you want to overtake.
+	 */
+	constructor(_name) {
+		name = _name
+		::o[_name] <- this
+	}
+
+	function get_object() {
+		return ::get_sector()[name]
+	}
+}
+
+/**
+ * @classend
+ */
+
+/**
+ * @class OAnonObject
+ * @description An anonymous version of the OObject that holds a direct reference to the object its taking over.
+ */
+class OAnonObject extends OBase {
+	/**
+	 * @member {instance} original
+	 * @description The instance this OObject has taken over.
+	 */
+	original = null
+
+	/**
+	 * @constructor
+	 * @param {instance} name The object you want to overtake.
+	 */
+	constructor(obj) {
+		original = obj
+	}
+
+	function get_object() {
+		return original
+	}
+}
+
+/**
+ * @classend
+ */
+
 
 /**
  * @function init

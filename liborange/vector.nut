@@ -89,6 +89,17 @@ class OVector {
 		return retval
 	}
 
+	function _wrapper(args) {
+		switch(args.len()) {
+			case 1: 
+				return [args[0].x, args[0].y]
+			case 2:
+				return args
+			default:
+				throw liborange_texts.error_wrong_param
+		}
+	}
+
 	function _add(other) {
 		if(typeof other == "OVector") {
 			return OVector(x + other.x, y + other.y)
@@ -125,7 +136,7 @@ class OVector {
 		}
 	}
 
-	function modulo(other) {
+	function _modulo(other) {
 		if(typeof other == "OVector") {
 			return OVector(x % other.x, y % other.y)
 		} else if(typeof other == "integer" || typeof other == "float") {
